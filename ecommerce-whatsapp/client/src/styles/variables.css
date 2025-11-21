@@ -1,0 +1,110 @@
+/* ==========================================
+   VARIABLES CSS - SISTEMA DE DISEÑO
+   ========================================== */
+
+:root {
+  /* Colores Principales - Paleta MAGNOLIA (Rosa/Magenta) */
+  --primary: #E91E8C;
+  /* Magenta principal - del logo */
+  --primary-light: #FF6BB5;
+  /* Rosa claro */
+  --primary-dark: #C41570;
+  /* Magenta oscuro */
+
+  --secondary: #F8B4D9;
+  /* Rosa pastel - suave */
+  --accent: #FF4DA6;
+  /* Rosa vibrante - premium */
+  --accent-2: #D946A6;
+  /* Magenta medio */
+
+  /* Neutros */
+  --white: #FFFFFF;
+  --off-white: #FFF5FB;
+  /* Blanco con tinte rosa */
+  --light-gray: #F5E6F0;
+  /* Gris rosado muy claro */
+  --gray: #C4A5B8;
+  /* Gris rosado medio */
+  --dark-gray: #6B4E5E;
+  /* Gris rosado oscuro */
+  --black: #2D1B26;
+  /* Negro con tinte púrpura */
+
+  /* Semánticos */
+  --success: #7AC97A;
+  --error: #E74C3C;
+  --warning: #F39C12;
+  --info: #9B59B6;
+
+  /* Tipografía */
+  --font-primary: 'Playfair Display', serif;
+  --font-secondary: 'Montserrat', sans-serif;
+
+  /* Tamaños de fuente */
+  --text-xs: 0.75rem;
+  /* 12px */
+  --text-sm: 0.875rem;
+  /* 14px */
+  --text-base: 1rem;
+  /* 16px */
+  --text-lg: 1.125rem;
+  /* 18px */
+  --text-xl: 1.25rem;
+  /* 20px */
+  --text-2xl: 1.5rem;
+  /* 24px */
+  --text-3xl: 1.875rem;
+  /* 30px */
+  --text-4xl: 2.25rem;
+  /* 36px */
+  --text-5xl: 3rem;
+  /* 48px */
+
+  /* Espaciado */
+  --spacing-xs: 0.5rem;
+  /* 8px */
+  --spacing-sm: 1rem;
+  /* 16px */
+  --spacing-md: 1.5rem;
+  /* 24px */
+  --spacing-lg: 2.5rem;
+  /* 40px */
+  --spacing-xl: 4rem;
+  /* 64px */
+  --spacing-2xl: 6rem;
+  /* 96px */
+
+  /* Sombras suaves */
+  --shadow-sm: 0 2px 8px rgba(44, 41, 38, 0.08);
+  --shadow-md: 0 4px 16px rgba(44, 41, 38, 0.12);
+  --shadow-lg: 0 8px 32px rgba(44, 41, 38, 0.16);
+  --shadow-xl: 0 12px 48px rgba(44, 41, 38, 0.20);
+
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Breakpoints (para uso en JS) */
+  --breakpoint-mobile: 640px;
+  --breakpoint-tablet: 1024px;
+  --breakpoint-desktop: 1280px;
+
+  /* Z-index layers */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+}

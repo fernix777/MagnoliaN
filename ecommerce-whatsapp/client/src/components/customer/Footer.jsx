@@ -1,0 +1,60 @@
+import { Link } from 'react-router-dom'
+import './Footer.css'
+
+export default function Footer() {
+    return (
+        <footer className="store-footer">
+            <div className="footer-container">
+                {/* Columna 1: Logo y descripción */}
+                <div className="footer-column">
+                    <div className="footer-logo">
+                        <img src="/logo.jpg" alt="Magnolia Novedades" />
+                        <h3>Magnolia Novedades</h3>
+                    </div>
+                    <p>Decoración y regalos únicos para hacer de cada momento algo especial.</p>
+                </div>
+
+                {/* Columna 2: Links */}
+                <div className="footer-column">
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><Link to="/">Inicio</Link></li>
+                        <li><Link to="/productos">Productos</Link></li>
+                        <li><Link to="/categorias">Categorías</Link></li>
+                        <li><Link to="/contacto">Contacto</Link></li>
+                    </ul>
+                </div>
+
+                {/* Columna 3: Contacto */}
+                <div className="footer-column">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li>📧 info@magnolia.com</li>
+                        <li>📱 WhatsApp: +54 9 XXX XXX-XXXX</li>
+                        <li>📍 Argentina</li>
+                    </ul>
+                </div>
+
+                {/* Columna 4: Redes Sociales */}
+                <div className="footer-column">
+                    <h4>Síguenos</h4>
+                    <div className="social-links">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                            📷 Instagram
+                        </a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                            📘 Facebook
+                        </a>
+                        <a href="https://wa.me/543765016293" target="_blank" rel="noopener noreferrer" className="social-link">
+                            💬 WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div className="footer-bottom">
+                <p>&copy; {new Date().getFullYear()} Magnolia Novedades. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    )
+}

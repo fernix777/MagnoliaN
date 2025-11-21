@@ -1,0 +1,20 @@
+.store-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.store-page main {
+    flex: 1;
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Global adjustments for store */
+body {
+    margin: 0;
+    padding: 0;
+}

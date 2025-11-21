@@ -1,0 +1,91 @@
+.confirm-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn var(--transition-fast);
+}
+
+.confirm-dialog {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-width: 450px;
+    width: 90%;
+    animation: slideUp var(--transition-normal);
+}
+
+.confirm-dialog-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.confirm-dialog-header h3 {
+    margin: 0;
+    color: var(--dark-gray);
+    font-size: var(--text-xl);
+}
+
+.confirm-dialog-body {
+    padding: var(--spacing-lg);
+}
+
+.confirm-dialog-body p {
+    margin: 0;
+    color: var(--gray);
+    line-height: 1.6;
+}
+
+.confirm-dialog-footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--light-gray);
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: flex-end;
+}
+
+.btn-danger {
+    background-color: var(--error);
+    color: var(--white);
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-warning {
+    background-color: var(--warning);
+    color: var(--white);
+    border: none;
+}
+
+.btn-warning:hover {
+    background-color: #d68910;
+}
+
+.btn-info {
+    background-color: var(--info);
+    color: var(--white);
+    border: none;
+}
+
+.btn-info:hover {
+    background-color: #8e44ad;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

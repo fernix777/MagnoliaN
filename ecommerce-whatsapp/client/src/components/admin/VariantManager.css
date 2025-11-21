@@ -1,0 +1,175 @@
+.variant-manager {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-lg);
+    background-color: var(--off-white);
+    border-radius: var(--radius-lg);
+}
+
+.variant-header h3 {
+    margin: 0 0 var(--spacing-xs) 0;
+    color: var(--dark-gray);
+    font-size: var(--text-xl);
+}
+
+.variant-header p {
+    margin: 0;
+    color: var(--gray);
+    font-size: var(--text-sm);
+}
+
+.variants-table {
+    margin: var(--spacing-lg) 0;
+    overflow-x: auto;
+}
+
+.variants-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.variants-table th {
+    background-color: var(--primary);
+    color: var(--white);
+    padding: var(--spacing-sm);
+    text-align: left;
+    font-weight: 600;
+    font-size: var(--text-sm);
+}
+
+.variants-table td {
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.variants-table tr:last-child td {
+    border-bottom: none;
+}
+
+.variants-table input {
+    width: 100%;
+    padding: var(--spacing-xs);
+    border: 1px solid var(--light-gray);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+}
+
+.variants-table input:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.variant-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.btn-icon {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+    transition: all var(--transition-fast);
+}
+
+.btn-icon.edit {
+    background-color: var(--info);
+    color: var(--white);
+}
+
+.btn-icon.edit:hover {
+    background-color: #8e44ad;
+}
+
+.btn-icon.save {
+    background-color: var(--success);
+    color: var(--white);
+}
+
+.btn-icon.save:hover {
+    background-color: #27ae60;
+}
+
+.btn-icon.delete {
+    background-color: var(--error);
+    color: var(--white);
+    font-size: var(--text-2xl);
+    line-height: 1;
+}
+
+.btn-icon.delete:hover {
+    background-color: #c0392b;
+}
+
+.add-variant-form {
+    background-color: var(--white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+}
+
+.add-variant-form h4 {
+    margin: 0 0 var(--spacing-md) 0;
+    color: var(--dark-gray);
+    font-size: var(--text-lg);
+}
+
+.variant-form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+    align-items: end;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-field label {
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+    color: var(--dark-gray);
+    font-size: var(--text-sm);
+}
+
+.form-field input {
+    padding: var(--spacing-sm);
+    border: 2px solid var(--light-gray);
+    border-radius: var(--radius-md);
+    font-size: var(--text-base);
+    transition: all var(--transition-fast);
+}
+
+.form-field input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(233, 30, 140, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .variant-form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .variant-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .variants-table {
+        font-size: var(--text-sm);
+    }
+
+    .variants-table th,
+    .variants-table td {
+        padding: var(--spacing-xs);
+    }
+}
