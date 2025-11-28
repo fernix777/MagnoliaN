@@ -29,7 +29,7 @@ export default function ContactPage() {
         setSending(true)
 
         // Construir mensaje de WhatsApp con los datos del formulario
-        const phoneNumber = '543765016293'
+        const phoneNumber = '543885171795'
         let message = `📧 *MENSAJE DE CONTACTO*\n\n`
         message += `👤 *Nombre:* ${formData.name}\n`
         message += `📧 *Email:* ${formData.email}\n`
@@ -88,8 +88,8 @@ export default function ContactPage() {
                             <div className="info-icon">📱</div>
                             <h3>Teléfono</h3>
                             <p>
-                                <a href="https://wa.me/543765016293" target="_blank" rel="noopener noreferrer">
-                                    +54 376 501-6293
+                                <a href="https://wa.me/543885171795" target="_blank" rel="noopener noreferrer">
+                                    +54 388 517-1795
                                 </a>
                             </p>
                         </div>

@@ -1,0 +1,24 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /admin/*
+
+# Disallow login pages
+Disallow: /login
+Disallow: /registro
+
+# Allow all product and category pages
+Allow: /productos
+Allow: /productos/*
+Allow: /categoria/*
+Allow: /categorias
+
+# Allow contact and about pages
+Allow: /contacto
+Allow: /nosotros
+
+# Sitemap location
+Sitemap: https://magnolia-novedades.vercel.app/sitemap.xml

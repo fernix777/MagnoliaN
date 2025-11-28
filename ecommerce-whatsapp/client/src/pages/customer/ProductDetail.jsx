@@ -55,8 +55,14 @@ export default function ProductDetail() {
             return
         }
 
-        if (!purchaseType || !selectedColor) {
-            alert('Por favor selecciona el tipo de venta y el color del producto')
+        if (!purchaseType) {
+            alert('Por favor selecciona el tipo de venta')
+            return
+        }
+
+        // Solo validar color si el producto tiene opciones de color
+        if (product.has_colors && !selectedColor) {
+            alert('Por favor selecciona el color del producto')
             return
         }
 
@@ -226,29 +232,37 @@ export default function ProductDetail() {
                                 onChange={(e) => setPurchaseType(e.target.value)}
                             >
                                 <option value="">Elige una opción</option>
-                                <option value="unidad">Unidad</option>
-                                <option value="caja">Caja ({product.units_per_box || 12} unidades)</option>
-                                <option value="bulto">Bulto ({product.boxes_per_bundle || 40} cajas)</option>
+                                {product.sale_types?.includes('unidad') && (
+                                    <option value="unidad">Unidad</option>
+                                )}
+                                {product.sale_types?.includes('caja') && (
+                                    <option value="caja">Caja ({product.units_per_box || 12} unidades)</option>
+                                )}
+                                {product.sale_types?.includes('bulto') && (
+                                    <option value="bulto">Bulto ({product.boxes_per_bundle || 40} cajas)</option>
+                                )}
                             </select>
                         </div>
 
-                        {/* Selector de color */}
-                        <div className="form-group">
-                            <label>Color</label>
-                            <select
-                                className="form-control"
-                                value={selectedColor}
-                                onChange={(e) => setSelectedColor(e.target.value)}
-                            >
-                                <option value="">Elige una opción</option>
-                                <option value="Rojo">Rojo</option>
-                                <option value="Azul">Azul</option>
-                                <option value="Verde">Verde</option>
-                                <option value="Amarillo">Amarillo</option>
-                                <option value="Negro">Negro</option>
-                                <option value="Blanco">Blanco</option>
-                            </select>
-                        </div>
+                        {/* Selector de color - Solo si el producto tiene colores */}
+                        {product.has_colors && (
+                            <div className="form-group">
+                                <label>Color</label>
+                                <select
+                                    className="form-control"
+                                    value={selectedColor}
+                                    onChange={(e) => setSelectedColor(e.target.value)}
+                                >
+                                    <option value="">Elige una opción</option>
+                                    <option value="Rojo">Rojo</option>
+                                    <option value="Azul">Azul</option>
+                                    <option value="Verde">Verde</option>
+                                    <option value="Amarillo">Amarillo</option>
+                                    <option value="Negro">Negro</option>
+                                    <option value="Blanco">Blanco</option>
+                                </select>
+                            </div>
+                        )}
 
                         {/* Cantidad */}
                         <div className="product-quantity">
@@ -273,9 +287,6 @@ export default function ProductDetail() {
                                     }}
                                 >+</button>
                             </div>
-                            <div className="min-purchase">
-                                <i className="fas fa-info-circle"></i> Compra mínima total: $20.000
-                            </div>
                         </div>
 
                         {/* Stock */}
@@ -293,7 +304,7 @@ export default function ProductDetail() {
                         <button
                             onClick={handleAddToCart}
                             className="btn btn-primary btn-large btn-block"
-                            disabled={!purchaseType || !selectedColor || !user}
+                            disabled={!purchaseType || (product.has_colors && !selectedColor) || !user}
                         >
                             🛒 Agregar al Carrito
                         </button>

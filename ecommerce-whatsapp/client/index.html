@@ -2,15 +2,146 @@
 <html lang="es">
 
 <head>
+  <!-- Meta Tags Básicos -->
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Magnolia Novedades - Tu Tienda de Decoración</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+  <link rel="apple-touch-icon" href="/logo.jpg" />
+
+  <!-- SEO Meta Tags -->
+  <title>Magnolia Novedades - Decoración y Regalos Únicos en San Salvador de Jujuy</title>
+  <meta name="description"
+    content="Descubre decoración única y regalos especiales en Magnolia Novedades. Ubicados en San Salvador de Jujuy, ofrecemos productos de calidad para hacer de cada momento algo especial. ¡Compra por WhatsApp!" />
+  <meta name="keywords"
+    content="decoración, regalos, novedades, San Salvador de Jujuy, Jujuy, Argentina, tienda decoración, regalos únicos, accesorios hogar, compra por WhatsApp" />
+  <meta name="author" content="Magnolia Novedades" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="Spanish" />
+  <meta name="geo.region" content="AR-Y" />
+  <meta name="geo.placename" content="San Salvador de Jujuy" />
+  <meta name="geo.position" content="-24.1857;-65.2995" />
+  <meta name="ICBM" content="-24.1857, -65.2995" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://magnolia-novedades.vercel.app/" />
+  <meta property="og:title" content="Magnolia Novedades - Decoración y Regalos Únicos" />
+  <meta property="og:description"
+    content="Descubre decoración única y regalos especiales en San Salvador de Jujuy. Productos de calidad para hacer de cada momento algo especial." />
+  <meta property="og:image" content="https://magnolia-novedades.vercel.app/logo.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:site_name" content="Magnolia Novedades" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://magnolia-novedades.vercel.app/" />
+  <meta name="twitter:title" content="Magnolia Novedades - Decoración y Regalos Únicos" />
+  <meta name="twitter:description"
+    content="Descubre decoración única y regalos especiales en San Salvador de Jujuy. Productos de calidad para hacer de cada momento algo especial." />
+  <meta name="twitter:image" content="https://magnolia-novedades.vercel.app/logo.jpg" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://magnolia-novedades.vercel.app/" />
+
+  <!-- Preconnect para optimización -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
     rel="stylesheet">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://magnolia-novedades.vercel.app/#business",
+        "name": "Magnolia Novedades",
+        "image": "https://magnolia-novedades.vercel.app/logo.jpg",
+        "description": "Tienda de decoración y regalos únicos en San Salvador de Jujuy, Argentina. Ofrecemos productos de calidad para hacer de cada momento algo especial.",
+        "url": "https://magnolia-novedades.vercel.app/",
+        "telephone": "+543885171795",
+        "email": "magnolianovedades56@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Av. Éxodo 841",
+          "addressLocality": "San Salvador de Jujuy",
+          "addressRegion": "Jujuy",
+          "postalCode": "4600",
+          "addressCountry": "AR"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "-24.1857",
+          "longitude": "-65.2995"
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "opens": "09:00",
+          "closes": "20:00"
+        },
+        "sameAs": [
+          "https://www.instagram.com/magnolia_novedades/",
+          "https://www.facebook.com/magnolianove",
+          "https://wa.me/543885171795"
+        ],
+        "priceRange": "$$",
+        "currenciesAccepted": "ARS",
+        "paymentAccepted": "Cash, Transfer"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://magnolia-novedades.vercel.app/#organization",
+        "name": "Magnolia Novedades",
+        "url": "https://magnolia-novedades.vercel.app/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://magnolia-novedades.vercel.app/logo.jpg",
+          "width": 250,
+          "height": 250
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+543885171795",
+          "contactType": "customer service",
+          "areaServed": "AR",
+          "availableLanguage": "Spanish"
+        },
+        "sameAs": [
+          "https://www.instagram.com/magnolia_novedades/",
+          "https://www.facebook.com/magnolianove"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://magnolia-novedades.vercel.app/#website",
+        "url": "https://magnolia-novedades.vercel.app/",
+        "name": "Magnolia Novedades",
+        "description": "Tienda online de decoración y regalos únicos",
+        "publisher": {
+          "@id": "https://magnolia-novedades.vercel.app/#organization"
+        },
+        "inLanguage": "es-AR"
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>

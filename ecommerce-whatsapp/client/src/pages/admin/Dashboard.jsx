@@ -72,12 +72,6 @@ export default function Dashboard() {
                     <a href="/admin/orders" className="nav-item">
                         <span>🛒</span> Pedidos
                     </a>
-                    <a href="/admin/shipping" className="nav-item">
-                        <span>🚚</span> Envíos
-                    </a>
-                    <a href="/admin/settings" className="nav-item">
-                        <span>⚙️</span> Configuración
-                    </a>
                 </nav>
 
                 <div className="sidebar-footer">
@@ -150,8 +144,6 @@ export default function Dashboard() {
                         <ul>
                             <li>✅ Gestionar productos y categorías</li>
                             <li>✅ Ver y administrar pedidos</li>
-                            <li>✅ Configurar métodos de envío</li>
-                            <li>✅ Personalizar la configuración de la tienda</li>
                         </ul>
                         <div style={{ marginTop: 'var(--spacing-lg)' }}>
                             <a href="/admin/products" className="btn btn-primary">

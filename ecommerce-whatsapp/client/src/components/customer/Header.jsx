@@ -16,7 +16,8 @@ export default function Header() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            window.location.href = `/buscar?q=${encodeURIComponent(searchQuery)}`;
+            navigate(`/buscar?q=${encodeURIComponent(searchQuery)}`);
+            setSearchQuery(''); // Limpiar el campo de búsqueda
         }
     };
 
@@ -40,7 +41,7 @@ export default function Header() {
 
                 {/* Navegación Desktop */}
                 <nav className="header-nav desktop-nav">
-                    <Link to="/" className="nav-link">Sobre Nosotros</Link>
+                    <Link to="/" className="nav-link">Nosotros</Link>
                     <Link to="/productos" className="nav-link">Productos</Link>
                     <Link to="/categorias" className="nav-link">Categorías</Link>
                     <Link to="/contacto" className="nav-link">Contacto</Link>
@@ -104,7 +105,16 @@ export default function Header() {
             {/* Mobile Menu */}
             {menuOpen && (
                 <nav className="mobile-nav">
-                    <Link to="/" onClick={() => setMenuOpen(false)}>Sobre Nosotros</Link>
+                    <form onSubmit={handleSearch} className="mobile-search-form">
+                        <input
+                            type="text"
+                            placeholder="Buscar productos..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <button type="submit">🔍</button>
+                    </form>
+                    <Link to="/" onClick={() => setMenuOpen(false)}>Nosotros</Link>
                     <Link to="/productos" onClick={() => setMenuOpen(false)}>Productos</Link>
                     <Link to="/categorias" onClick={() => setMenuOpen(false)}>Categorías</Link>
                     <Link to="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>

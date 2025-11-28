@@ -45,7 +45,7 @@ export default function Footer() {
                         <a href="https://www.facebook.com/magnolianove" target="_blank" rel="noopener noreferrer" className="social-link">
                             📘 Facebook
                         </a>
-                        <a href="https://wa.me/543765016293" target="_blank" rel="noopener noreferrer" className="social-link">
+                        <a href="https://wa.me/543885171795" target="_blank" rel="noopener noreferrer" className="social-link">
                             💬 WhatsApp
                         </a>
                     </div>

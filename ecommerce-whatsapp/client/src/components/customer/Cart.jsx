@@ -31,7 +31,7 @@ export default function Cart({ onClose }) {
     const handleWhatsAppOrder = () => {
         if (!user) return;
 
-        const phoneNumber = '543765016293';
+        const phoneNumber = '543885171795';
         let message = '🛒 *PEDIDO DE COMPRA*\n\n';
 
         // Detalles del cliente
@@ -42,7 +42,7 @@ export default function Cart({ onClose }) {
         message += '📋 *Productos solicitados:*\n';
         cart.forEach((item, index) => {
             message += `\n${index + 1}. *${item.name}*\n`;
-            message += `   - Cantidad: ${item.quantity} ${item.purchaseType === 'caja' ? 'cajas' : 'bultos'}\n`;
+            message += `   - Cantidad: ${item.quantity} ${item.purchaseType === 'caja' ? 'cajas' : item.purchaseType === 'bulto' ? 'bultos' : 'unidades'}\n`;
             message += `   - Precio unitario: ${formatPrice(item.price)}\n`;
             message += `   - Subtotal: ${formatPrice(item.price * item.quantity)}\n`;
 
@@ -103,7 +103,7 @@ export default function Cart({ onClose }) {
                     {cart.map(item => (
                         <div key={`${item.id}-${item.selectedColor}-${item.selectedCondition}`} className="cart-item">
                             <div className="item-image">
-                                <img src={item.images?.[0]?.url || '/placeholder-product.jpg'} alt={item.name} />
+                                <img src={item.images?.[0]?.image_url || item.images?.[0]?.url || '/placeholder-product.jpg'} alt={item.name} />
                             </div>
                             <div className="item-details">
                                 <h4>{item.name}</h4>

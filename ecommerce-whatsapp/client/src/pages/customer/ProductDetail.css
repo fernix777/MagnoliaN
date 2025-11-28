@@ -302,6 +302,8 @@
 @media (max-width: 768px) {
     .product-detail {
         grid-template-columns: 1fr;
+        padding: var(--spacing-md);
+        gap: var(--spacing-lg);
     }
 
     .product-info h1 {
@@ -309,10 +311,39 @@
     }
 
     .product-price {
-        font-size: var(--text-2xl);
+        font-size: var(--text-3xl);
     }
 
     .image-thumbnails {
         grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        gap: var(--spacing-xs);
+    }
+
+    .thumbnail {
+        border-radius: var(--radius-sm);
+    }
+
+    /* Mejora de targets táctiles */
+    .quantity-selector button {
+        width: 44px;
+        height: 44px;
+    }
+
+    .quantity-selector input {
+        height: 44px;
+    }
+
+    .variant-btn {
+        padding: var(--spacing-md);
+        min-width: 80px;
+    }
+
+    .btn-large {
+        padding: var(--spacing-lg);
+        font-size: 1.1rem;
+        position: sticky;
+        bottom: var(--spacing-md);
+        z-index: 100;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 }

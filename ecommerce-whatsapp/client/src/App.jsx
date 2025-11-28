@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
@@ -10,6 +11,7 @@ import CategoryPage from './pages/customer/CategoryPage';
 import ProductsPage from './pages/customer/ProductsPage';
 import CategoriesPage from './pages/customer/CategoriesPage';
 import ContactPage from './pages/customer/ContactPage';
+import SearchPage from './pages/customer/SearchPage';
 
 // Páginas de autenticación
 import Login from './pages/auth/Login';
@@ -31,85 +33,88 @@ function RedirectIfAuth({ children }) {
 
 function App() {
     return (
-        <AuthProvider>
-            <CartProvider>
-                <Router>
-                    <Routes>
-                        {/* Rutas públicas */}
-                        <Route path="/" element={<StorePage />} />
-                        <Route path="/productos" element={<ProductsPage />} />
-                        <Route path="/categorias" element={<CategoriesPage />} />
-                        <Route path="/producto/:slug" element={<ProductDetail />} />
-                        <Route path="/categoria/:slug" element={<CategoryPage />} />
-                        <Route path="/contacto" element={<ContactPage />} />
+        <HelmetProvider>
+            <AuthProvider>
+                <CartProvider>
+                    <Router>
+                        <Routes>
+                            {/* Rutas públicas */}
+                            <Route path="/" element={<StorePage />} />
+                            <Route path="/productos" element={<ProductsPage />} />
+                            <Route path="/categorias" element={<CategoriesPage />} />
+                            <Route path="/producto/:slug" element={<ProductDetail />} />
+                            <Route path="/categoria/:slug" element={<CategoryPage />} />
+                            <Route path="/buscar" element={<SearchPage />} />
+                            <Route path="/contacto" element={<ContactPage />} />
 
-                        {/* Rutas de autenticación de administradores */}
-                        <Route path="/admin/login" element={
-                            <RedirectIfAuth>
-                                <AdminLogin />
-                            </RedirectIfAuth>
-                        } />
+                            {/* Rutas de autenticación de administradores */}
+                            <Route path="/admin/login" element={
+                                <RedirectIfAuth>
+                                    <AdminLogin />
+                                </RedirectIfAuth>
+                            } />
 
-                        {/* Rutas de autenticación de usuarios */}
-                        <Route path="/login" element={
-                            <RedirectIfAuth>
-                                <Login />
-                            </RedirectIfAuth>
-                        } />
-                        <Route path="/registro" element={
-                            <RedirectIfAuth>
-                                <Register />
-                            </RedirectIfAuth>
-                        } />
-                        <Route path="/registro-exitoso" element={
-                            <RegistrationSuccess />
-                        } />
+                            {/* Rutas de autenticación de usuarios */}
+                            <Route path="/login" element={
+                                <RedirectIfAuth>
+                                    <Login />
+                                </RedirectIfAuth>
+                            } />
+                            <Route path="/registro" element={
+                                <RedirectIfAuth>
+                                    <Register />
+                                </RedirectIfAuth>
+                            } />
+                            <Route path="/registro-exitoso" element={
+                                <RegistrationSuccess />
+                            } />
 
-                        {/* Rutas protegidas de admin */}
-                        <Route
-                            path="/admin/dashboard"
-                            element={
-                                <ProtectedRoute>
-                                    <Dashboard />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/admin/categories"
-                            element={
-                                <ProtectedRoute>
-                                    <Categories />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/admin/products"
-                            element={
-                                <ProtectedRoute>
-                                    <Products />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/admin/products/new"
-                            element={
-                                <ProtectedRoute>
-                                    <ProductForm />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/admin/products/edit/:id"
-                            element={
-                                <ProtectedRoute>
-                                    <ProductForm />
-                                </ProtectedRoute>
-                            }
-                        />
-                    </Routes>
-                </Router>
-            </CartProvider>
-        </AuthProvider>
+                            {/* Rutas protegidas de admin */}
+                            <Route
+                                path="/admin/dashboard"
+                                element={
+                                    <ProtectedRoute>
+                                        <Dashboard />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/admin/categories"
+                                element={
+                                    <ProtectedRoute>
+                                        <Categories />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/admin/products"
+                                element={
+                                    <ProtectedRoute>
+                                        <Products />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/admin/products/new"
+                                element={
+                                    <ProtectedRoute>
+                                        <ProductForm />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/admin/products/edit/:id"
+                                element={
+                                    <ProtectedRoute>
+                                        <ProductForm />
+                                    </ProtectedRoute>
+                                }
+                            />
+                        </Routes>
+                    </Router>
+                </CartProvider>
+            </AuthProvider>
+        </HelmetProvider>
     )
 }
 

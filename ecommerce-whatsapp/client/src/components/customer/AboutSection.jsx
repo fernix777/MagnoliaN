@@ -22,7 +22,7 @@ export default function AboutSection() {
         <section className="about-section">
             <div className="about-container">
                 <div className="about-header">
-                    <h2 className="about-title">Sobre Nosotros</h2>
+                    <h2 className="about-title">Nosotros</h2>
                     <p className="about-subtitle">Conoce más sobre nuestra historia y servicios</p>
                 </div>
 

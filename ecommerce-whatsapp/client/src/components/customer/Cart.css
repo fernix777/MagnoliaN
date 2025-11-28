@@ -149,14 +149,14 @@
 .item-quantity button {
     background: #f5f5f5;
     border: none;
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: #333;
 }
 
@@ -249,20 +249,47 @@
     .cart-container {
         max-width: 100%;
     }
-    
+
+    .cart-header {
+        padding: 1rem;
+    }
+
+    .cart-items {
+        padding: 1rem;
+    }
+
+    .cart-item {
+        padding: 1rem 0;
+    }
+
+    .item-image {
+        width: 70px;
+        height: 70px;
+    }
+
     .item-details h4 {
+        font-size: 0.95rem;
+    }
+
+    .item-price {
         font-size: 0.9rem;
     }
-    
-    .item-price {
-        font-size: 0.85rem;
+
+    .item-quantity button {
+        width: 40px;
+        height: 40px;
     }
-    
+
     .cart-total {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
-    
+
     .total-amount {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
+    }
+
+    .btn-whatsapp {
+        padding: 1rem;
+        font-size: 1.1rem;
     }
 }

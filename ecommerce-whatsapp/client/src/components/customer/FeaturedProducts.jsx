@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { getFeaturedProducts } from '../../services/storeService'
+import { AuthContext } from '../../context/AuthContext'
 import LoadingSpinner from '../common/LoadingSpinner'
 import './FeaturedProducts.css'
 
 export default function FeaturedProducts() {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
+    const { user } = useContext(AuthContext)
 
     useEffect(() => {
         loadProducts()
@@ -74,7 +76,13 @@ export default function FeaturedProducts() {
                                         <p className="product-description">{product.description}</p>
                                     )}
                                     <div className="product-footer">
-                                        <span className="product-price">{formatPrice(product.base_price)}</span>
+                                        {user ? (
+                                            <span className="product-price">{formatPrice(product.base_price)}</span>
+                                        ) : (
+                                            <span className="login-to-see">
+                                                <Link to="/login">Inicia sesión</Link> para ver precios
+                                            </span>
+                                        )}
                                         {product.category && (
                                             <span className="product-category">{product.category.name}</span>
                                         )}

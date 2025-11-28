@@ -29,7 +29,9 @@ export default function ProductForm() {
         units_per_box: 12,
         boxes_per_bundle: 40,
         price_box: '',
-        price_bundle: ''
+        price_bundle: '',
+        has_colors: true,
+        sale_types: ['unidad', 'caja', 'bulto']
     })
 
     const [images, setImages] = useState([])
@@ -80,7 +82,9 @@ export default function ProductForm() {
             units_per_box: data.units_per_box || 12,
             boxes_per_bundle: data.boxes_per_bundle || 40,
             price_box: data.price_box || '',
-            price_bundle: data.price_bundle || ''
+            price_bundle: data.price_bundle || '',
+            has_colors: data.has_colors ?? true,
+            sale_types: data.sale_types || ['unidad', 'caja', 'bulto']
         })
 
         // Cargar imágenes existentes
@@ -111,6 +115,20 @@ export default function ProductForm() {
         }
     }
 
+    const handleSaleTypeChange = (type) => {
+        setFormData(prev => {
+            const currentTypes = prev.sale_types || []
+            const newTypes = currentTypes.includes(type)
+                ? currentTypes.filter(t => t !== type)
+                : [...currentTypes, type]
+            return { ...prev, sale_types: newTypes }
+        })
+
+        if (errors.sale_types) {
+            setErrors(prev => ({ ...prev, sale_types: null }))
+        }
+    }
+
     const validate = () => {
         const newErrors = {}
 
@@ -128,6 +146,20 @@ export default function ProductForm() {
 
         if (images.length === 0) {
             newErrors.images = 'Agrega al menos una imagen'
+        }
+
+        // Validar que al menos un tipo de venta esté seleccionado
+        if (!formData.sale_types || formData.sale_types.length === 0) {
+            newErrors.sale_types = 'Selecciona al menos un tipo de venta'
+        }
+
+        // Validar precios según tipos de venta seleccionados
+        if (formData.sale_types?.includes('caja') && (!formData.price_box || Number(formData.price_box) <= 0)) {
+            newErrors.price_box = 'El precio por caja es requerido'
+        }
+
+        if (formData.sale_types?.includes('bulto') && (!formData.price_bundle || Number(formData.price_bundle) <= 0)) {
+            newErrors.price_bundle = 'El precio por bulto es requerido'
         }
 
         setErrors(newErrors)
@@ -154,7 +186,9 @@ export default function ProductForm() {
                 units_per_box: Number(formData.units_per_box),
                 boxes_per_bundle: Number(formData.boxes_per_bundle),
                 price_box: formData.price_box ? Number(formData.price_box) : null,
-                price_bundle: formData.price_bundle ? Number(formData.price_bundle) : null
+                price_bundle: formData.price_bundle ? Number(formData.price_bundle) : null,
+                has_colors: formData.has_colors,
+                sale_types: formData.sale_types
             }
 
             // Obtener solo las imágenes nuevas (que tienen file)
@@ -304,10 +338,10 @@ export default function ProductForm() {
                         </div>
                     </div>
 
-                    {/* Precios Explícitos */}
-                    <div className="form-row">
+                    {/* Precios Explícitos - Condicionales */}
+                    {formData.sale_types?.includes('caja') && (
                         <div className="form-group">
-                            <label htmlFor="price_box">Precio por Caja ({formData.units_per_box} u)</label>
+                            <label htmlFor="price_box">Precio por Caja ({formData.units_per_box} u) *</label>
                             <input
                                 id="price_box"
                                 name="price_box"
@@ -316,12 +350,15 @@ export default function ProductForm() {
                                 value={formData.price_box}
                                 onChange={handleChange}
                                 disabled={saving}
-                                placeholder="Opcional"
+                                className={errors.price_box ? 'error' : ''}
                             />
+                            {errors.price_box && <span className="error-text">{errors.price_box}</span>}
                         </div>
+                    )}
 
+                    {formData.sale_types?.includes('bulto') && (
                         <div className="form-group">
-                            <label htmlFor="price_bundle">Precio por Bulto ({Number(formData.units_per_box || 12) * Number(formData.boxes_per_bundle || 40)} u)</label>
+                            <label htmlFor="price_bundle">Precio por Bulto ({Number(formData.units_per_box || 12) * Number(formData.boxes_per_bundle || 40)} u) *</label>
                             <input
                                 id="price_bundle"
                                 name="price_bundle"
@@ -330,10 +367,11 @@ export default function ProductForm() {
                                 value={formData.price_bundle}
                                 onChange={handleChange}
                                 disabled={saving}
-                                placeholder="Opcional"
+                                className={errors.price_bundle ? 'error' : ''}
                             />
+                            {errors.price_bundle && <span className="error-text">{errors.price_bundle}</span>}
                         </div>
-                    </div>
+                    )}
                 </section>
 
                 {/* Categorización */}
@@ -390,9 +428,63 @@ export default function ProductForm() {
 
 
 
-                {/* Configuración */}
+                {/* Configuración de Venta */}
                 <section className="form-section">
-                    <h2>Configuración</h2>
+                    <h2>Configuración de Venta</h2>
+
+                    <div className="form-group">
+                        <label className="checkbox-label">
+                            <input
+                                name="has_colors"
+                                type="checkbox"
+                                checked={formData.has_colors}
+                                onChange={handleChange}
+                                disabled={saving}
+                            />
+                            <span>Este producto tiene opciones de color</span>
+                        </label>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Tipos de venta disponibles *</label>
+                        <div className="form-checkboxes">
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.sale_types?.includes('unidad')}
+                                    onChange={() => handleSaleTypeChange('unidad')}
+                                    disabled={saving}
+                                />
+                                <span>Venta por Unidad</span>
+                            </label>
+
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.sale_types?.includes('caja')}
+                                    onChange={() => handleSaleTypeChange('caja')}
+                                    disabled={saving}
+                                />
+                                <span>Venta por Caja ({formData.units_per_box} unidades)</span>
+                            </label>
+
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.sale_types?.includes('bulto')}
+                                    onChange={() => handleSaleTypeChange('bulto')}
+                                    disabled={saving}
+                                />
+                                <span>Venta por Bulto ({formData.boxes_per_bundle} cajas)</span>
+                            </label>
+                        </div>
+                        {errors.sale_types && <span className="error-text">{errors.sale_types}</span>}
+                    </div>
+                </section>
+
+                {/* Configuración General */}
+                <section className="form-section">
+                    <h2>Configuración General</h2>
 
                     <div className="form-checkboxes">
                         <label className="checkbox-label">

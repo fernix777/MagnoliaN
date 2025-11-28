@@ -142,12 +142,25 @@
 
 @media (max-width: 768px) {
     .hero-section {
-        height: 50vh;
+        height: 60vh;
         min-height: 400px;
     }
 
     .hero-content {
-        padding: var(--spacing-md);
+        margin-left: 0;
+        padding: var(--spacing-lg);
+        text-align: center;
+        width: 100%;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        padding: 0.25rem 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: var(--spacing-lg);
     }
 
     .hero-indicators {
