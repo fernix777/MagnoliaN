@@ -1,21 +1,15 @@
 import './AboutSection.css';
 import {
     FaBookOpen,
-    FaCreditCard,
-    FaMoneyBillWave,
-    FaBuildingColumns,
     FaTruckFast,
     FaStore,
     FaMotorcycle,
     FaMapLocationDot,
-    FaBolt,
     FaCircleCheck,
     FaShieldHalved,
     FaWhatsapp,
-    FaStar,
-    FaRegCreditCard
+    FaStar
 } from 'react-icons/fa6';
-import { MdPayments } from 'react-icons/md';
 
 export default function AboutSection() {
     return (
@@ -45,45 +39,6 @@ export default function AboutSection() {
                         </p>
                     </div>
 
-                    {/* Métodos de Pago */}
-                    <div className="about-card payment-card">
-                        <div className="card-icon">
-                            <FaCreditCard />
-                        </div>
-                        <h3>Métodos de Pago</h3>
-                        <p>Aceptamos diversas formas de pago para tu comodidad:</p>
-                        <ul className="payment-list">
-                            <li>
-                                <span className="payment-icon"><FaMoneyBillWave /></span>
-                                <div>
-                                    <strong>Efectivo</strong>
-                                    <p>Pago al momento de la entrega</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span className="payment-icon"><FaRegCreditCard /></span>
-                                <div>
-                                    <strong>Tarjetas de Débito/Crédito</strong>
-                                    <p>Visa, MasterCard, American Express</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span className="payment-icon"><FaBuildingColumns /></span>
-                                <div>
-                                    <strong>Transferencias Bancarias</strong>
-                                    <p>Pago directo a nuestra cuenta</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span className="payment-icon"><MdPayments /></span>
-                                <div>
-                                    <strong>Mercado Pago</strong>
-                                    <p>Plataforma segura de pagos online</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
                     {/* Métodos de Envío */}
                     <div className="about-card shipping-card">
                         <div className="card-icon">
@@ -102,22 +57,15 @@ export default function AboutSection() {
                             <li>
                                 <span className="shipping-icon"><FaMotorcycle /></span>
                                 <div>
-                                    <strong>Envío Local</strong>
-                                    <p>Entrega en tu domicilio dentro de la ciudad</p>
+                                    <strong>ENTREGAS EN SALTA CAPITAL</strong>
+                                    <p>Sin costo los sábados</p>
                                 </div>
                             </li>
                             <li>
                                 <span className="shipping-icon"><FaMapLocationDot /></span>
                                 <div>
                                     <strong>Envío Nacional</strong>
-                                    <p>A todo el país mediante correo argentino</p>
-                                </div>
-                            </li>
-                            <li>
-                                <span className="shipping-icon"><FaBolt /></span>
-                                <div>
-                                    <strong>Envío Express</strong>
-                                    <p>Entrega en 24-48 horas (zonas disponibles)</p>
+                                    <p>A todo el país mediante todos los expresos</p>
                                 </div>
                             </li>
                         </ul>

@@ -4,22 +4,26 @@ import './VariantManager.css'
 export default function VariantManager({ variants, onChange }) {
     const [editingIndex, setEditingIndex] = useState(null)
     const [newVariant, setNewVariant] = useState({
-        type: 'caja', // 'caja' o 'bulto'
+        name: '',
         sku: '',
         price_modifier: 0,
-        stock: 0,
-        description: ''
+        stock: 0
     })
 
     const handleAdd = () => {
-        // Verificar si ya existe una variante del mismo tipo
-        const variantExists = variants.some((v, i) => 
-            v.type === newVariant.type && 
+        if (!newVariant.name.trim()) {
+            alert('El nombre de la variante es requerido')
+            return
+        }
+
+        // Verificar si ya existe una variante con el mismo nombre
+        const variantExists = variants.some((v, i) =>
+            v.name.toLowerCase() === newVariant.name.toLowerCase().trim() &&
             i !== editingIndex
         )
 
         if (variantExists) {
-            alert(`Ya existe una variante de tipo ${newVariant.type === 'caja' ? 'caja' : 'bulto'}`)
+            alert(`Ya existe una variante con el nombre "${newVariant.name}"`)
             return
         }
 
@@ -35,13 +39,12 @@ export default function VariantManager({ variants, onChange }) {
 
         // Reset form
         setNewVariant({
-            type: 'caja',
+            name: '',
             sku: '',
             price_modifier: 0,
-            stock: 0,
-            description: ''
+            stock: 0
         })
-        
+
         // Si estábamos editando, limpiamos el índice de edición
         if (editingIndex !== null) {
             setEditingIndex(null)
@@ -56,19 +59,18 @@ export default function VariantManager({ variants, onChange }) {
     }
 
     const handleSave = (index) => {
-        if (!newVariant.color && !newVariant.size) {
-            alert('Debes especificar al menos color o tamaño')
+        if (!newVariant.name.trim()) {
+            alert('El nombre de la variante es requerido')
             return
         }
 
         const updatedVariants = [...variants]
         updatedVariants[index] = { ...newVariant }
         onChange(updatedVariants)
-        
+
         // Resetear el formulario y el índice de edición
         setNewVariant({
-            color: '',
-            size: '',
+            name: '',
             sku: '',
             price_modifier: 0,
             stock: 0
@@ -98,11 +100,21 @@ export default function VariantManager({ variants, onChange }) {
         }))
     }
 
+    const handleCancelEdit = () => {
+        setEditingIndex(null)
+        setNewVariant({
+            name: '',
+            sku: '',
+            price_modifier: 0,
+            stock: 0
+        })
+    }
+
     return (
         <div className="variant-manager">
             <div className="variant-header">
                 <h3>Variantes del Producto</h3>
-                <p>Define diferentes colores, tamaños y precios</p>
+                <p>Define diferentes variantes como colores, tipos, etc. (ej: Cálido, Blanco, Multicolor)</p>
             </div>
 
             {variants.length > 0 && (
@@ -110,10 +122,9 @@ export default function VariantManager({ variants, onChange }) {
                     <table>
                         <thead>
                             <tr>
-                                <th>Tipo</th>
-                                <th>Descripción</th>
+                                <th>Nombre</th>
                                 <th>SKU</th>
-                                <th>Precio</th>
+                                <th>Modificador de Precio</th>
                                 <th>Stock</th>
                                 <th>Acciones</th>
                             </tr>
@@ -123,27 +134,14 @@ export default function VariantManager({ variants, onChange }) {
                                 <tr key={index}>
                                     <td>
                                         {editingIndex === index ? (
-                                            <select
-                                                value={variant.type || 'caja'}
-                                                onChange={(e) => handleChange(index, 'type', e.target.value)}
-                                            >
-                                                <option value="caja">Caja</option>
-                                                <option value="bulto">Bulto</option>
-                                            </select>
-                                        ) : (
-                                            variant.type === 'caja' ? 'Caja' : 'Bulto'
-                                        )}
-                                    </td>
-                                    <td>
-                                        {editingIndex === index ? (
                                             <input
                                                 type="text"
-                                                value={variant.description || ''}
-                                                onChange={(e) => handleChange(index, 'description', e.target.value)}
-                                                placeholder="Descripción"
+                                                value={variant.name || ''}
+                                                onChange={(e) => handleChange(index, 'name', e.target.value)}
+                                                placeholder="Nombre (ej: Cálido)"
                                             />
                                         ) : (
-                                            variant.description || 'Sin descripción'
+                                            <strong>{variant.name}</strong>
                                         )}
                                     </td>
                                     <td>
@@ -221,23 +219,12 @@ export default function VariantManager({ variants, onChange }) {
                 <h4>{editingIndex !== null ? 'Editar Variante' : 'Agregar Nueva Variante'}</h4>
                 <div className="variant-form-grid">
                     <div className="form-field">
-                        <label>Tipo</label>
-                        <select
-                            value={newVariant.type}
-                            onChange={(e) => handleNewVariantChange('type', e.target.value)}
-                        >
-                            <option value="caja">Caja</option>
-                            <option value="bulto">Bulto</option>
-                        </select>
-                    </div>
-
-                    <div className="form-field">
-                        <label>Descripción</label>
+                        <label>Nombre *</label>
                         <input
                             type="text"
-                            value={newVariant.description || ''}
-                            onChange={(e) => handleNewVariantChange('description', e.target.value)}
-                            placeholder="Descripción del producto"
+                            value={newVariant.name || ''}
+                            onChange={(e) => handleNewVariantChange('name', e.target.value)}
+                            placeholder="Ej: Cálido, Blanco, Multicolor"
                         />
                     </div>
 
@@ -247,7 +234,7 @@ export default function VariantManager({ variants, onChange }) {
                             type="text"
                             value={newVariant.sku}
                             onChange={(e) => handleNewVariantChange('sku', e.target.value)}
-                            placeholder="Código único"
+                            placeholder="Código único (opcional)"
                         />
                     </div>
 
@@ -260,6 +247,7 @@ export default function VariantManager({ variants, onChange }) {
                             step="0.01"
                             placeholder="0.00"
                         />
+                        <small>Ajuste al precio base (puede ser negativo)</small>
                     </div>
 
                     <div className="form-field">
@@ -273,14 +261,23 @@ export default function VariantManager({ variants, onChange }) {
                         />
                     </div>
 
-                    <div className="form-field">
+                    <div className="form-field form-actions-field">
                         <button
                             type="button"
                             onClick={handleAdd}
                             className="btn btn-primary"
                         >
-                            + Agregar Variante
+                            {editingIndex !== null ? '✓ Guardar Cambios' : '+ Agregar Variante'}
                         </button>
+                        {editingIndex !== null && (
+                            <button
+                                type="button"
+                                onClick={handleCancelEdit}
+                                className="btn btn-outline"
+                            >
+                                Cancelar
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

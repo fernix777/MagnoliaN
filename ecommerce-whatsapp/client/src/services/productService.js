@@ -103,17 +103,41 @@ export async function createProduct(productData, imageFiles = []) {
         // Generar slug
         const slug = productData.slug || generateSlug(productData.name)
 
+        // Separar variantes de los datos del producto
+        const { variants, ...productFields } = productData
+
         // Crear producto
         const { data: product, error: productError } = await supabase
             .from('products')
             .insert([{
-                ...productData,
+                ...productFields,
                 slug
             }])
             .select()
             .single()
 
         if (productError) throw productError
+
+        // Guardar variantes si existen
+        if (variants && variants.length > 0) {
+            const variantsToInsert = variants.map(v => ({
+                product_id: product.id,
+                variant_type: v.variant_type || 'color',
+                variant_value: v.variant_value || v.name,
+                sku: v.sku || null,
+                price_modifier: Number(v.price_modifier) || 0,
+                stock: Number(v.stock) || 0
+            }))
+
+            const { error: variantsError } = await supabase
+                .from('product_variants')
+                .insert(variantsToInsert)
+
+            if (variantsError) {
+                console.error('Error saving variants:', variantsError)
+                // No lanzamos error, continuamos sin variantes
+            }
+        }
 
         // Subir imágenes si hay
         if (imageFiles.length > 0) {
@@ -142,7 +166,7 @@ export async function createProduct(productData, imageFiles = []) {
             }
         }
 
-        // Obtener producto completo con imágenes
+        // Obtener producto completo con imágenes y variantes
         return await getProductById(product.id)
     } catch (error) {
         console.error('Error creating product:', error)
@@ -158,14 +182,49 @@ export async function createProduct(productData, imageFiles = []) {
  */
 export async function updateProduct(id, productData) {
     try {
+        // Separar variantes de los datos del producto
+        const { variants, ...productFields } = productData
+
         const { data, error } = await supabase
             .from('products')
-            .update(productData)
+            .update(productFields)
             .eq('id', id)
             .select()
             .single()
 
         if (error) throw error
+
+        // Actualizar variantes (Estrategia: Eliminar todas y crear nuevas)
+        if (variants !== undefined) {
+            // 1. Eliminar variantes existentes
+            const { error: deleteError } = await supabase
+                .from('product_variants')
+                .delete()
+                .eq('product_id', id)
+
+            if (deleteError) console.error('Error deleting old variants:', deleteError)
+
+            // 2. Insertar nuevas variantes
+            if (variants.length > 0) {
+                const variantsToInsert = variants.map(v => ({
+                    product_id: id,
+                    variant_type: v.variant_type || 'color',
+                    variant_value: v.variant_value || v.name,
+                    sku: v.sku || null,
+                    price_modifier: Number(v.price_modifier) || 0,
+                    stock: Number(v.stock) || 0
+                }))
+
+                const { error: variantsError } = await supabase
+                    .from('product_variants')
+                    .insert(variantsToInsert)
+
+                if (variantsError) {
+                    console.error('Error updating variants:', variantsError)
+                    // No lanzamos error, continuamos sin variantes
+                }
+            }
+        }
 
         return { data, error: null }
     } catch (error) {

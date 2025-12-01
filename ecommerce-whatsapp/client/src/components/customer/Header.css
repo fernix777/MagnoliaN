@@ -13,6 +13,7 @@
     padding: 0.75rem var(--spacing-lg);
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: var(--spacing-md);
 }
 
@@ -47,7 +48,7 @@
 .header-nav {
     display: flex;
     gap: var(--spacing-md);
-    flex: 1;
+    margin: 0 1rem;
 }
 
 .nav-link {
@@ -133,23 +134,25 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
+    margin-left: auto;
 }
 
 .auth-buttons {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: 8px;
     align-items: center;
+    margin-left: 10px;
 }
 
 .auth-buttons .btn {
     white-space: nowrap;
-    padding: 0.5rem 1.25rem;
-    font-size: 0.9rem;
-    height: 40px;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 120px;
+    min-width: 100px;
 }
 
 .user-dropdown {

@@ -205,7 +205,9 @@
 }
 
 .product-info h3 {
+    font-family: var(--font-secondary);
     font-size: 1.1rem;
+    font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--spacing-xs);
     line-height: 1.3;

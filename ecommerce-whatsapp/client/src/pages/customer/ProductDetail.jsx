@@ -19,7 +19,7 @@ export default function ProductDetail() {
     const [selectedImage, setSelectedImage] = useState(0)
     const [selectedVariant, setSelectedVariant] = useState(null)
     const [quantity, setQuantity] = useState(1)
-    const [purchaseType, setPurchaseType] = useState('') // 'unidad', 'caja' o 'bulto'
+    const [purchaseType, setPurchaseType] = useState('') // 'unidad', 'paquete' o 'bulto'
     const [selectedColor, setSelectedColor] = useState('')
     const [showNotification, setShowNotification] = useState(false)
 
@@ -48,6 +48,37 @@ export default function ProductDetail() {
             maximumFractionDigits: 0
         }).format(price)
     }
+
+    const formatDescription = (description) => {
+        if (!description) return null
+
+        // Detectar si la descripción tiene líneas con asteriscos
+        const lines = description.split('\n').map(line => line.trim()).filter(line => line)
+        const hasBullets = lines.some(line => line.startsWith('*'))
+
+        if (hasBullets) {
+            // Separar el título (primera línea sin asterisco) de los tags
+            const titleLine = lines.find(line => !line.startsWith('*'))
+            const tagLines = lines.filter(line => line.startsWith('*')).map(line => line.substring(1).trim())
+
+            return (
+                <div className="description-container">
+                    {titleLine && <p className="description-title">{titleLine}</p>}
+                    <div className="description-tags">
+                        {tagLines.map((tag, index) => (
+                            <span key={index} className="description-tag">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )
+        }
+
+        // Si no tiene viñetas, mostrar como texto normal
+        return <p>{description}</p>
+    }
+
 
     const handleAddToCart = () => {
         if (!user) {
@@ -91,7 +122,7 @@ export default function ProductDetail() {
         switch (purchaseType) {
             case 'unidad':
                 return basePrice // Precio base por unidad
-            case 'caja':
+            case 'paquete':
                 // Usar precio explícito si existe, sino calcular
                 return product.price_box ? Number(product.price_box) : basePrice * (product.units_per_box || 12)
             case 'bulto':
@@ -205,9 +236,9 @@ export default function ProductDetail() {
                         )}
 
                         {product.description && (
-                            <div className="product-description">
+                            <div className="detail-description">
                                 <h3>Descripción</h3>
-                                <p>{product.description}</p>
+                                {formatDescription(product.description)}
                             </div>
                         )}
 
@@ -235,38 +266,42 @@ export default function ProductDetail() {
                                 {product.sale_types?.includes('unidad') && (
                                     <option value="unidad">Unidad</option>
                                 )}
-                                {product.sale_types?.includes('caja') && (
-                                    <option value="caja">Caja ({product.units_per_box || 12} unidades)</option>
+                                {product.sale_types?.includes('paquete') && (
+                                    <option value="paquete">Paquete ({product.units_per_box || 12} unidades)</option>
                                 )}
                                 {product.sale_types?.includes('bulto') && (
-                                    <option value="bulto">Bulto ({product.boxes_per_bundle || 40} cajas)</option>
+                                    <option value="bulto">Bulto ({product.boxes_per_bundle || 40} paquetes)</option>
                                 )}
                             </select>
                         </div>
 
-                        {/* Selector de color - Solo si el producto tiene colores */}
-                        {product.has_colors && (
+                        {/* Selector de variante - Solo si el producto tiene variantes */}
+                        {product.has_colors && product.variants && product.variants.length > 0 && (
                             <div className="form-group">
                                 <label>Color</label>
                                 <select
                                     className="form-control"
                                     value={selectedColor}
-                                    onChange={(e) => setSelectedColor(e.target.value)}
+                                    onChange={(e) => {
+                                        setSelectedColor(e.target.value)
+                                        // Buscar la variante seleccionada para obtener el modificador de precio
+                                        const selected = product.variants.find(v => v.variant_value === e.target.value)
+                                        setSelectedVariant(selected || null)
+                                    }}
                                 >
                                     <option value="">Elige una opción</option>
-                                    <option value="Rojo">Rojo</option>
-                                    <option value="Azul">Azul</option>
-                                    <option value="Verde">Verde</option>
-                                    <option value="Amarillo">Amarillo</option>
-                                    <option value="Negro">Negro</option>
-                                    <option value="Blanco">Blanco</option>
+                                    {product.variants.map((variant) => (
+                                        <option key={variant.id} value={variant.variant_value}>
+                                            {variant.variant_value}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         )}
 
                         {/* Cantidad */}
                         <div className="product-quantity">
-                            <h3>Cantidad de {purchaseType === 'caja' ? 'cajas' : purchaseType === 'bulto' ? 'bultos' : 'unidades'}</h3>
+                            <h3>Cantidad de {purchaseType === 'paquete' ? 'paquetes' : purchaseType === 'bulto' ? 'bultos' : 'unidades'}</h3>
                             <div className="quantity-selector">
                                 <button
                                     onClick={(e) => {

@@ -42,12 +42,12 @@ export default function Cart({ onClose }) {
         message += '📋 *Productos solicitados:*\n';
         cart.forEach((item, index) => {
             message += `\n${index + 1}. *${item.name}*\n`;
-            message += `   - Cantidad: ${item.quantity} ${item.purchaseType === 'caja' ? 'cajas' : item.purchaseType === 'bulto' ? 'bultos' : 'unidades'}\n`;
+            message += `   - Cantidad: ${item.quantity} ${item.purchaseType === 'paquete' ? 'paquetes' : item.purchaseType === 'bulto' ? 'bultos' : 'unidades'}\n`;
             message += `   - Precio unitario: ${formatPrice(item.price)}\n`;
             message += `   - Subtotal: ${formatPrice(item.price * item.quantity)}\n`;
 
             if (item.selectedColor) {
-                message += `   - Color: ${item.selectedColor}\n`;
+                message += `   - Variante: ${item.selectedColor}\n`;
             }
             if (item.selectedCondition) {
                 message += `   - Condición: ${item.selectedCondition}\n`;
@@ -108,7 +108,7 @@ export default function Cart({ onClose }) {
                             <div className="item-details">
                                 <h4>{item.name}</h4>
                                 <p className="item-variant">
-                                    {item.purchaseType === 'caja' ? 'Caja' : 'Bulto'}
+                                    {item.purchaseType === 'paquete' ? 'Paquete' : 'Bulto'}
                                     {item.selectedColor && ` • ${item.selectedColor}`}
                                     {item.selectedCondition && ` • ${item.selectedCondition}`}
                                 </p>

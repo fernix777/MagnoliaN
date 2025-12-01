@@ -41,7 +41,7 @@ export function CartProvider({ children }) {
                     {
                         ...product,
                         quantity,
-                        purchaseType: options.purchaseType || 'caja',
+                        purchaseType: options.purchaseType || 'paquete',
                         selectedColor: options.selectedColor || '',
                         selectedCondition: options.selectedCondition || '',
                         selectedVariant: options.selectedVariant || null,
