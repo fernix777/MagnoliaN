@@ -108,8 +108,8 @@ export default function ContactPage() {
                             <div className="info-icon">🕐</div>
                             <h3>Horario</h3>
                             <p>
-                                Lunes a Viernes: 9:00 - 18:00<br />
-                                Sábados: 9:00 - 13:00
+                                Lunes a Viernes: 17:00 - 21:00<br />
+                                Sábados: 10:00 - 14:00
                             </p>
                         </div>
 
