@@ -56,7 +56,7 @@ export default function HeroSection() {
             ))}
 
             {/* Contenido */}
-            <div className="hero-content">
+            <div className="hero-content" style={{ display: 'none' }}>
                 <h1 className="hero-title">{slides[currentSlide].title}</h1>
                 <p className="hero-subtitle">{slides[currentSlide].subtitle}</p>
                 <Link to="/productos" className="hero-cta">
