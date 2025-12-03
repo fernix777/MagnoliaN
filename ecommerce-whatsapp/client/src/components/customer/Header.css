@@ -329,4 +329,38 @@
         background-color: var(--off-white);
         color: var(--primary);
     }
+
+    .mobile-auth-link {
+        padding: var(--spacing-md);
+        text-decoration: none;
+        color: var(--dark-gray);
+        font-weight: 500;
+        border-radius: var(--radius-md);
+        transition: all var(--transition-fast);
+        border-bottom: 1px solid var(--light-gray);
+        display: block;
+        text-align: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .mobile-auth-link:hover {
+        background-color: var(--off-white);
+        color: var(--primary);
+    }
+
+    .mobile-auth-primary {
+        background-color: var(--primary);
+        color: var(--white);
+        border-bottom: none;
+        margin-top: var(--spacing-sm);
+        font-weight: 600;
+    }
+
+    .mobile-auth-primary:hover {
+        background-color: var(--primary-dark);
+        color: var(--white);
+    }
 }

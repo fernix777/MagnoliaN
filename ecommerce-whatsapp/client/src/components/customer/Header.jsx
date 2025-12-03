@@ -118,6 +118,24 @@ export default function Header() {
                     <Link to="/productos" onClick={() => setMenuOpen(false)}>Productos</Link>
                     <Link to="/categorias" onClick={() => setMenuOpen(false)}>Categorías</Link>
                     <Link to="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
+                    
+                    {/* Auth Buttons en Mobile */}
+                    {!user && (
+                        <>
+                            <Link to="/login" className="mobile-auth-link" onClick={() => setMenuOpen(false)}>Iniciar Sesión</Link>
+                            <Link to="/registro" className="mobile-auth-link mobile-auth-primary" onClick={() => setMenuOpen(false)}>Registrarse</Link>
+                        </>
+                    )}
+                    
+                    {user && (
+                        <>
+                            <Link to="/mi-cuenta" className="mobile-auth-link" onClick={() => setMenuOpen(false)}>Mi Cuenta</Link>
+                            <Link to="/mis-pedidos" className="mobile-auth-link" onClick={() => setMenuOpen(false)}>Mis Pedidos</Link>
+                            <button onClick={() => { handleSignOut(); setMenuOpen(false); }} className="mobile-auth-link" style={{ color: 'var(--error)' }}>
+                                Cerrar Sesión
+                            </button>
+                        </>
+                    )}
                 </nav>
             )}
 
