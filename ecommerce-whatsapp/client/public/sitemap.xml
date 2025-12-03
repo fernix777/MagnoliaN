@@ -4,40 +4,40 @@
   
   <!-- Homepage -->
   <url>
-    <loc>https://magnolia-novedades.vercel.app/</loc>
-    <lastmod>2025-11-28</lastmod>
+    <loc>https://www.magnolia-n.com/</loc>
+    <lastmod>2025-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   
   <!-- Products Page -->
   <url>
-    <loc>https://magnolia-novedades.vercel.app/productos</loc>
-    <lastmod>2025-11-28</lastmod>
+    <loc>https://www.magnolia-n.com/productos</loc>
+    <lastmod>2025-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Categories Page -->
   <url>
-    <loc>https://magnolia-novedades.vercel.app/categorias</loc>
-    <lastmod>2025-11-28</lastmod>
+    <loc>https://www.magnolia-n.com/categorias</loc>
+    <lastmod>2025-12-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <!-- Contact Page -->
   <url>
-    <loc>https://magnolia-novedades.vercel.app/contacto</loc>
-    <lastmod>2025-11-28</lastmod>
+    <loc>https://www.magnolia-n.com/contacto</loc>
+    <lastmod>2025-12-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <!-- About Page (if exists) -->
   <url>
-    <loc>https://magnolia-novedades.vercel.app/nosotros</loc>
-    <lastmod>2025-11-28</lastmod>
+    <loc>https://www.magnolia-n.com/nosotros</loc>
+    <lastmod>2025-12-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

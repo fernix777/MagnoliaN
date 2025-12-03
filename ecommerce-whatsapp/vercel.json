@@ -2,5 +2,12 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install",
-  "framework": "vite"
+  "framework": "vite",
+  "env": {
+    "VITE_SITE_URL": "https://www.magnolia-n.com"
+  },
+  "domains": [
+    "www.magnolia-n.com",
+    "magnolia-n.com"
+  ]
 }

@@ -21,4 +21,4 @@ Allow: /contacto
 Allow: /nosotros
 
 # Sitemap location
-Sitemap: https://magnolia-novedades.vercel.app/sitemap.xml
+Sitemap: https://www.magnolia-n.com/sitemap.xml
