@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>Magnolia Novedades - Productos</title>
+        <link>https://www.magnolia-n.com</link>
+        <description>Decoración y regalos únicos en San Salvador de Jujuy, Argentina</description>
+        <language>es-ar</language>
+        <lastBuildDate>2025-12-10T23:53:35.996Z</lastBuildDate>
+        <image>
+            <url>https://www.magnolia-n.com/logo.jpg</url>
+            <title>Magnolia Novedades</title>
+            <link>https://www.magnolia-n.com</link>
+        </image>
+        
+    <item>
+        <title>Producto Destacado 1</title>
+        <link>https://www.magnolia-n.com/producto/producto-destacado-1</link>
+        <description>Descripción del primer producto destacado</description>
+        <category>Decoración</category>
+        <price>1999.99</price>
+        <image>https://www.magnolia-n.com/logo.jpg</image>
+        <pubDate>2025-12-10T23:53:35.996Z</pubDate>
+        <guid>https://www.magnolia-n.com/producto/producto-destacado-1</guid>
+    </item>
+    <item>
+        <title>Producto Destacado 2</title>
+        <link>https://www.magnolia-n.com/producto/producto-destacado-2</link>
+        <description>Descripción del segundo producto destacado</description>
+        <category>Regalos</category>
+        <price>2499.99</price>
+        <image>https://www.magnolia-n.com/logo.jpg</image>
+        <pubDate>2025-12-10T23:53:35.996Z</pubDate>
+        <guid>https://www.magnolia-n.com/producto/producto-destacado-2</guid>
+    </item>
+    <item>
+        <title>Producto Destacado 3</title>
+        <link>https://www.magnolia-n.com/producto/producto-destacado-3</link>
+        <description>Descripción del tercer producto destacado</description>
+        <category>Accesorios</category>
+        <price>1799.99</price>
+        <image>https://www.magnolia-n.com/logo.jpg</image>
+        <pubDate>2025-12-10T23:53:35.996Z</pubDate>
+        <guid>https://www.magnolia-n.com/producto/producto-destacado-3</guid>
+    </item>
+    </channel>
+</rss>
