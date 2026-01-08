@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
+import { trackContact } from '../../services/facebookService'
+import { useAuth } from '../../context/AuthContext'
 import './ContactPage.css'
 
 export default function ContactPage() {
+    const { user } = useAuth()
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -24,9 +27,21 @@ export default function ContactPage() {
         }))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         setSending(true)
+
+        // Rastrear evento de contacto en Facebook
+        const userData = user ? {
+            email: user.email || formData.email,
+            user_id: user.id,
+            phone: user.phone || formData.phone
+        } : {
+            email: formData.email,
+            phone: formData.phone
+        }
+        
+        await trackContact(formData.message, userData)
 
         // Construir mensaje de WhatsApp con los datos del formulario
         const phoneNumber = '543885171795'

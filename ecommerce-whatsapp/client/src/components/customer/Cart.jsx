@@ -23,7 +23,7 @@ export default function Cart({ onClose }) {
 
     const handleCheckout = () => {
         if (!user) {
-            navigate('/login?redirect=/carrito');
+            navigate('/login?redirect=/checkout');
             return;
         }
 
@@ -33,7 +33,9 @@ export default function Cart({ onClose }) {
             user_id: user.id
         });
 
-        setIsCheckout(true);
+        // Navegar a página de checkout
+        navigate('/checkout');
+        onClose();
     };
 
     const handleWhatsAppOrder = () => {
@@ -200,10 +202,16 @@ export default function Cart({ onClose }) {
                         <div className="checkout-options">
                             <p>¿Cómo deseas realizar tu pedido?</p>
                             <button
+                                className="btn btn-primary"
+                                onClick={() => navigate('/checkout')}
+                            >
+                                📝 Completar Compra
+                            </button>
+                            <button
                                 className="btn btn-whatsapp"
                                 onClick={handleWhatsAppOrder}
                             >
-                                <FaWhatsapp /> Completar por WhatsApp
+                                <FaWhatsapp /> Coordinar por WhatsApp
                             </button>
                             <button
                                 className="btn btn-outline"

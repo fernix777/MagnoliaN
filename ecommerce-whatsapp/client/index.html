@@ -150,32 +150,29 @@
 <body>
   <div id="root"></div>
   
-  <!-- Meta Pixel Code - Async load after React mounts -->
-  <script defer>
-    window.addEventListener('DOMContentLoaded', function() {
-      // Usar setTimeout para asegurar que React ya montó
-      setTimeout(function() {
-        if (typeof fbq === 'undefined') {
-          !function(f,b,e,v,n,t,s) {
-            if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)
-          }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-        }
-        if (typeof fbq !== 'undefined') {
-          fbq('init', '1532565591243521');
-          fbq('track', 'PageView');
-        }
-      }, 100);
+  <!-- Facebook Meta Pixel Code - Version mejorada con deduplicación -->
+  <script>
+    !function(f,b,e,v,n,t,s) {
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)
+    }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1613812252958290');
+    fbq('track', 'PageView');
+    
+    // Configurar modo de deduplicación
+    fbq('set', 'config', {
+      'autoConfig': true
     });
   </script>
   <noscript>
     <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1532565591243521&ev=PageView&noscript=1" />
+      src="https://www.facebook.com/tr?id=1613812252958290&ev=PageView&noscript=1" />
   </noscript>
+  <!-- End Facebook Meta Pixel Code -->
   
   <script type="module" src="/src/main.jsx"></script>
 </body>

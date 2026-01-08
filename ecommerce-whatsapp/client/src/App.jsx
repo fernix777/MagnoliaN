@@ -13,6 +13,8 @@ import ProductsPage from './pages/customer/ProductsPage';
 import CategoriesPage from './pages/customer/CategoriesPage';
 import ContactPage from './pages/customer/ContactPage';
 import SearchPage from './pages/customer/SearchPage';
+import CheckoutPage from './pages/customer/CheckoutPage';
+import OrderConfirmation from './pages/customer/OrderConfirmation';
 
 // Páginas de autenticación
 import Login from './pages/auth/Login';
@@ -47,6 +49,8 @@ function App() {
                             <Route path="/categoria/:slug" element={<CategoryPage />} />
                             <Route path="/buscar" element={<SearchPage />} />
                             <Route path="/contacto" element={<ContactPage />} />
+                            <Route path="/checkout" element={<CheckoutPage />} />
+                            <Route path="/order-confirmation" element={<OrderConfirmation />} />
 
                             {/* Rutas de autenticación de administradores */}
                             <Route path="/admin/login" element={

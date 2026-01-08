@@ -72,6 +72,13 @@ const prepareUserData = async (user) => {
 };
 
 /**
+ * Generar ID único para evento (para deduplicación)
+ */
+const generateEventId = () => {
+    return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
+/**
  * Enviar evento a Facebook Conversion API
  */
 export const trackFacebookEvent = async (eventName, eventData = {}) => {
@@ -82,11 +89,15 @@ export const trackFacebookEvent = async (eventName, eventData = {}) => {
 
     try {
         const userData = eventData.user ? await prepareUserData(eventData.user) : await prepareUserData({});
+        
+        // Generar ID único para deduplicación
+        const eventId = generateEventId();
 
         const payload = {
             data: [
                 {
                     event_name: eventName,
+                    event_id: eventId, // Agregado para deduplicación
                     event_time: Math.floor(Date.now() / 1000),
                     event_source_url: typeof window !== 'undefined' ? window.location.href : '',
                     action_source: 'website',
@@ -126,6 +137,12 @@ export const trackFacebookEvent = async (eventName, eventData = {}) => {
 
         const result = await response.json();
         console.log(`✅ Evento Facebook registrado (Alta Precisión): ${eventName}`, result);
+        
+        // También enviar al Pixel del navegador para deduplicación
+        if (typeof window !== 'undefined' && window.fbq) {
+            window.fbq('track', eventName, {}, { eventID: eventId });
+        }
+        
         return result;
 
     } catch (error) {
