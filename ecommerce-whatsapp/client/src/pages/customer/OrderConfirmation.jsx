@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { trackPurchase } from '../../services/facebookService'
+import { trackPurchase as trackPixelPurchase } from '../../utils/facebookPixel'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -65,6 +66,8 @@ export default function OrderConfirmation() {
             }
 
             trackPurchase(purchaseData)
+            // Rastrear en Facebook Pixel
+            trackPixelPurchase(order.total, 'ARS', orderId || order.order_id)
             setPurchaseTracked(true)
 
             // Limpiar localStorage

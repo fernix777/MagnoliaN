@@ -8,6 +8,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
 import { trackViewContent, trackAddToCart } from '../../services/facebookService'
+import { trackViewContent as trackPixelViewContent, trackAddToCart as trackPixelAddToCart } from '../../utils/facebookPixel'
 import './ProductDetail.css'
 
 export default function ProductDetail() {
@@ -50,6 +51,8 @@ export default function ProductDetail() {
             } : null;
 
             trackViewContent(product, currentUser);
+            // Rastrear en Facebook Pixel
+            trackPixelViewContent(product.name, product.base_price);
         }
     }, [product, user]);
 
@@ -134,6 +137,8 @@ export default function ProductDetail() {
             user_id: user.id
         } : null;
         trackAddToCart(product, quantity, currentUser);
+        // Rastrear en Facebook Pixel
+        trackPixelAddToCart(product.name, finalPrice);
 
         // Mostrar notificación
         setShowNotification(true)

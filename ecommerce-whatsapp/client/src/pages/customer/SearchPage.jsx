@@ -3,6 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../../config/supabase'
 import { AuthContext } from '../../context/AuthContext'
 import { trackSearch } from '../../services/facebookService'
+import { trackSearch as trackPixelSearch } from '../../utils/facebookPixel'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -36,6 +37,8 @@ export default function SearchPage() {
                 email: user?.email,
                 user_id: user?.id
             });
+            // Rastrear en Facebook Pixel
+            trackPixelSearch(query);
         }
     }, [query, products.length, loading, user]);
 

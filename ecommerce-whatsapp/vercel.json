@@ -1,24 +1,11 @@
 {
-  "projects": [
-    {
-      "name": "magnolia-client",
-      "path": "client",
-      "buildCommand": "npm run build",
-      "outputDirectory": "dist",
-      "installCommand": "npm install",
-      "framework": "vite",
-      "env": {
-        "VITE_SITE_URL": "https://www.magnolia-n.com"
-      }
-    },
-    {
-      "name": "magnolia-server",
-      "path": "server",
-      "buildCommand": "npm run build",
-      "installCommand": "npm install",
-      "framework": "nodejs"
-    }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "framework": "vite",
+  "env": {
+    "VITE_SITE_URL": "https://www.magnolia-n.com"
+  },
   "domains": [
     "www.magnolia-n.com",
     "magnolia-n.com"

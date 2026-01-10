@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
 import { trackInitiateCheckout, trackPurchase } from '../../services/facebookService'
+import { trackInitiateCheckout as trackPixelInitiateCheckout } from '../../utils/facebookPixel'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -45,6 +46,8 @@ export default function CheckoutPage() {
             } : null
             
             trackInitiateCheckout(cartTotal, cartItemsCount, userData)
+            // Rastrear en Facebook Pixel
+            trackPixelInitiateCheckout(cartTotal)
             setCheckoutInitiated(true)
         }
     }, [cart, user, cartTotal, cartItemsCount, checkoutInitiated])
