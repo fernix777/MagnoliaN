@@ -1,363 +1,201 @@
 /**
- * Facebook Conversion API Service
- * Servicio para enviar eventos de conversión a Facebook con alta precisión
+ * Facebook Pixel Service (Client-Side Only)
+ * Rastreo simplificado usando solo Facebook Pixel del navegador
+ * Sin dependencias de backend
  */
 
-import { FACEBOOK_CONFIG, FACEBOOK_EVENTS, isFacebookConfigured } from '../config/facebook';
-
-/**
- * Obtener valor de una cookie por nombre
- */
-const getCookie = (name) => {
-    if (typeof document === 'undefined') return null;
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-};
-
-/**
- * Hash de string usando SHA-256 (requerido por Facebook)
- * Compatible con el navegador
- */
-const hashString = async (str) => {
-    if (!str) return null;
-    try {
-        // Normalizar: lowercase, trim, remove spaces
-        const normalized = str.toLowerCase().trim().replace(/\s+/g, '');
-        const buffer = new TextEncoder().encode(normalized);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        return hashHex;
-    } catch (error) {
-        console.error('Error al hacer hash:', error);
-        return null;
-    }
-};
-
-/**
- * Preparar datos de usuario con hash y parámetros de alta precisión
- */
-const prepareUserData = async (user) => {
-    const userData = {};
-
-    // Datos básicos (Hasheados)
-    if (user?.email) userData.em = await hashString(user.email);
-    if (user?.phone) userData.ph = await hashString(user.phone);
-    if (user?.first_name) userData.fn = await hashString(user.first_name);
-    if (user?.last_name) userData.ln = await hashString(user.last_name);
-
-    // Ubicación (Hasheados)
-    if (user?.city) userData.ct = await hashString(user.city);
-    if (user?.state) userData.st = await hashString(user.state);
-    if (user?.zip) userData.zp = await hashString(user.zip);
-    if (user?.country) userData.country = await hashString(user.country);
-
-    // Identificadores de Facebook (NO hasheados)
-    const fbp = getCookie('_fbp');
-    const fbc = getCookie('_fbc');
-    if (fbp) userData.fbp = fbp;
-    if (fbc) userData.fbc = fbc;
-
-    // Identificador externo
-    if (user?.user_id || user?.id) {
-        userData.external_id = user.user_id || user.id;
-    }
-
-    // Datos del navegador
-    if (typeof navigator !== 'undefined') {
-        userData.client_user_agent = navigator.userAgent;
-    }
-
-    return userData;
-};
-
-/**
- * Generar ID único para evento (para deduplicación)
- */
-const generateEventId = () => {
-    return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-};
-
-/**
- * Enviar evento a Facebook Conversion API
- */
-export const trackFacebookEvent = async (eventName, eventData = {}) => {
-    if (!isFacebookConfigured()) {
-        console.warn('Facebook Conversion API no está configurada. Falta PIXEL_ID o ACCESS_TOKEN');
-        return null;
-    }
-
-    try {
-        const userData = eventData.user ? await prepareUserData(eventData.user) : await prepareUserData({});
-        
-        // Generar ID único para deduplicación
-        const eventId = generateEventId();
-
-        // Limpiar custom_data: remover campos undefined y NaN
-        const customData = {};
-        if (eventData.value !== undefined && !isNaN(eventData.value)) {
-            customData.value = eventData.value;
-        }
-        if (eventData.currency) {
-            customData.currency = eventData.currency || 'ARS';
-        }
-        if (eventData.content_name) {
-            customData.content_name = eventData.content_name;
-        }
-        if (eventData.content_type) {
-            customData.content_type = eventData.content_type || 'product';
-        }
-        if (eventData.content_id) {
-            customData.content_id = eventData.content_id;
-        }
-        if (eventData.contents && eventData.contents.length > 0) {
-            customData.contents = eventData.contents;
-        }
-
-        const payload = {
-            data: [
-                {
-                    event_name: eventName,
-                    event_id: eventId, // Agregado para deduplicación
-                    event_time: Math.floor(Date.now() / 1000),
-                    event_source_url: typeof window !== 'undefined' ? window.location.href : '',
-                    action_source: 'website',
-                    user_data: userData,
-                    custom_data: customData
-                }
-            ],
-            test_event_code: import.meta.env.VITE_FACEBOOK_TEST_EVENT_CODE // Opcional: para testing
-        };
-
-        const response = await fetch(
-            `https://graph.facebook.com/${FACEBOOK_CONFIG.API_VERSION}/${FACEBOOK_CONFIG.PIXEL_ID}/events`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    ...payload,
-                    access_token: FACEBOOK_CONFIG.ACCESS_TOKEN
-                })
-            }
-        );
-
-        if (!response.ok) {
-            const error = await response.json();
-            console.error('Error en Facebook Conversion API:', error);
-            return null;
-        }
-
-        const result = await response.json();
-        console.log(`✅ Evento Facebook registrado (Alta Precisión): ${eventName}`, result);
-        
-        // También enviar al Pixel del navegador para deduplicación
-        if (typeof window !== 'undefined' && window.fbq) {
-            window.fbq('track', eventName, {}, { eventID: eventId });
-        }
-        
-        return result;
-
-    } catch (error) {
-        console.error('Error al rastrear evento Facebook:', error);
-        return null;
-    }
-};
+import { 
+  fbq, 
+  trackPageView as trackPixelPageView,
+  trackViewContent as trackPixelViewContent,
+  trackAddToCart as trackPixelAddToCart,
+  trackInitiateCheckout as trackPixelInitiateCheckout,
+  trackPurchase as trackPixelPurchase,
+  trackSearch as trackPixelSearch
+} from '../utils/facebookPixel';
 
 /**
  * Rastrear visualización de contenido
  */
-export const trackViewContent = async (product, user = null) => {
-    // 1. Rastrear desde cliente
-    const clientResult = await trackFacebookEvent(FACEBOOK_EVENTS.VIEW_CONTENT, {
-        user,
-        content_id: product.id,
-        content_name: product.name,
-        value: product.base_price,
-        contents: [
-            {
-                id: product.id,
-                quantity: 1,
-                delivery_category: 'home_delivery'
-            }
-        ]
+export const trackViewContent = (product, user = null) => {
+  try {
+    // Rastrear en Facebook Pixel
+    trackPixelViewContent(product.name, product.base_price);
+    
+    // Log para debugging
+    console.log('✅ ViewContent tracked:', {
+      product_name: product.name,
+      price: product.base_price,
+      user: user?.email
     });
-
-    // 2. Rastrear desde servidor (deduplicación)
-    const serverResult = await trackServerEvent('track-view', {
-        product,
-        user
-    });
-
-    return clientResult || serverResult;
+    
+    return true;
+  } catch (error) {
+    console.error('Error tracking ViewContent:', error);
+    return false;
+  }
 };
 
 /**
  * Rastrear agregar al carrito
  */
-export const trackAddToCart = async (product, quantity, user = null) => {
-    // 1. Rastrear desde cliente
-    const clientResult = await trackFacebookEvent(FACEBOOK_EVENTS.ADD_TO_CART, {
-        user,
-        content_id: product.id,
-        content_name: product.name,
-        value: product.base_price * quantity,
-        contents: [
-            {
-                id: product.id,
-                quantity: quantity,
-                delivery_category: 'home_delivery'
-            }
-        ]
+export const trackAddToCart = (product, quantity, user = null) => {
+  try {
+    // Rastrear en Facebook Pixel
+    const totalPrice = (product.base_price || 0) * quantity;
+    trackPixelAddToCart(product.name, totalPrice);
+    
+    // Log para debugging
+    console.log('✅ AddToCart tracked:', {
+      product_name: product.name,
+      quantity: quantity,
+      total_price: totalPrice,
+      user: user?.email
     });
-
-    // 2. Rastrear desde servidor (más confiable)
-    const serverResult = await trackServerEvent('track-add-to-cart', {
-        product,
-        quantity,
-        user
-    });
-
-    return clientResult || serverResult;
+    
+    return true;
+  } catch (error) {
+    console.error('Error tracking AddToCart:', error);
+    return false;
+  }
 };
 
 /**
  * Rastrear iniciación de checkout
  */
-export const trackInitiateCheckout = async (cartTotal, itemsCount, user = null) => {
-    // 1. Rastrear desde cliente
-    const clientResult = await trackFacebookEvent(FACEBOOK_EVENTS.INITIATE_CHECKOUT, {
-        user,
-        value: cartTotal,
-        content_type: 'product_group',
-        contents: [
-            {
-                quantity: itemsCount,
-                delivery_category: 'home_delivery'
-            }
-        ]
+export const trackInitiateCheckout = (cartTotal, itemsCount, user = null) => {
+  try {
+    // Rastrear en Facebook Pixel
+    trackPixelInitiateCheckout(cartTotal);
+    
+    // Log para debugging
+    console.log('✅ InitiateCheckout tracked:', {
+      cart_total: cartTotal,
+      items_count: itemsCount,
+      user: user?.email
     });
-
-    // 2. Rastrear desde servidor
-    const serverResult = await trackServerEvent('track-checkout', {
-        cartTotal,
-        itemsCount,
-        user
-    });
-
-    return clientResult || serverResult;
+    
+    return true;
+  } catch (error) {
+    console.error('Error tracking InitiateCheckout:', error);
+    return false;
+  }
 };
 
 /**
- * Rastrear compra/conversión
+ * Rastrear compra completada
  */
-export const trackPurchase = async (order) => {
-    // 1. Rastrear desde cliente
-    const clientResult = await trackFacebookEvent(FACEBOOK_EVENTS.PURCHASE, {
-        user: order.user,
-        value: order.total,
-        content_id: order.id,
-        content_name: `Order #${order.id}`,
-        contents: order.items.map(item => ({
-            id: item.product_id,
-            quantity: item.quantity,
-            item_price: item.price,
-            title: item.product_name,
-            delivery_category: 'home_delivery'
-        }))
+export const trackPurchase = (order) => {
+  try {
+    // Rastrear en Facebook Pixel
+    const orderId = order.id || order.order_id;
+    trackPixelPurchase(order.total, 'ARS', orderId);
+    
+    // Log para debugging
+    console.log('✅ Purchase tracked:', {
+      order_id: orderId,
+      total: order.total,
+      items_count: order.items?.length || 0,
+      user: order.user?.email
     });
-
-    // 2. Rastrear desde servidor (CRÍTICO para conversiones)
-    const serverResult = await trackServerEvent('track-purchase', {
-        order
-    });
-
-    return clientResult || serverResult;
-};
-
-/**
- * Rastrear registro completado
- */
-export const trackCompleteRegistration = async (user) => {
-    // 1. Rastrear desde cliente
-    const clientResult = await trackFacebookEvent(FACEBOOK_EVENTS.COMPLETE_REGISTRATION, {
-        user,
-        content_name: 'Registration',
-        content_type: 'lead'
-    });
-
-    // 2. Rastrear desde servidor
-    const serverResult = await trackServerEvent('track-registration', {
-        user
-    });
-
-    return clientResult || serverResult;
+    
+    return true;
+  } catch (error) {
+    console.error('Error tracking Purchase:', error);
+    return false;
+  }
 };
 
 /**
  * Rastrear búsqueda
  */
-export const trackSearch = async (searchQuery, resultsCount, user = null) => {
-    return trackFacebookEvent(FACEBOOK_EVENTS.SEARCH, {
-        user,
-        content_name: searchQuery,
-        content_type: 'search_results',
-        value: resultsCount
+export const trackSearch = (searchQuery, resultsCount, user = null) => {
+  try {
+    // Rastrear en Facebook Pixel
+    trackPixelSearch(searchQuery);
+    
+    // Log para debugging
+    console.log('✅ Search tracked:', {
+      search_query: searchQuery,
+      results_count: resultsCount,
+      user: user?.email
     });
+    
+    return true;
+  } catch (error) {
+    console.error('Error tracking Search:', error);
+    return false;
+  }
+};
+
+/**
+ * Rastrear registro completado
+ */
+export const trackCompleteRegistration = (user) => {
+  try {
+    // Rastrear event de registro personalizado
+    fbq('track', 'CompleteRegistration', {
+      content_name: 'Registration',
+      content_type: 'lead'
+    });
+    
+    // Log para debugging
+    console.log('✅ CompleteRegistration tracked:', {
+      user: user?.email
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error tracking CompleteRegistration:', error);
+    return false;
+  }
 };
 
 /**
  * Rastrear contacto/consulta
  */
-export const trackContact = async (message, user = null) => {
-    return trackFacebookEvent(FACEBOOK_EVENTS.CONTACT, {
-        user,
-        content_name: 'Contact',
-        content_type: 'inquiry',
-        value: message.length
+export const trackContact = (message, user = null) => {
+  try {
+    // Rastrear event de contacto personalizado
+    fbq('track', 'Contact', {
+      content_name: 'Contact',
+      content_type: 'inquiry'
     });
+    
+    // Log para debugging
+    console.log('✅ Contact tracked:', {
+      user: user?.email,
+      message_length: message.length
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error tracking Contact:', error);
+    return false;
+  }
 };
 
 /**
- * Enviar evento al servidor para rastreo server-side
+ * Rastrear vista de página
  */
-const trackServerEvent = async (endpoint, data) => {
-    try {
-        const response = await fetch(`/api/facebook/${endpoint}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                ...data,
-                eventSourceUrl: typeof window !== 'undefined' ? window.location.href : ''
-            })
-        });
-
-        if (!response.ok) {
-            console.warn(`Server tracking failed: ${endpoint}`);
-            return null;
-        }
-
-        const result = await response.json();
-        console.log(`✅ Server-side event tracked: ${endpoint}`, result);
-        return result;
-    } catch (error) {
-        console.error(`Error en server tracking (${endpoint}):`, error);
-        return null;
-    }
+export const trackPageView = () => {
+  try {
+    trackPixelPageView();
+    console.log('✅ PageView tracked');
+    return true;
+  } catch (error) {
+    console.error('Error tracking PageView:', error);
+    return false;
+  }
 };
 
 export default {
-    trackFacebookEvent,
-    trackViewContent,
-    trackAddToCart,
-    trackInitiateCheckout,
-    trackPurchase,
-    trackCompleteRegistration,
-    trackSearch,
-    trackContact
+  trackViewContent,
+  trackAddToCart,
+  trackInitiateCheckout,
+  trackPurchase,
+  trackCompleteRegistration,
+  trackSearch,
+  trackContact,
+  trackPageView
 };
