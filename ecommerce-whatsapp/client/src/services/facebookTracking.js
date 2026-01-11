@@ -1,6 +1,8 @@
 // client/src/services/facebookTracking.js
 // Servicio para tracking dual: Pixel + CAPI
 
+import { setupEnhancedMatching } from '../utils/enhancedMatching';
+
 /**
  * Obtener cookies de Facebook para tracking
  */
@@ -46,6 +48,11 @@ const trackDualEvent = async (pixelEvent, serverEndpoint, eventData) => {
   const eventId = generateEventId();
   const eventSourceUrl = window.location.href;
   const userData = getUserData(eventData.user);
+
+  // Configurar Enhanced Matching si hay datos de usuario
+  if (eventData.user && (eventData.user.email || eventData.user.phone)) {
+    setupEnhancedMatching(eventData.user);
+  }
 
   // 1. Pixel Event (Browser)
   if (typeof fbq !== 'undefined') {

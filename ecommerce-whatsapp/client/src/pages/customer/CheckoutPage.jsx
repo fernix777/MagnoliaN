@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
 import { trackInitiateCheckout, trackPurchase } from '../../services/facebookTracking'
+import { setupEnhancedMatching } from '../../utils/enhancedMatching'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -73,6 +74,18 @@ export default function CheckoutPage() {
         setProcessing(true)
 
         try {
+            // Configurar Enhanced Matching con los datos del formulario
+            setupEnhancedMatching({
+                email: formData.email,
+                phone: formData.phone,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                zip: formData.zipCode,
+                city: formData.city,
+                state: formData.state || 'Jujuy',
+                country: 'ar'
+            });
+
             // Preparar datos de la orden
             const orderData = {
                 customer: formData,

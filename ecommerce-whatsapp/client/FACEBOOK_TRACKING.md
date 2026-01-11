@@ -9,6 +9,7 @@ El servicio `facebookTracking.js` proporciona tracking dual (Pixel + CAPI) para 
 3. **Event ID único** para deduplicación
 4. **Cookies fbp/fbc** automáticas
 5. **User Agent y datos de cliente**
+6. **Enhanced Matching** para mejorar Event Match Quality
 
 ## 🚀 Instalación y Configuración
 
@@ -29,6 +30,26 @@ import {
 - **PageView**: Automático en cada cambio de ruta (implementado en App.jsx)
 - **Cookies**: Automáticas desde el navegador
 - **User Data**: Automático desde AuthContext
+- **Enhanced Matching**: Automático en login/logout y formulario de checkout
+
+## 🎯 Enhanced Matching
+
+El Enhanced Matching mejora drásticamente el Event Match Quality al proporcionar datos de usuario adicionales:
+
+### Configuración automática
+- **Login/Logout**: Configurado automáticamente en AuthContext
+- **Checkout**: Configurado al enviar el formulario
+- **Eventos con datos**: Configurado automáticamente si hay email/phone
+
+### Datos utilizados
+- **Email** (em) - El más importante
+- **Teléfono** (ph)
+- **Nombre** (fn)
+- **Apellido** (ln)
+- **Ciudad** (ct)
+- **Estado** (st)
+- **Código Postal** (zp)
+- **País** (country)
 
 ## 📱 Eventos Disponibles
 
@@ -136,18 +157,22 @@ const order = {
 
 ## 🔄 Flujo Completo
 
-1. **Usuario visita producto** → `ViewContent` (Pixel + CAPI)
-2. **Usuario agrega al carrito** → `AddToCart` (Pixel + CAPI)
-3. **Usuario inicia checkout** → `InitiateCheckout` (Pixel + CAPI)
-4. **Usuario completa compra** → `Purchase` (Pixel + CAPI)
-5. **Navegación entre páginas** → `PageView` (Pixel solo)
+1. **Usuario inicia sesión** → Enhanced Matching configurado automáticamente
+2. **Usuario visita producto** → `ViewContent` (Pixel + CAPI + Enhanced Matching)
+3. **Usuario agrega al carrito** → `AddToCart` (Pixel + CAPI + Enhanced Matching)
+4. **Usuario inicia checkout** → `InitiateCheckout` (Pixel + CAPI + Enhanced Matching)
+5. **Usuario completa compra** → `Purchase` (Pixel + CAPI + Enhanced Matching)
+6. **Navegación entre páginas** → `PageView` (Pixel solo)
+7. **Usuario cierra sesión** → Enhanced Matching limpiado
 
 ## 📊 Logs y Debugging
 
 Cada evento genera logs en la consola:
 
 ```javascript
+✅ Enhanced Matching configurado: {em: "email@ejemplo.com", fn: "Juan", ...}
 ✅ Dual tracking enviado: ViewContent { success: true, data: {...} }
+🔄 Enhanced Matching limpiado
 ```
 
 ## 🛠️ Endpoints Serverless
@@ -164,11 +189,14 @@ El servicio utiliza endpoints serverless en Vercel:
 - **Event ID único**: Generado automáticamente para deduplicación
 - **Cookies fbp/fbc**: Extraídas automáticamente del navegador
 - **User Agent**: Incluido automáticamente
+- **Enhanced Matching**: Configurado automáticamente con datos de usuario
 - **Errores**: Los errores de CAPI no afectan el Pixel
 - **Async**: Las funciones son async pero no bloquean el UI
+- **Event Match Quality**: Mejora significativamente con Enhanced Matching
 
 ## 🔧 Mantenimiento
 
 - **Variables de entorno**: Configurar en Vercel (`FB_PIXEL_ID`, `FB_ACCESS_TOKEN`)
 - **Gateway de Meta**: Configurar con URL del endpoint
 - **Testing**: Probar cada evento en la consola del navegador
+- **Enhanced Matching**: Verificar logs de configuración en login/checkout

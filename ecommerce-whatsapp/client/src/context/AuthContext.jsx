@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../config/supabase'
+import { setupEnhancedMatching, clearEnhancedMatching, getUserDataForMatching } from '../utils/enhancedMatching'
 
 export const AuthContext = createContext({})
 
@@ -10,14 +11,35 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         // Obtener sesión actual
         supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user ?? null)
-            setLoading(false)
+            const user = session?.user ?? null;
+            setUser(user);
+            
+            // Configurar Enhanced Matching si hay usuario
+            if (user) {
+                const matchingData = getUserDataForMatching(user.user_metadata);
+                if (matchingData) {
+                    setupEnhancedMatching(matchingData);
+                }
+            }
+            
+            setLoading(false);
         })
 
         // Escuchar cambios de autenticación
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             (_event, session) => {
-                setUser(session?.user ?? null)
+                const user = session?.user ?? null;
+                setUser(user);
+                
+                // Configurar Enhanced Matching según el estado de autenticación
+                if (user) {
+                    const matchingData = getUserDataForMatching(user.user_metadata);
+                    if (matchingData) {
+                        setupEnhancedMatching(matchingData);
+                    }
+                } else {
+                    clearEnhancedMatching();
+                }
             }
         )
 
