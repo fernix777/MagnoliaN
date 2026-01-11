@@ -65,8 +65,36 @@ export default function OrderConfirmation() {
                 }))
             }
 
-            // CAPI (servidor)
+            // CAPI (servidor) - llamada original al backend
             trackPurchase(purchaseData)
+
+            // CAPI (serverless Vercel) - nueva llamada
+            fetch('/api/facebook/track-purchase', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    order: {
+                        id: orderId || order.order_id,
+                        total: order.total,
+                        user: userData,
+                        items: order.items.map(item => ({
+                            product_id: item.id,
+                            quantity: item.quantity,
+                            price: item.price,
+                            product_name: item.name
+                        }))
+                    },
+                    eventSourceUrl: window.location.href
+                })
+            }).then(response => response.json())
+              .then(data => {
+                  console.log('✅ CAPI Serverless response:', data)
+              })
+              .catch(error => {
+                  console.error('❌ Error sending CAPI serverless:', error)
+              })
 
             // Pixel con datos de usuario hasheados
             const orderDataForPixel = {
