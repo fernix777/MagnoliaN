@@ -7,8 +7,7 @@ import WhatsAppButton from '../../components/customer/WhatsAppButton'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
 import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
-import { trackViewContent, trackAddToCart } from '../../services/facebookService'
-import { trackViewContent as trackPixelViewContent, trackAddToCart as trackPixelAddToCart } from '../../utils/facebookPixel'
+import { trackViewContent, trackAddToCart } from '../../services/facebookTracking'
 import './ProductDetail.css'
 
 export default function ProductDetail() {
@@ -44,15 +43,8 @@ export default function ProductDetail() {
 
     useEffect(() => {
         if (product) {
-            // Rastrear visualización del producto
-            const currentUser = user ? {
-                email: user.email,
-                user_id: user.id
-            } : null;
-
-            trackViewContent(product, currentUser);
-            // Rastrear en Facebook Pixel con parámetros mejorados
-            trackPixelViewContent(product.name, product.base_price, 'ARS', product.id);
+            // Rastrear visualización del producto (Pixel + CAPI)
+            trackViewContent(product);
         }
     }, [product, user]);
 
@@ -131,14 +123,8 @@ export default function ProductDetail() {
             finalPrice
         })
 
-        // Rastrear evento AddToCart en Facebook
-        const currentUser = user ? {
-            email: user.email,
-            user_id: user.id
-        } : null;
-        trackAddToCart(product, quantity, currentUser);
-        // Rastrear en Facebook Pixel
-        trackPixelAddToCart(product.name, finalPrice);
+        // Rastrear evento AddToCart (Pixel + CAPI)
+        trackAddToCart(product, quantity);
 
         // Mostrar notificación
         setShowNotification(true)

@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { trackAddToCart } from '../services/facebookService';
-import { trackAddToCart as trackPixelAddToCart } from '../utils/facebookPixel';
+import { trackAddToCart } from '../services/facebookTracking';
 import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
@@ -25,15 +24,8 @@ export function CartProvider({ children }) {
     }, [cart]);
 
     const addToCart = (product, quantity = 1, options = {}) => {
-        // Rastrear en Facebook
-        const currentUser = user ? {
-            email: user.email,
-            user_id: user.id
-        } : null;
-        trackAddToCart(product, quantity, currentUser);
-        // Rastrear en Facebook Pixel con parámetros mejorados
-        const finalPrice = options.finalPrice || product.base_price;
-        trackPixelAddToCart(product.name, finalPrice, 'ARS', product.id, quantity);
+        // Rastrear evento AddToCart (Pixel + CAPI)
+        trackAddToCart(product, quantity);
 
         setCart(prevCart => {
             // Verificar si el producto ya está en el carrito

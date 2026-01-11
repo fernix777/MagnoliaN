@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
-import { trackInitiateCheckout, trackPurchase } from '../../services/facebookService'
-import { trackInitiateCheckout as trackPixelInitiateCheckout } from '../../utils/facebookPixel'
+import { trackInitiateCheckout, trackPurchase } from '../../services/facebookTracking'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -37,18 +36,8 @@ export default function CheckoutPage() {
     // Rastrear InitiateCheckout cuando el componente se monta
     useEffect(() => {
         if (cart.length > 0 && !checkoutInitiated) {
-            const userData = user ? {
-                email: user.email,
-                user_id: user.id,
-                phone: user.phone,
-                first_name: user.first_name,
-                last_name: user.last_name
-            } : null
-            
-            trackInitiateCheckout(cartTotal, cartItemsCount, userData)
-            // Rastrear en Facebook Pixel con parámetros mejorados
-            const contentIds = cart.map(item => item.id)
-            trackPixelInitiateCheckout(cartTotal, 'ARS', cartItemsCount, contentIds)
+            // Rastrear InitiateCheckout (Pixel + CAPI)
+            trackInitiateCheckout(cart);
             setCheckoutInitiated(true)
         }
     }, [cart, user, cartTotal, cartItemsCount, checkoutInitiated])

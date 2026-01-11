@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { trackPurchase } from '../../services/facebookService'
-import { trackPurchaseWithUserData } from '../../utils/facebookPixel'
+import { trackPurchase } from '../../services/facebookTracking'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -42,76 +41,29 @@ export default function OrderConfirmation() {
     // Rastrear evento de Purchase cuando se carga la orden
     useEffect(() => {
         if (order && !purchaseTracked) {
-            const userData = user ? {
-                email: user.email || order.customer.email,
-                user_id: user.id,
-                phone: user.phone || order.customer.phone,
-                first_name: user.first_name || order.customer.firstName,
-                last_name: user.last_name || order.customer.lastName
-            } : {
-                email: order.customer.email,
-                phone: order.customer.phone
-            }
-
-            const purchaseData = {
+            const purchaseOrder = {
                 id: orderId || order.order_id,
                 total: order.total,
-                user: userData,
+                user: user ? {
+                    email: user.email || order.customer.email,
+                    user_id: user.id,
+                    phone: user.phone || order.customer.phone,
+                    first_name: user.first_name || order.customer.firstName,
+                    last_name: user.last_name || order.customer.lastName
+                } : {
+                    email: order.customer.email,
+                    phone: order.customer.phone
+                },
                 items: order.items.map(item => ({
                     product_id: item.id,
+                    product_name: item.name,
                     quantity: item.quantity,
-                    price: item.price,
-                    product_name: item.name
+                    price: item.price
                 }))
             }
 
-            // CAPI (servidor) - llamada original al backend
-            trackPurchase(purchaseData)
-
-            // CAPI (serverless Vercel) - nueva llamada
-            fetch('/api/facebook/track-purchase', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    order: {
-                        id: orderId || order.order_id,
-                        total: order.total,
-                        user: userData,
-                        items: order.items.map(item => ({
-                            product_id: item.id,
-                            quantity: item.quantity,
-                            price: item.price,
-                            product_name: item.name
-                        }))
-                    },
-                    eventSourceUrl: window.location.href
-                })
-            }).then(response => response.json())
-              .then(data => {
-                  console.log('✅ CAPI Serverless response:', data)
-              })
-              .catch(error => {
-                  console.error('❌ Error sending CAPI serverless:', error)
-              })
-
-            // Pixel con datos de usuario hasheados
-            const orderDataForPixel = {
-                total: order.total,
-                orderId: orderId || order.order_id,
-                productIds: order.items.map(item => item.id),
-                numItems: order.items.reduce((sum, item) => sum + item.quantity, 0),
-                email: order.customer.email,
-                phone: order.customer.phone,
-                firstName: order.customer.firstName,
-                lastName: order.customer.lastName,
-                city: order.customer.city,
-                state: order.customer.state,
-                zipCode: order.customer.zipCode
-            }
-
-            trackPurchaseWithUserData(orderDataForPixel)
+            // Rastrear Purchase (Pixel + CAPI)
+            trackPurchase(purchaseOrder);
             setPurchaseTracked(true)
 
             // Limpiar localStorage
