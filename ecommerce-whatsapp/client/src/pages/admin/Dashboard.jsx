@@ -15,12 +15,16 @@ export default function Dashboard() {
     })
     const [loading, setLoading] = useState(true)
 
+    console.log('🔍 Dashboard Component:', { user, loading })
+
     useEffect(() => {
+        console.log('🚀 Dashboard: useEffect called')
         fetchStats()
     }, [])
 
     const fetchStats = async () => {
         try {
+            console.log('📊 Dashboard: Fetching stats...')
             setLoading(true)
 
             // Fetch products count
@@ -33,6 +37,8 @@ export default function Dashboard() {
                 .from('categories')
                 .select('*', { count: 'exact', head: true })
 
+            console.log('📈 Dashboard: Stats fetched:', { productsCount, categoriesCount })
+
             setStats({
                 products: productsCount || 0,
                 categories: categoriesCount || 0,
@@ -40,7 +46,7 @@ export default function Dashboard() {
                 sales: 0   // TODO: Implement when orders table exists
             })
         } catch (error) {
-            console.error('Error fetching stats:', error)
+            console.error('❌ Dashboard: Error fetching stats:', error)
         } finally {
             setLoading(false)
         }
