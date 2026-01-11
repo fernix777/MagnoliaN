@@ -51,8 +51,8 @@ export default function ProductDetail() {
             } : null;
 
             trackViewContent(product, currentUser);
-            // Rastrear en Facebook Pixel
-            trackPixelViewContent(product.name, product.base_price);
+            // Rastrear en Facebook Pixel con parámetros mejorados
+            trackPixelViewContent(product.name, product.base_price, 'ARS', product.id);
         }
     }, [product, user]);
 

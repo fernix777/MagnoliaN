@@ -46,8 +46,9 @@ export default function CheckoutPage() {
             } : null
             
             trackInitiateCheckout(cartTotal, cartItemsCount, userData)
-            // Rastrear en Facebook Pixel
-            trackPixelInitiateCheckout(cartTotal)
+            // Rastrear en Facebook Pixel con parámetros mejorados
+            const contentIds = cart.map(item => item.id)
+            trackPixelInitiateCheckout(cartTotal, 'ARS', cartItemsCount, contentIds)
             setCheckoutInitiated(true)
         }
     }, [cart, user, cartTotal, cartItemsCount, checkoutInitiated])

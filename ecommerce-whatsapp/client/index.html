@@ -150,7 +150,10 @@
 <body>
   <div id="root"></div>
   
-  <!-- Facebook Meta Pixel Code - Version mejorada con deduplicación -->
+  <!-- Facebook Parameter Builder - DEBE IR PRIMERO -->
+  <script src="https://capi-automation.s3.us-east-2.amazonaws.com/public/client_js/capiParamBuilder/clientParamBuilder.bundle.js"></script>
+  
+  <!-- Facebook Meta Pixel Code - Version mejorada con Parameter Builder -->
   <script>
     !function(f,b,e,v,n,t,s) {
       if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -160,6 +163,12 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)
     }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    
+    // Procesar parámetros con el Parameter Builder
+    if (typeof clientParamBuilder !== 'undefined') {
+      clientParamBuilder.processAndCollectAllParams(window.location.href);
+    }
+    
     fbq('init', '1613812252958290');
     fbq('track', 'PageView');
   </script>
@@ -167,7 +176,6 @@
     <img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=1613812252958290&ev=PageView&noscript=1" />
   </noscript>
-  <!-- End Facebook Meta Pixel Code -->
   
   <script type="module" src="/src/main.jsx"></script>
 </body>

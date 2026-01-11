@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { trackPurchase } from '../../services/facebookService'
-import { trackPurchase as trackPixelPurchase } from '../../utils/facebookPixel'
+import { trackPurchaseWithUserData } from '../../utils/facebookPixel'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -65,9 +65,25 @@ export default function OrderConfirmation() {
                 }))
             }
 
+            // CAPI (servidor)
             trackPurchase(purchaseData)
-            // Rastrear en Facebook Pixel
-            trackPixelPurchase(order.total, 'ARS', orderId || order.order_id)
+
+            // Pixel con datos de usuario hasheados
+            const orderDataForPixel = {
+                total: order.total,
+                orderId: orderId || order.order_id,
+                productIds: order.items.map(item => item.id),
+                numItems: order.items.reduce((sum, item) => sum + item.quantity, 0),
+                email: order.customer.email,
+                phone: order.customer.phone,
+                firstName: order.customer.firstName,
+                lastName: order.customer.lastName,
+                city: order.customer.city,
+                state: order.customer.state,
+                zipCode: order.customer.zipCode
+            }
+
+            trackPurchaseWithUserData(orderDataForPixel)
             setPurchaseTracked(true)
 
             // Limpiar localStorage

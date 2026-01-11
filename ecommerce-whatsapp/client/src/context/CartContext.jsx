@@ -31,9 +31,9 @@ export function CartProvider({ children }) {
             user_id: user.id
         } : null;
         trackAddToCart(product, quantity, currentUser);
-        // Rastrear en Facebook Pixel
+        // Rastrear en Facebook Pixel con parámetros mejorados
         const finalPrice = options.finalPrice || product.base_price;
-        trackPixelAddToCart(product.name, finalPrice);
+        trackPixelAddToCart(product.name, finalPrice, 'ARS', product.id, quantity);
 
         setCart(prevCart => {
             // Verificar si el producto ya está en el carrito
