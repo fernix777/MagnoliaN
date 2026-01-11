@@ -1,4 +1,4 @@
-import { trackServerAddToCart } from '../facebookCAPI'
+import { trackServerAddToCart } from '../facebookCAPI.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

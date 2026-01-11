@@ -1,4 +1,4 @@
-import { trackServerViewContent } from '../facebookCAPI'
+import { trackServerViewContent } from '../facebookCAPI.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

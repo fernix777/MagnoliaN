@@ -1,4 +1,4 @@
-import { trackServerPurchase } from '../facebookCAPI'
+import { trackServerPurchase } from '../facebookCAPI.js'
 
 export default async function handler(req, res) {
   console.log('🔍 track-purchase called:', { method: req.method, body: req.body })
