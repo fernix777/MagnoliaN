@@ -7,7 +7,9 @@ export default function CategoryForm({ category, onClose, onSuccess }) {
         name: '',
         description: '',
         active: true,
-        display_order: 0
+        display_order: 0,
+        current_image_url: null,
+        remove_image: false
     })
     const [imageFile, setImageFile] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
@@ -20,11 +22,23 @@ export default function CategoryForm({ category, onClose, onSuccess }) {
                 name: category.name || '',
                 description: category.description || '',
                 active: category.active ?? true,
-                display_order: category.display_order || 0
+                display_order: category.display_order || 0,
+                current_image_url: category.image_url || null,
+                remove_image: false
             })
             if (category.image_url) {
                 setImagePreview(category.image_url)
             }
+        } else {
+            setFormData({
+                name: '',
+                description: '',
+                active: true,
+                display_order: 0,
+                current_image_url: null,
+                remove_image: false
+            })
+            setImagePreview(null)
         }
     }, [category])
 
@@ -55,6 +69,10 @@ export default function CategoryForm({ category, onClose, onSuccess }) {
             }
 
             setImageFile(file)
+            setFormData(prev => ({
+                ...prev,
+                remove_image: false
+            }))
             setErrors(prev => ({ ...prev, image: null }))
 
             // Preview
@@ -67,8 +85,22 @@ export default function CategoryForm({ category, onClose, onSuccess }) {
     }
 
     const removeImage = () => {
-        setImageFile(null)
-        setImagePreview(category?.image_url || null)
+        if (imageFile) {
+            setImageFile(null)
+            setImagePreview(formData.current_image_url || null)
+            setFormData(prev => ({
+                ...prev,
+                remove_image: false
+            }))
+            return
+        }
+        if (formData.current_image_url) {
+            setImagePreview(null)
+            setFormData(prev => ({
+                ...prev,
+                remove_image: true
+            }))
+        }
     }
 
     const validate = () => {

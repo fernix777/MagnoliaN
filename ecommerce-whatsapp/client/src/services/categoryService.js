@@ -111,25 +111,30 @@ export async function createCategory(categoryData, imageFile = null) {
  */
 export async function updateCategory(id, categoryData, imageFile = null) {
     try {
-        let imageUrl = categoryData.image_url
+        const currentImageUrl = categoryData.current_image_url || null
+        const removeImage = categoryData.remove_image === true
+        let imageUrl = currentImageUrl
 
         // Si hay nueva imagen, subir y eliminar la anterior
         if (imageFile) {
-            // Eliminar imagen anterior si existe
-            if (categoryData.image_url) {
-                const oldPath = extractPathFromUrl(categoryData.image_url, 'category-images')
+            if (currentImageUrl) {
+                const oldPath = extractPathFromUrl(currentImageUrl, 'category-images')
                 if (oldPath) {
                     await deleteImage('category-images', oldPath)
                 }
             }
 
-            // Subir nueva imagen
             const uploadResult = await uploadImage(imageFile, 'category-images', 'categories')
             if (uploadResult.error) throw uploadResult.error
             imageUrl = uploadResult.url
+        } else if (removeImage && currentImageUrl) {
+            const oldPath = extractPathFromUrl(currentImageUrl, 'category-images')
+            if (oldPath) {
+                await deleteImage('category-images', oldPath)
+            }
+            imageUrl = null
         }
 
-        // Limpiar datos - solo campos válidos de la tabla
         const cleanData = {
             name: categoryData.name,
             description: categoryData.description || null,
