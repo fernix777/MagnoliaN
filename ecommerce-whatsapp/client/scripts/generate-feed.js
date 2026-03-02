@@ -27,8 +27,10 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function getProductsFromSupabase() {
     try {
-        // Obtener todos los productos con información de categorías
-        const { data, error } = await supabase
+        console.log('🔄 Obteniendo productos y todas las imágenes por separado...');
+
+        // 1. Obtener todos los productos
+        const { data: products, error: productsError } = await supabase
             .from('products')
             .select(`
                 *,
@@ -38,27 +40,32 @@ async function getProductsFromSupabase() {
             .eq('active', true)
             .order('created_at', { ascending: false });
 
-        if (error) {
-            console.error('✗ Error al obtener productos:', error.message);
+        if (productsError) {
+            console.error('✗ Error al obtener productos:', productsError.message);
             return [];
         }
 
-        // Para cada producto, obtener sus imágenes
-        const productsWithImages = await Promise.all(
-            (data || []).map(async (product) => {
-                const { data: images } = await supabase
-                    .from('product_images')
-                    .select('*')
-                    .eq('product_id', product.id)
-                    .order('order', { ascending: true });
+        // 2. Obtener TODAS las imágenes
+        const { data: allImages, error: imagesError } = await supabase
+            .from('product_images')
+            .select('*');
 
-                return {
-                    ...product,
-                    images: images || [],
-                    category: product.categories?.name || 'Decoración'
-                };
-            })
-        );
+        if (imagesError) {
+            console.error('✗ Error al obtener todas las imágenes:', imagesError.message);
+            return [];
+        }
+        
+        console.log(`✓ Se encontraron ${allImages.length} imágenes en total en la tabla.`);
+
+        // 3. Unir los datos en el script
+        const productsWithImages = products.map(product => {
+            const productImages = allImages.filter(img => img.product_id === product.id);
+            return {
+                ...product,
+                images: productImages || [],
+                category: product.categories?.name || 'Decoración'
+            };
+        });
 
         return productsWithImages;
     } catch (error) {
@@ -68,9 +75,22 @@ async function getProductsFromSupabase() {
 }
 
 function getPrimaryImage(product) {
-    if (!product.images || product.images.length === 0) return 'https://www.magnolia-n.com/logo.jpg';
-    const primary = product.images.find(img => img.is_primary);
-    return primary ? primary.image_url : product.images[0].image_url;
+    if (!product.images || product.images.length === 0) {
+        return 'https://www.magnolia-n.com/logo.jpg';
+    }
+
+    // Filtrar las imágenes para excluir el logo por defecto
+    const realImages = product.images.filter(img => !img.image_url.includes('logo.jpg'));
+
+    if (realImages.length === 0) {
+        return 'https://www.magnolia-n.com/logo.jpg'; // Si solo hay logos, devolver el logo
+    }
+
+    // Buscar la imagen primaria entre las imágenes reales
+    const primary = realImages.find(img => img.is_primary);
+    
+    // Si hay una primaria, devolver su URL. Si no, devolver la URL de la primera imagen real.
+    return primary ? primary.image_url : realImages[0].image_url;
 }
 
 function generateProductFeed(products) {
