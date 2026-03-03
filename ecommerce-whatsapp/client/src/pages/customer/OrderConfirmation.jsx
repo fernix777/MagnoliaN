@@ -66,8 +66,6 @@ export default function OrderConfirmation() {
             }
 
             trackPurchase(purchaseData)
-            // Rastrear en Facebook Pixel
-            trackPixelPurchase(order.total, 'ARS', orderId || order.order_id)
             setPurchaseTracked(true)
 
             // Limpiar localStorage

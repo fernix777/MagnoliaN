@@ -4,7 +4,6 @@ import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
 import { createOrder } from '../../services/orderService'
 import { trackInitiateCheckout, trackPurchase } from '../../services/facebookService'
-import { trackInitiateCheckout as trackPixelInitiateCheckout } from '../../utils/facebookPixel'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -46,9 +45,7 @@ export default function CheckoutPage() {
                 last_name: user.last_name
             } : null
             
-            trackInitiateCheckout(cartTotal, cartItemsCount, userData)
-            // Rastrear en Facebook Pixel
-            trackPixelInitiateCheckout(cartTotal)
+            trackInitiateCheckout(cartTotal, cart, userData)
             setCheckoutInitiated(true)
         }
     }, [cart, user, cartTotal, cartItemsCount, checkoutInitiated])

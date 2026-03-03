@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { trackAddToCart } from '../services/facebookTracking';
+import { trackAddToCart } from '../services/facebookService';
 import { useAuth } from './AuthContext';
 
 export const CartContext = createContext();

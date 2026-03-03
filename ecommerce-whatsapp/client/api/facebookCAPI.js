@@ -78,8 +78,8 @@ export async function trackServerEvent(eventName, eventData = {}) {
   try {
     const userData = await prepareUserData(eventData.user || {})
 
-    // Generar ID único para deduplicación
-    const eventId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    // Usar el ID de evento pasado para deduplicación, o generar uno nuevo
+    const eventId = eventData.eventId || `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 
     const payload = {
       data: [
@@ -95,7 +95,7 @@ export async function trackServerEvent(eventName, eventData = {}) {
             currency: eventData.currency || 'ARS',
             content_name: eventData.content_name || undefined,
             content_type: eventData.content_type || 'product',
-            content_id: eventData.content_id || undefined,
+            content_ids: eventData.content_ids || (eventData.content_id ? [eventData.content_id] : undefined),
             contents: eventData.contents || []
           }
         }
@@ -134,8 +134,17 @@ export async function trackServerEvent(eventName, eventData = {}) {
   }
 }
 
+// Rastrear vista de página
+export const trackServerPageView = async (eventSourceUrl, userData = null, eventId = null) => {
+  return trackServerEvent('PageView', {
+    event_source_url: eventSourceUrl,
+    user: userData,
+    eventId
+  });
+};
+
 // Rastrear vista de contenido
-export async function trackServerViewContent(product, user, eventSourceUrl = '') {
+export const trackServerViewContent = async (product, user, eventSourceUrl, eventId = null) => {
   return trackServerEvent('ViewContent', {
     user: user,
     value: product.base_price || product.price,
@@ -143,6 +152,7 @@ export async function trackServerViewContent(product, user, eventSourceUrl = '')
     content_name: product.name,
     content_type: 'product',
     event_source_url: eventSourceUrl,
+    eventId,
     contents: [{
       id: product.id,
       quantity: 1,
@@ -150,11 +160,11 @@ export async function trackServerViewContent(product, user, eventSourceUrl = '')
       title: product.name,
       delivery_category: 'home_delivery'
     }]
-  })
-}
+  });
+};
 
 // Rastrear agregar al carrito
-export async function trackServerAddToCart(product, user, eventSourceUrl = '') {
+export const trackServerAddToCart = async (product, user, eventSourceUrl, eventId = null) => {
   return trackServerEvent('AddToCart', {
     user: user,
     value: product.base_price || product.price,
@@ -162,6 +172,7 @@ export async function trackServerAddToCart(product, user, eventSourceUrl = '') {
     content_name: product.name,
     content_type: 'product',
     event_source_url: eventSourceUrl,
+    eventId,
     contents: [{
       id: product.id,
       quantity: product.quantity || 1,
@@ -169,28 +180,30 @@ export async function trackServerAddToCart(product, user, eventSourceUrl = '') {
       title: product.name,
       delivery_category: 'home_delivery'
     }]
-  })
-}
+  });
+};
 
 // Rastrear inicio de checkout
-export async function trackServerInitiateCheckout(cartTotal, itemsCount, user, eventSourceUrl = '') {
+export const trackServerInitiateCheckout = async (cartTotal, itemsCount, user, eventSourceUrl, eventId = null) => {
   return trackServerEvent('InitiateCheckout', {
     user: user,
     value: cartTotal,
     content_type: 'product',
     num_items: itemsCount,
-    event_source_url: eventSourceUrl
-  })
-}
+    event_source_url: eventSourceUrl,
+    eventId
+  });
+};
 
 // Rastrear compra/conversión
-export async function trackServerPurchase(order, eventSourceUrl = '') {
+export const trackServerPurchase = async (order, eventSourceUrl, eventId = null) => {
   return trackServerEvent('Purchase', {
     user: order.user,
     value: order.total,
     content_id: order.id,
     content_name: `Order #${order.id}`,
     event_source_url: eventSourceUrl,
+    eventId,
     contents: (order.items || []).map((item) => ({
       id: item.product_id,
       quantity: item.quantity,
@@ -198,5 +211,5 @@ export async function trackServerPurchase(order, eventSourceUrl = '') {
       title: item.product_name,
       delivery_category: 'home_delivery'
     }))
-  })
-}
+  });
+};

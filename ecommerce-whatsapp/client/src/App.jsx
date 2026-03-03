@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
-import { trackPageView } from './services/facebookTracking';
+import { trackPageView } from './services/facebookService';
 
 // Páginas públicas
 import StorePage from './pages/customer/StorePage';

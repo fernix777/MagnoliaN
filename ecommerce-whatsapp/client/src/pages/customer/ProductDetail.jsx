@@ -83,8 +83,6 @@ export default function ProductDetail() {
             } : null;
 
             trackViewContent(product, currentUser);
-            // Rastrear en Facebook Pixel
-            trackPixelViewContent(product.name, product.base_price);
         }
     }, [product, user]);
 

@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { order, eventSourceUrl } = req.body || {}
+    const { order, eventSourceUrl, eventId } = req.body || {}
     console.log('📦 Parsed payload:', { order, eventSourceUrl })
 
     if (!order) {
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     }
 
     console.log('🚀 Calling trackServerPurchase...')
-    const result = await trackServerPurchase(order, eventSourceUrl || '')
+    const result = await trackServerPurchase(order, eventSourceUrl || '', eventId)
     console.log('✅ trackServerPurchase result:', result)
 
     res.status(200).json({ success: !!result, data: result })

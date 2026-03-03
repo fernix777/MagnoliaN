@@ -10,8 +10,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { product, user, eventSourceUrl } = req.body || {}
-    console.log('📦 Parsed payload:', { product, user, eventSourceUrl })
+    const { product, user, eventSourceUrl, eventId } = req.body || {}
+    console.log('📦 Parsed payload:', { product, user, eventSourceUrl, eventId })
 
     if (!product) {
       console.log('❌ Missing product')
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     }
 
     console.log('🚀 Calling trackServerViewContent...')
-    const result = await trackServerViewContent(product, user, eventSourceUrl || '')
+    const result = await trackServerViewContent(product, user, eventSourceUrl || '', eventId)
     console.log('✅ trackServerViewContent result:', result)
     res.status(200).json({ success: !!result, data: result })
   } catch (error) {

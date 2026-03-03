@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { cartTotal, itemsCount, user, eventSourceUrl } = req.body || {}
+    const { cartTotal, itemsCount, user, eventSourceUrl, eventId } = req.body || {}
     console.log('📦 Parsed payload:', { cartTotal, itemsCount, user, eventSourceUrl })
 
     if (!cartTotal || !itemsCount) {
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     }
 
     console.log('🚀 Calling trackServerInitiateCheckout...')
-    const result = await trackServerInitiateCheckout(cartTotal, itemsCount, user, eventSourceUrl || '')
+    const result = await trackServerInitiateCheckout(cartTotal, itemsCount, user, eventSourceUrl || '', eventId)
     console.log('✅ trackServerInitiateCheckout result:', result)
     res.status(200).json({ success: !!result, data: result })
   } catch (error) {
