@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getProductBySlug } from '../../services/storeService'
+import { Helmet } from 'react-helmet-async'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -234,8 +235,31 @@ export default function ProductDetail() {
     const images = product.images || []
     const variants = product.variants || []
 
+    const mainImage = product.images && product.images.length > 0 
+        ? product.images[selectedImage]?.image_url 
+        : '/logo.jpg'
+
     return (
         <div className="product-detail-page">
+            <Helmet>
+                <title>{`${product.name} - Magnolia Novedades`}</title>
+                <meta name="description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
+                
+                {/* Open Graph / Facebook */}
+                <meta property="og:type" content="product" />
+                <meta property="og:url" content={window.location.href} />
+                <meta property="og:title" content={product.name} />
+                <meta property="og:description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
+                <meta property="og:image" content={mainImage} />
+                <meta property="product:price:amount" content={product.base_price} />
+                <meta property="product:price:currency" content="ARS" />
+                <meta property="product:retailer_item_id" content={product.id.toString()} />
+                
+                {/* Twitter */}
+                <meta name="twitter:title" content={product.name} />
+                <meta name="twitter:description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
+                <meta name="twitter:image" content={mainImage} />
+            </Helmet>
             <Header />
 
             <main className="container">
