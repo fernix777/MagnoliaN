@@ -203,9 +203,47 @@ export default function ProductDetail() {
         return price * quantity
     }
 
+    // Definir metadatos base incluso antes de cargar el producto
+    const images = product?.images || []
+    const mainImage = images.length > 0 
+        ? images[selectedImage]?.image_url 
+        : (product?.image_url && !product?.image_url.includes('logo.jpg') 
+            ? product?.image_url 
+            : 'https://www.magnolia-n.com/logo.jpg')
+
+    const absoluteMainImage = mainImage.startsWith('http') 
+        ? mainImage 
+        : `https://www.magnolia-n.com${mainImage.startsWith('/') ? '' : '/'}${mainImage}`
+
+    const productUrl = product ? `https://www.magnolia-n.com/producto/${product.slug}` : window.location.href
+
+    const helmetContent = (
+        <Helmet>
+            <title>{product ? `${product.name} - Magnolia Novedades` : 'Magnolia Novedades'}</title>
+            <meta name="description" content={product?.description || 'Compra productos de calidad en Magnolia Novedades.'} />
+            <link rel="canonical" href={productUrl} />
+            
+            <meta property="og:type" content={product ? "product" : "website"} />
+            <meta property="og:url" content={productUrl} />
+            <meta property="og:title" content={product?.name || 'Magnolia Novedades'} />
+            <meta property="og:description" content={product?.description || 'Compra productos de calidad en Magnolia Novedades.'} />
+            <meta property="og:image" content={absoluteMainImage} />
+            <meta property="og:image:secure_url" content={absoluteMainImage} />
+            {product && <meta property="product:price:amount" content={product.base_price} />}
+            {product && <meta property="product:price:currency" content="ARS" />}
+            {product && <meta property="product:retailer_item_id" content={product.id.toString()} />}
+            
+            <meta name="twitter:title" content={product?.name || 'Magnolia Novedades'} />
+            <meta name="twitter:description" content={product?.description || 'Compra productos de calidad en Magnolia Novedades.'} />
+            <meta name="twitter:image" content={absoluteMainImage} />
+            <meta name="twitter:url" content={productUrl} />
+        </Helmet>
+    )
+
     if (loading) {
         return (
             <div className="product-detail-page">
+                {helmetContent}
                 <Header />
                 <main className="container">
                     <LoadingSpinner size="large" message="Cargando producto..." />
@@ -218,6 +256,7 @@ export default function ProductDetail() {
     if (!product) {
         return (
             <div className="product-detail-page">
+                {helmetContent}
                 <Header />
                 <main className="container">
                     <div className="not-found">
@@ -230,49 +269,11 @@ export default function ProductDetail() {
         )
     }
 
-    const images = product.images || []
     const variants = product.variants || []
-
-    // Obtener la imagen principal: 
-    // 1. De la galería (product_images)
-    // 2. De la columna image_url de la tabla products
-    // 3. Del logo por defecto
-    const mainImage = images.length > 0 
-        ? images[selectedImage]?.image_url 
-        : (product.image_url && !product.image_url.includes('logo.jpg') 
-            ? product.image_url 
-            : 'https://www.magnolia-n.com/logo.jpg')
-
-    // Asegurar que la URL de la imagen sea absoluta para SEO
-    const absoluteMainImage = mainImage.startsWith('http') 
-        ? mainImage 
-        : `https://www.magnolia-n.com${mainImage.startsWith('/') ? '' : '/'}${mainImage}`
-
-    const productUrl = `https://www.magnolia-n.com/producto/${product.slug}`
 
     return (
         <div className="product-detail-page">
-            <Helmet>
-                <title>{`${product.name} - Magnolia Novedades`}</title>
-                <meta name="description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
-                <link rel="canonical" href={productUrl} />
-                
-                {/* Open Graph / Facebook */}
-                <meta property="og:type" content="product" />
-                <meta property="og:url" content={productUrl} />
-                <meta property="og:title" content={product.name} />
-                <meta property="og:description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
-                <meta property="og:image" content={absoluteMainImage} />
-                <meta property="product:price:amount" content={product.base_price} />
-                <meta property="product:price:currency" content="ARS" />
-                <meta property="product:retailer_item_id" content={product.id.toString()} />
-                
-                {/* Twitter */}
-                <meta name="twitter:title" content={product.name} />
-                <meta name="twitter:description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
-                <meta name="twitter:image" content={absoluteMainImage} />
-                <meta name="twitter:url" content={productUrl} />
-            </Helmet>
+            {helmetContent}
             <Header />
 
             <main className="container">
