@@ -335,20 +335,6 @@ export const trackContact = (message, user = null) => {
   }
 };
 
-/**
- * Rastrear vista de página
- */
-export const trackPageView = () => {
-  try {
-    trackPixelPageView();
-    console.log('✅ PageView tracked');
-    return true;
-  } catch (error) {
-    console.error('Error tracking PageView:', error);
-    return false;
-  }
-};
-
 export default {
   trackViewContent,
   trackAddToCart,
