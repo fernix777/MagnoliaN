@@ -16,7 +16,7 @@ export default function SEO({
     title = 'Magnolia Novedades - Decoración y Regalos Únicos',
     description = 'Descubre decoración única y regalos especiales en Magnolia Novedades. Ubicados en San Salvador de Jujuy, ofrecemos productos de calidad para hacer de cada momento algo especial.',
     keywords = 'decoración, regalos, novedades, San Salvador de Jujuy, Jujuy, Argentina',
-    image = 'https://www.magnolia-n.com/logo.jpg',
+    image = 'https://www.magnolia-n.com/hero-banner.jpg',
     url = 'https://www.magnolia-n.com/',
     type = 'website',
     structuredData = null

@@ -209,7 +209,7 @@ export default function ProductDetail() {
         ? images[selectedImage]?.image_url 
         : (product?.image_url && !product?.image_url.includes('logo.jpg') 
             ? product?.image_url 
-            : 'https://www.magnolia-n.com/logo.jpg')
+            : 'https://www.magnolia-n.com/hero-banner.jpg')
 
     const absoluteMainImage = mainImage.startsWith('http') 
         ? mainImage 
