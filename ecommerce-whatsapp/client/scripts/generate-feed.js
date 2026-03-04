@@ -120,14 +120,13 @@ function getProductImages(product) {
 
     // 3. Si no hay nada, usar el logo
     return {
-        primary: 'https://www.magnolia-n.com/logo.jpg',
+        primary: 'https://www.magnolia-n.com/hero-banner.jpg',
         additional: []
     };
 }
 
 function generateProductFeed(products) {
     const now = new Date().toISOString();
-    const cacheBuster = Date.now();
 
     let itemsXml = '';
     let validProducts = 0;
@@ -143,9 +142,8 @@ function generateProductFeed(products) {
         }
 
         const { primary, additional } = getProductImages(product);
-        
-        // Agregar cache buster a la imagen principal
-        const imageUrl = primary.includes('?') ? `${primary}&v=${cacheBuster}` : `${primary}?v=${cacheBuster}`;
+        // Usar URL limpia (sin query params) para máxima estabilidad con Facebook/Google
+        const imageUrl = primary.split('?')[0];
         
         const productUrl = `https://www.magnolia-n.com/producto/${product.slug}`;
 
@@ -181,7 +179,7 @@ function generateProductFeed(products) {
         // Generar XML de imágenes adicionales
         let additionalImagesXml = '';
         additional.forEach(imgUrl => {
-            const finalImgUrl = imgUrl.includes('?') ? `${imgUrl}&v=${cacheBuster}` : `${imgUrl}?v=${cacheBuster}`;
+            const finalImgUrl = imgUrl.split('?')[0];
             additionalImagesXml += `
             <g:additional_image_link>${escapeXml(finalImgUrl)}</g:additional_image_link>`;
         });
