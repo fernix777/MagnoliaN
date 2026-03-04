@@ -74,6 +74,16 @@ async function getProductsFromSupabase() {
     }
 }
 
+// Normaliza URLs de imágenes para mejorar compatibilidad con plataformas externas
+// - Convierte extensiones a minúsculas (.JPG → .jpg, .PNG → .png)
+// - Conserva cualquier query string existente (el cache buster se agrega más adelante)
+function normalizeImageUrl(url) {
+    if (!url) return url;
+    const [base, query] = url.split('?');
+    const normalizedBase = base.replace(/\.(JPG|JPEG|PNG|WEBP|GIF)$/i, ext => ext.toLowerCase());
+    return query ? `${normalizedBase}?${query}` : normalizedBase;
+}
+
 function getProductImages(product) {
     // 1. Priorizar imágenes de la tabla product_images
     if (product.images && product.images.length > 0) {
@@ -81,17 +91,20 @@ function getProductImages(product) {
         const realImages = product.images.filter(img => img.image_url && !img.image_url.includes('logo.jpg'));
 
         if (realImages.length > 0) {
-            // Buscar la imagen primaria o la primera real
-            const primaryImg = realImages.find(img => img.is_primary) || realImages[0];
+            // Preferir imágenes JPEG como principal cuando sea posible
+            const jpegImages = realImages.filter(img => /\.(jpe?g)$/i.test((img.image_url || '').split('?')[0]));
+            const primaryImg =
+                realImages.find(img => img.is_primary) ||
+                (jpegImages.length > 0 ? jpegImages[0] : realImages[0]);
             
             // Obtener las adicionales (máximo 10 para Facebook)
             const additional = realImages
                 .filter(img => img.id !== primaryImg.id)
                 .slice(0, 10)
-                .map(img => img.image_url);
+                .map(img => normalizeImageUrl(img.image_url));
 
             return {
-                primary: primaryImg.image_url,
+                primary: normalizeImageUrl(primaryImg.image_url),
                 additional
             };
         }
@@ -100,7 +113,7 @@ function getProductImages(product) {
     // 2. Fallback a la columna image_url de la tabla products
     if (product.image_url && !product.image_url.includes('logo.jpg')) {
         return {
-            primary: product.image_url,
+            primary: normalizeImageUrl(product.image_url),
             additional: []
         };
     }
