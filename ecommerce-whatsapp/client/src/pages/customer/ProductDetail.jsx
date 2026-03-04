@@ -233,24 +233,33 @@ export default function ProductDetail() {
     const images = product.images || []
     const variants = product.variants || []
 
+    // Obtener la imagen principal: 
+    // 1. De la galería (product_images)
+    // 2. De la columna image_url de la tabla products
+    // 3. Del logo por defecto
     const mainImage = images.length > 0 
         ? images[selectedImage]?.image_url 
-        : 'https://www.magnolia-n.com/logo.jpg'
+        : (product.image_url && !product.image_url.includes('logo.jpg') 
+            ? product.image_url 
+            : 'https://www.magnolia-n.com/logo.jpg')
 
     // Asegurar que la URL de la imagen sea absoluta para SEO
     const absoluteMainImage = mainImage.startsWith('http') 
         ? mainImage 
         : `https://www.magnolia-n.com${mainImage.startsWith('/') ? '' : '/'}${mainImage}`
 
+    const productUrl = `https://www.magnolia-n.com/producto/${product.slug}`
+
     return (
         <div className="product-detail-page">
             <Helmet>
                 <title>{`${product.name} - Magnolia Novedades`}</title>
                 <meta name="description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
+                <link rel="canonical" href={productUrl} />
                 
                 {/* Open Graph / Facebook */}
                 <meta property="og:type" content="product" />
-                <meta property="og:url" content={window.location.href} />
+                <meta property="og:url" content={productUrl} />
                 <meta property="og:title" content={product.name} />
                 <meta property="og:description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
                 <meta property="og:image" content={absoluteMainImage} />
@@ -262,6 +271,7 @@ export default function ProductDetail() {
                 <meta name="twitter:title" content={product.name} />
                 <meta name="twitter:description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
                 <meta name="twitter:image" content={absoluteMainImage} />
+                <meta name="twitter:url" content={productUrl} />
             </Helmet>
             <Header />
 
