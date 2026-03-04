@@ -74,27 +74,42 @@ async function getProductsFromSupabase() {
     }
 }
 
-function getPrimaryImage(product) {
+function getProductImages(product) {
     if (!product.images || product.images.length === 0) {
-        return 'https://www.magnolia-n.com/logo.jpg';
+        return {
+            primary: 'https://www.magnolia-n.com/logo.jpg',
+            additional: []
+        };
     }
 
     // Filtrar las imágenes para excluir el logo por defecto
     const realImages = product.images.filter(img => !img.image_url.includes('logo.jpg'));
 
     if (realImages.length === 0) {
-        return 'https://www.magnolia-n.com/logo.jpg'; // Si solo hay logos, devolver el logo
+        return {
+            primary: 'https://www.magnolia-n.com/logo.jpg',
+            additional: []
+        };
     }
 
-    // Buscar la imagen primaria entre las imágenes reales
-    const primary = realImages.find(img => img.is_primary);
+    // Buscar la imagen primaria
+    const primaryImg = realImages.find(img => img.is_primary) || realImages[0];
     
-    // Si hay una primaria, devolver su URL. Si no, devolver la URL de la primera imagen real.
-    return primary ? primary.image_url : realImages[0].image_url;
+    // Obtener las adicionales (máximo 10 para Facebook)
+    const additional = realImages
+        .filter(img => img.id !== primaryImg.id)
+        .slice(0, 10)
+        .map(img => img.image_url);
+
+    return {
+        primary: primaryImg.image_url,
+        additional
+    };
 }
 
 function generateProductFeed(products) {
     const now = new Date().toISOString();
+    const cacheBuster = Date.now();
 
     let itemsXml = '';
     let validProducts = 0;
@@ -109,7 +124,11 @@ function generateProductFeed(products) {
             return;
         }
 
-        const imageUrl = getPrimaryImage(product);
+        const { primary, additional } = getProductImages(product);
+        
+        // Agregar cache buster a la imagen principal
+        const imageUrl = primary.includes('?') ? `${primary}&v=${cacheBuster}` : `${primary}?v=${cacheBuster}`;
+        
         const productUrl = `https://www.magnolia-n.com/producto/${product.slug}`;
 
         // Validar URLs
@@ -119,21 +138,12 @@ function generateProductFeed(products) {
             return;
         }
 
-        if (!validateUrl(imageUrl)) {
-            console.warn(`⚠ URL de imagen inválida para ${product.name}: ${imageUrl}`);
-        }
-
         // Generar ID único
         const productId = product.id.toString();
 
         // Formatear precio
-        const price = product.base_price && product.base_price > 0 ? product.base_price : 1; // Usar 1 ARS como precio mínimo
+        const price = product.base_price && product.base_price > 0 ? product.base_price : 1;
         const formattedPrice = `${price.toFixed(2)} ARS`;
-
-        // Advertir sobre productos sin precio
-        if (!product.base_price || product.base_price <= 0) {
-            console.warn(`⚠ Producto "${product.name}" no tiene precio válido, usando precio mínimo: 1 ARS`);
-        }
 
         // Determinar disponibilidad
         const stock = product.stock || 0;
@@ -150,13 +160,21 @@ function generateProductFeed(products) {
 
         validProducts++;
 
+        // Generar XML de imágenes adicionales
+        let additionalImagesXml = '';
+        additional.forEach(imgUrl => {
+            const finalImgUrl = imgUrl.includes('?') ? `${imgUrl}&v=${cacheBuster}` : `${imgUrl}?v=${cacheBuster}`;
+            additionalImagesXml += `
+            <g:additional_image_link>${escapeXml(finalImgUrl)}</g:additional_image_link>`;
+        });
+
         itemsXml += `
         <item>
             <g:id>${escapeXml(productId)}</g:id>
             <g:title>${escapeXml(product.name)}</g:title>
             <g:description>${escapeXml(description)}</g:description>
             <g:link>${escapeXml(productUrl)}</g:link>
-            <g:image_link>${escapeXml(imageUrl)}</g:image_link>
+            <g:image_link>${escapeXml(imageUrl)}</g:image_link>${additionalImagesXml}
             <g:availability>${availability}</g:availability>
             <g:price>${formattedPrice}</g:price>
             <g:condition>new</g:condition>
