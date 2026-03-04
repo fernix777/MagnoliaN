@@ -215,6 +215,11 @@ export default function ProductDetail() {
         ? mainImage 
         : `https://www.magnolia-n.com${mainImage.startsWith('/') ? '' : '/'}${mainImage}`
 
+    // Añadir un parámetro de versión para forzar a Facebook a recargar la imagen
+    const imageWithCacheBuster = absoluteMainImage.includes('?') 
+        ? `${absoluteMainImage}&v=1.1` 
+        : `${absoluteMainImage}?v=1.1`
+
     const productUrl = product ? `https://www.magnolia-n.com/producto/${product.slug}` : window.location.href
 
     const helmetContent = (
@@ -227,15 +232,18 @@ export default function ProductDetail() {
             <meta property="og:url" content={productUrl} />
             <meta property="og:title" content={product?.name || 'Magnolia Novedades'} />
             <meta property="og:description" content={product?.description || 'Compra productos de calidad en Magnolia Novedades.'} />
-            <meta property="og:image" content={absoluteMainImage} />
-            <meta property="og:image:secure_url" content={absoluteMainImage} />
+            <meta property="og:image" content={imageWithCacheBuster} />
+            <meta property="og:image:secure_url" content={imageWithCacheBuster} />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta property="og:image:type" content="image/jpeg" />
             {product && <meta property="product:price:amount" content={product.base_price} />}
             {product && <meta property="product:price:currency" content="ARS" />}
             {product && <meta property="product:retailer_item_id" content={product.id.toString()} />}
             
             <meta name="twitter:title" content={product?.name || 'Magnolia Novedades'} />
             <meta name="twitter:description" content={product?.description || 'Compra productos de calidad en Magnolia Novedades.'} />
-            <meta name="twitter:image" content={absoluteMainImage} />
+            <meta name="twitter:image" content={imageWithCacheBuster} />
             <meta name="twitter:url" content={productUrl} />
         </Helmet>
     )
