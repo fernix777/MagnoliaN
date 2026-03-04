@@ -75,35 +75,40 @@ async function getProductsFromSupabase() {
 }
 
 function getProductImages(product) {
-    if (!product.images || product.images.length === 0) {
+    // 1. Priorizar imágenes de la tabla product_images
+    if (product.images && product.images.length > 0) {
+        // Filtrar las imágenes para excluir el logo por defecto
+        const realImages = product.images.filter(img => img.image_url && !img.image_url.includes('logo.jpg'));
+
+        if (realImages.length > 0) {
+            // Buscar la imagen primaria o la primera real
+            const primaryImg = realImages.find(img => img.is_primary) || realImages[0];
+            
+            // Obtener las adicionales (máximo 10 para Facebook)
+            const additional = realImages
+                .filter(img => img.id !== primaryImg.id)
+                .slice(0, 10)
+                .map(img => img.image_url);
+
+            return {
+                primary: primaryImg.image_url,
+                additional
+            };
+        }
+    }
+
+    // 2. Fallback a la columna image_url de la tabla products
+    if (product.image_url && !product.image_url.includes('logo.jpg')) {
         return {
-            primary: 'https://www.magnolia-n.com/logo.jpg',
+            primary: product.image_url,
             additional: []
         };
     }
 
-    // Filtrar las imágenes para excluir el logo por defecto
-    const realImages = product.images.filter(img => !img.image_url.includes('logo.jpg'));
-
-    if (realImages.length === 0) {
-        return {
-            primary: 'https://www.magnolia-n.com/logo.jpg',
-            additional: []
-        };
-    }
-
-    // Buscar la imagen primaria
-    const primaryImg = realImages.find(img => img.is_primary) || realImages[0];
-    
-    // Obtener las adicionales (máximo 10 para Facebook)
-    const additional = realImages
-        .filter(img => img.id !== primaryImg.id)
-        .slice(0, 10)
-        .map(img => img.image_url);
-
+    // 3. Si no hay nada, usar el logo
     return {
-        primary: primaryImg.image_url,
-        additional
+        primary: 'https://www.magnolia-n.com/logo.jpg',
+        additional: []
     };
 }
 

@@ -168,8 +168,6 @@ export default function ProductDetail() {
             user_id: user.id
         } : null;
         trackAddToCart(product, quantity, currentUser);
-        // Rastrear en Facebook Pixel
-        trackPixelAddToCart(product.name, finalPrice);
 
         // Mostrar notificación
         setShowNotification(true)
@@ -235,9 +233,14 @@ export default function ProductDetail() {
     const images = product.images || []
     const variants = product.variants || []
 
-    const mainImage = product.images && product.images.length > 0 
-        ? product.images[selectedImage]?.image_url 
-        : '/logo.jpg'
+    const mainImage = images.length > 0 
+        ? images[selectedImage]?.image_url 
+        : 'https://www.magnolia-n.com/logo.jpg'
+
+    // Asegurar que la URL de la imagen sea absoluta para SEO
+    const absoluteMainImage = mainImage.startsWith('http') 
+        ? mainImage 
+        : `https://www.magnolia-n.com${mainImage.startsWith('/') ? '' : '/'}${mainImage}`
 
     return (
         <div className="product-detail-page">
@@ -250,7 +253,7 @@ export default function ProductDetail() {
                 <meta property="og:url" content={window.location.href} />
                 <meta property="og:title" content={product.name} />
                 <meta property="og:description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
-                <meta property="og:image" content={mainImage} />
+                <meta property="og:image" content={absoluteMainImage} />
                 <meta property="product:price:amount" content={product.base_price} />
                 <meta property="product:price:currency" content="ARS" />
                 <meta property="product:retailer_item_id" content={product.id.toString()} />
@@ -258,7 +261,7 @@ export default function ProductDetail() {
                 {/* Twitter */}
                 <meta name="twitter:title" content={product.name} />
                 <meta name="twitter:description" content={product.description || `Compra ${product.name} en Magnolia Novedades.`} />
-                <meta name="twitter:image" content={mainImage} />
+                <meta name="twitter:image" content={absoluteMainImage} />
             </Helmet>
             <Header />
 
