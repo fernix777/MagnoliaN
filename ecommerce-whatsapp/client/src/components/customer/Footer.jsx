@@ -31,7 +31,8 @@ export default function Footer() {
                     <ul>
                         <li>📧 magnolianovedades56@gmail.com</li>
                         <li>📱 WhatsApp: +54 388 517-1795</li>
-                        <li>📍 Av. Éxodo 841, San Salvador de Jujuy, Argentina</li>
+                        <li>📍 Jujuy: Calle Palpala N°987, Sector B6, B° Alto Comedero</li>
+                        <li>📍 CABA: Calle Libertad N°121, B° San Nicolás</li>
                     </ul>
                 </div>
 
