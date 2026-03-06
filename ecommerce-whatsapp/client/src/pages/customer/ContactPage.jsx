@@ -90,62 +90,105 @@ export default function ContactPage() {
                     <p>Estamos aquí para ayudarte. Envíanos un mensaje y te responderemos a la brevedad.</p>
                 </div>
 
-                <div className="contact-content">
-                    {/* Información de contacto */}
-                    <div className="contact-info">
-                        <div className="info-card">
-                            <div className="info-icon">📍</div>
-                            <h3>Ubicación</h3>
-                            <p>Av. Éxodo 841<br />San Salvador de Jujuy, Argentina</p>
-                        </div>
-
-                        <div className="info-card">
-                            <div className="info-icon">📱</div>
-                            <h3>Teléfono</h3>
-                            <p>
-                                <a href="https://wa.me/543885171795" target="_blank" rel="noopener noreferrer">
-                                    +54 388 517-1795
-                                </a>
-                            </p>
-                        </div>
-
-                        <div className="info-card">
-                            <div className="info-icon">📧</div>
-                            <h3>Email</h3>
-                            <p>
-                                <a href="mailto:magnolianovedades56@gmail.com">
-                                    magnolianovedades56@gmail.com
-                                </a>
-                            </p>
-                        </div>
-
-                        <div className="info-card">
-                            <div className="info-icon">🕐</div>
-                            <h3>Horario</h3>
-                            <p>
-                                Lunes a Viernes: 17:00 - 21:00<br />
-                                Sábados: 10:00 - 14:00
-                            </p>
-                        </div>
-
-                        {/* Mapa */}
-                        <div className="map-container">
-                            <h3>Encuéntranos</h3>
-                            <div className="map-wrapper">
+                {/* Ubicaciones */}
+                <div className="locations-section">
+                    <h2>Nuestras Sucursales</h2>
+                    <p className="locations-subtitle">Visítanos en cualquiera de nuestras ubicaciones</p>
+                    
+                    <div className="locations-grid">
+                        {/* Ubicación Jujuy - Palpala */}
+                        <div className="location-card">
+                            <div className="location-header">
+                                <h3>📍 Jujuy - Palpala</h3>
+                                <span className="location-badge">Sucursal</span>
+                            </div>
+                            <div className="location-info">
+                                <div className="info-item">
+                                    <span className="info-label">📍 Dirección:</span>
+                                    <p>Calle Palpala N°987, Sector B6, B° Alto Comedero, San Salvador de Jujuy</p>
+                                </div>
+                                <div className="info-item">
+                                    <span className="info-label">📞 Celular:</span>
+                                    <a href="https://wa.me/543885171795" target="_blank" rel="noopener noreferrer">
+                                        388-5171795
+                                    </a>
+                                </div>
+                                <div className="info-item">
+                                    <span className="info-label">🕐 Horario:</span>
+                                    <p>Lunes a sábado: 09:00 - 13:00</p>
+                                </div>
+                            </div>
+                            <div className="location-map">
                                 <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3622.8937485849347!2d-65.30366492385!3d-24.18666997849!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x941b0f2e8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sAv.%20%C3%89xodo%20841%2C%20San%20Salvador%20de%20Jujuy%2C%20Jujuy!5e0!3m2!1ses!2sar!4v1234567890123!5m2!1ses!2sar"
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3617.965649599548!2d-65.28909672385!3d-24.19604697849!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x941b0d8f2e8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sCalle%20Palpala%20987%2C%20San%20Salvador%20de%20Jujuy!5e0!3m2!1ses!2sar!4v1234567890124"
                                     width="100%"
-                                    height="350"
+                                    height="250"
                                     style={{ border: 0 }}
                                     allowFullScreen=""
                                     loading="lazy"
                                     referrerPolicy="no-referrer-when-downgrade"
-                                    title="Ubicación de Magnolia Novedades"
+                                    title="Ubicación Palpala - Magnolia Novedades"
+                                ></iframe>
+                            </div>
+                        </div>
+
+                        {/* Ubicación CABA */}
+                        <div className="location-card">
+                            <div className="location-header">
+                                <h3>📍 Buenos Aires - CABA</h3>
+                                <span className="location-badge">Sucursal</span>
+                            </div>
+                            <div className="location-info">
+                                <div className="info-item">
+                                    <span className="info-label">📍 Dirección:</span>
+                                    <p>Calle Libertad N°121, B° San Nicolás, Buenos Aires</p>
+                                </div>
+                                <div className="info-item">
+                                    <span className="info-label">📞 Celular:</span>
+                                    <a href="https://wa.me/541172285323" target="_blank" rel="noopener noreferrer">
+                                        +54 11 7228-5323
+                                    </a>
+                                </div>
+                                <div className="info-item">
+                                    <span className="info-label">🕐 Horario:</span>
+                                    <p>Lunes a sábado: 09:00 - 15:00</p>
+                                </div>
+                            </div>
+                            <div className="location-map">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.9352945297477!2d-58.38158892385!3d-34.603869978449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a334d7f4a4c4c4%3A0x8b8b8b8b8b8b8b8b!2sLibertad%20121%2C%20San%20Nicol%C3%A1s%2C%20CABA!5e0!3m2!1ses!2sar!4v1234567890125"
+                                    width="100%"
+                                    height="250"
+                                    style={{ border: 0 }}
+                                    allowFullScreen=""
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    title="Ubicación CABA - Magnolia Novedades"
                                 ></iframe>
                             </div>
                         </div>
                     </div>
+                </div>
 
+                {/* Contacto General */}
+                <div className="contact-general-info">
+                    <div className="info-box">
+                        <span className="icon">📧</span>
+                        <div>
+                            <h4>Email</h4>
+                            <a href="mailto:magnolianovedades56@gmail.com">magnolianovedades56@gmail.com</a>
+                        </div>
+                    </div>
+                    <div className="info-box">
+                        <span className="icon">📞</span>
+                        <div>
+                            <h4>Soporte por WhatsApp</h4>
+                            <p>Disponible en cualquiera de nuestras sedes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="contact-content">
                     {/* Formulario de contacto */}
                     <div className="contact-form-wrapper">
                         <h2>Envíanos un mensaje</h2>
