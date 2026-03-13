@@ -32,7 +32,7 @@ export default function Footer() {
                         <li>📧 magnolianovedades56@gmail.com</li>
                         <li>📱 WhatsApp: +54 388 517-1795</li>
                         <li>📍 Jujuy: Calle Palpala N°987, Sector B6, B° Alto Comedero</li>
-                        <li>📍 CABA: Calle Libertad N°121, B° San Nicolás</li>
+                        <li>📍 CABA: Calle Libertad N°121, B° San Nicolás | +54 11 5470-5414</li>
                     </ul>
                 </div>
 

@@ -145,8 +145,8 @@ export default function ContactPage() {
                                 </div>
                                 <div className="info-item">
                                     <span className="info-label">📞 Celular:</span>
-                                    <a href="https://wa.me/541172285323" target="_blank" rel="noopener noreferrer">
-                                        +54 11 7228-5323
+                                    <a href="https://wa.me/541154705414" target="_blank" rel="noopener noreferrer">
+                                        +54 11 5470-5414
                                     </a>
                                 </div>
                                 <div className="info-item">
