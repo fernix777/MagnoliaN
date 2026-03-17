@@ -58,10 +58,10 @@ export default function Cart({ onClose }) {
             message += `   - Subtotal: ${formatPrice(price * item.quantity)}\n`;
 
             if (item.selectedColor) {
-                message += `   - Variante: ${item.selectedColor}\n`;
+                message += `   - 🎨 Color: ${item.selectedColor}\n`;
             }
             if (item.selectedCondition) {
-                message += `   - Condición: ${item.selectedCondition}\n`;
+                message += `   - 📦 Tipo: ${item.selectedCondition}\n`;
             }
         });
 

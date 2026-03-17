@@ -84,7 +84,13 @@ export default function CheckoutPage() {
             // Preparar datos de la orden
             const orderPayload = {
                 customer: formData,
-                items: cart,
+                items: cart.map(item => ({
+                    ...item,
+                    // Asegurar que los datos de variante se incluyan
+                    selectedColor: item.selectedColor,
+                    selectedCondition: item.selectedCondition,
+                    purchaseType: item.purchaseType
+                })),
                 total: cartTotal,
                 paymentMethod,
                 user_id: user?.id
@@ -142,9 +148,19 @@ export default function CheckoutPage() {
                 cart.forEach((item, index) => {
                     const price = item.price || 0
                     message += `\n${index + 1}. *${item.name}*\n`
-                    message += `   - Cantidad: ${item.quantity}\n`
+                    message += `   - Cantidad: ${item.quantity} ${item.purchaseType === 'paquete' ? 'paquetes' : item.purchaseType === 'bulto' ? 'bultos' : 'unidades'}\n`
                     message += `   - Precio unitario: ${price.toLocaleString('es-AR')}\n`
                     message += `   - Subtotal: ${(price * item.quantity).toLocaleString('es-AR')}\n`
+                    
+                    // Agregar información de color si existe
+                    if (item.selectedColor) {
+                        message += `   - 🎨 Color: ${item.selectedColor}\n`
+                    }
+                    
+                    // Agregar información de condición/tipo de venta
+                    if (item.selectedCondition) {
+                        message += `   - 📦 Tipo: ${item.selectedCondition}\n`
+                    }
                 })
                 
                 message += `\n💰 *Total a pagar: ${cartTotal.toLocaleString('es-AR')}*\n\n`
@@ -194,7 +210,9 @@ export default function CheckoutPage() {
                                     <div className="item-info">
                                         <h4>{item.name}</h4>
                                         <p className="item-details">
-                                            Cantidad: {item.quantity}
+                                            Cantidad: {item.quantity} {item.purchaseType === 'paquete' ? 'paquetes' : item.purchaseType === 'bulto' ? 'bultos' : 'unidades'}
+                                            {item.selectedColor && ` • 🎨 Color: ${item.selectedColor}`}
+                                            {item.selectedCondition && ` • 📦 Tipo: ${item.selectedCondition}`}
                                         </p>
                                     </div>
                                     <div className="item-price">
