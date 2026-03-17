@@ -186,8 +186,24 @@ export default function Orders() {
                                 <div key={index} className="order-item">
                                     <div className="item-details">
                                         <h4>{item.product_name}</h4>
-                                        <p>Cantidad: {item.quantity}</p>
-                                        {item.variant_info && (
+                                        <p>Cantidad: {item.quantity} {item.purchaseType === 'paquete' ? 'paquetes' : item.purchaseType === 'bulto' ? 'bultos' : 'unidades'}</p>
+                                        
+                                        {/* Mostrar color si existe */}
+                                        {item.selectedColor && (
+                                            <p style={{ color: '#e91e63', fontSize: '0.9em', fontWeight: '500' }}>
+                                                🎨 Color: {item.selectedColor}
+                                            </p>
+                                        )}
+                                        
+                                        {/* Mostrar tipo/condición si existe */}
+                                        {item.selectedCondition && (
+                                            <p style={{ color: '#2196f3', fontSize: '0.9em' }}>
+                                                📦 Tipo: {item.selectedCondition}
+                                            </p>
+                                        )}
+                                        
+                                        {/* Mantener compatibilidad con variant_info existente */}
+                                        {item.variant_info && !item.selectedColor && (
                                             <p style={{ color: '#666', fontSize: '0.9em' }}>
                                                 Variante: {item.variant_info.variant_value || item.variant_info.name}
                                             </p>
