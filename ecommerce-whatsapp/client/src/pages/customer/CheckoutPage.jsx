@@ -36,7 +36,7 @@ export default function CheckoutPage() {
 
     // Rastrear InitiateCheckout cuando el componente se monta
     useEffect(() => {
-        if (cart.length > 0 && !checkoutInitiated) {
+        if (cart && cart.length > 0 && !checkoutInitiated && Array.isArray(cart)) {
             const userData = user ? {
                 email: user.email,
                 user_id: user.id,

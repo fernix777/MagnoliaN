@@ -186,24 +186,24 @@ export default function Orders() {
                                 <div key={index} className="order-item">
                                     <div className="item-details">
                                         <h4>{item.product_name}</h4>
-                                        <p>Cantidad: {item.quantity} {item.purchaseType === 'paquete' ? 'paquetes' : item.purchaseType === 'bulto' ? 'bultos' : 'unidades'}</p>
+                                        <p>Cantidad: {item.quantity} {item.purchase_type === 'paquete' ? 'paquetes' : item.purchase_type === 'bulto' ? 'bultos' : 'unidades'}</p>
                                         
                                         {/* Mostrar color si existe */}
-                                        {item.selectedColor && (
+                                        {item.selected_color && (
                                             <p style={{ color: '#e91e63', fontSize: '0.9em', fontWeight: '500' }}>
-                                                🎨 Color: {item.selectedColor}
+                                                🎨 Color: {item.selected_color}
                                             </p>
                                         )}
                                         
                                         {/* Mostrar tipo/condición si existe */}
-                                        {item.selectedCondition && (
+                                        {item.selected_condition && (
                                             <p style={{ color: '#2196f3', fontSize: '0.9em' }}>
-                                                📦 Tipo: {item.selectedCondition}
+                                                📦 Tipo: {item.selected_condition}
                                             </p>
                                         )}
                                         
                                         {/* Mantener compatibilidad con variant_info existente */}
-                                        {item.variant_info && !item.selectedColor && (
+                                        {item.variant_info && !item.selected_color && (
                                             <p style={{ color: '#666', fontSize: '0.9em' }}>
                                                 Variante: {item.variant_info.variant_value || item.variant_info.name}
                                             </p>

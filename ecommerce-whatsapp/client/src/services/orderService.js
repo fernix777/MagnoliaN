@@ -33,9 +33,9 @@ export async function createOrder(orderData) {
             product_name: item.name,
             // Guardar información de variante y color
             variant_info: item.variant || null,
-            selectedColor: item.selectedColor || null,
-            selectedCondition: item.selectedCondition || null,
-            purchaseType: item.purchaseType || 'paquete'
+            selected_color: item.selectedColor || null,
+            selected_condition: item.selectedCondition || null,
+            purchase_type: item.purchaseType || 'paquete'
         }))
 
         const { error: itemsError } = await supabase
