@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
 import { createOrder } from '../../services/orderService'
 import { trackInitiateCheckout, trackPurchase } from '../../services/facebookService'
+import { ga4SignUp } from '../../utils/ga4'
 import Header from '../../components/customer/Header'
 import Footer from '../../components/customer/Footer'
 import WhatsAppButton from '../../components/customer/WhatsAppButton'
@@ -109,6 +110,7 @@ export default function CheckoutPage() {
                         const userData = await response.json()
                         createdUser = userData.user
                         console.log('✅ Cuenta creada automáticamente')
+                        ga4SignUp('checkout')
                         if (userData.tempPassword) {
                             try {
                                 await signIn(formData.email, userData.tempPassword)

@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { FaTimes, FaMinus, FaPlus, FaWhatsapp, FaShoppingCart } from 'react-icons/fa';
 import { trackInitiateCheckout, trackPurchase } from '../../services/facebookService';
+import { ga4BeginCheckout } from '../../utils/ga4';
 import './Cart.css';
 
 export default function Cart({ onClose }) {
@@ -27,6 +28,7 @@ export default function Cart({ onClose }) {
             email: user.email,
             user_id: user.id
         } : null);
+        ga4BeginCheckout(cart, getCartTotal());
 
         // Navegar a página de checkout
         navigate('/checkout');

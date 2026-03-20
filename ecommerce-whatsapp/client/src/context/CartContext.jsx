@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { trackAddToCart } from '../services/facebookService';
+import { ga4AddToCart } from '../utils/ga4';
 import { useAuth } from './AuthContext';
 
 export const CartContext = createContext();
@@ -30,8 +31,9 @@ export function CartProvider({ children }) {
             return;
         }
 
-        // Rastrear evento AddToCart (Pixel + CAPI)
+        // Rastrear evento AddToCart (Pixel + CAPI + GA4)
         trackAddToCart(product, quantity);
+        ga4AddToCart(product, quantity);
 
         setCart(prevCart => {
             // Verificar si el producto ya está en el carrito

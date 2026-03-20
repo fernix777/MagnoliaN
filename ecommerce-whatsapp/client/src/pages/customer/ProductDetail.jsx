@@ -10,6 +10,7 @@ import { AuthContext } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
 import { trackViewContent, trackAddToCart } from '../../services/facebookService'
 import { trackViewContent as trackPixelViewContent, trackAddToCart as trackPixelAddToCart } from '../../utils/facebookPixel'
+import { ga4ViewItem } from '../../utils/ga4'
 import './ProductDetail.css'
 
 export default function ProductDetail() {
@@ -84,6 +85,7 @@ export default function ProductDetail() {
             } : null;
 
             trackViewContent(product, currentUser);
+            ga4ViewItem(product);
         }
     }, [product, user]);
 
