@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { onLCP, onFID, onCLS, onFCP, onTTFB } from 'web-vitals';
+import { onLCP, onINP, onCLS, onFCP, onTTFB } from 'web-vitals';
 
 /**
  * Componente que monitorea las Web Vitals y las registra en la consola.
@@ -32,7 +32,7 @@ export default function PerformanceAuditor() {
 
         // Suscribirse a las métricas principales
         onLCP(logMetric);
-        onFID(logMetric);
+        onINP(logMetric);
         onCLS(logMetric);
         onFCP(logMetric);
         onTTFB(logMetric);
