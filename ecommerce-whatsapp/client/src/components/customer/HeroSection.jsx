@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getActiveBanners } from '../../services/bannerService'
 import './HeroSection.css'
-import todoOctubreBanner from '../../assets/images/hero/todo_octubre.png'
+import todoOctubreBanner from '../../assets/images/hero/todo_octubre.webp'
 
 export default function HeroSection() {
     const [currentSlide, setCurrentSlide] = useState(0)
@@ -17,19 +17,19 @@ export default function HeroSection() {
             link: '/productos'
         },
         {
-            image: '/brillo.png',
+            image: '/brillo.webp',
             title: 'Magnolia Novedades',
             subtitle: 'Decoración y regalos únicos para cada ocasión',
             link: '/productos'
         },
         {
-            image: '/pic3.png',
+            image: '/pic3.webp',
             title: 'Encuentra tu estilo',
             subtitle: 'Las mejores tendencias en decoración del hogar',
             link: '/categoria/decoracion'
         },
         {
-            image: '/imagen1 (1).png',
+            image: '/imagen1 (1).webp',
             title: 'Regalos especiales',
             subtitle: 'Para cada momento importante de tu vida',
             link: '/categoria/regalos'
