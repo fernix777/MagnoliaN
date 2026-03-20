@@ -13,9 +13,9 @@ import PropTypes from 'prop-types'
  * @param {Object} props.structuredData - Additional structured data
  */
 export default function SEO({
-    title = 'Magnolia Novedades - Decoración y Regalos Únicos',
-    description = 'Descubre decoración única y regalos especiales en Magnolia Novedades. Ubicados en San Salvador de Jujuy, ofrecemos productos de calidad para hacer de cada momento algo especial.',
-    keywords = 'decoración, regalos, novedades, San Salvador de Jujuy, Jujuy, Argentina',
+    title = 'Cotillón LED y Tecnología en Jujuy y Buenos Aires | Magnolia-N',
+    description = 'Cotillón LED, Tecnología y Decoración única en Magnolia-N. Envíos directos en San Salvador de Jujuy y Buenos Aires.',
+    keywords = 'cotillón LED, tecnología, decoración, regalos, Jujuy, Buenos Aires, Argentina, tienda cotillon',
     image = 'https://www.magnolia-n.com/hero-banner.jpg',
     url = 'https://www.magnolia-n.com/',
     type = 'website',

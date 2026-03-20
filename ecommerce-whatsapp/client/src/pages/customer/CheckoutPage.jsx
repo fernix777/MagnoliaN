@@ -216,6 +216,18 @@ export default function CheckoutPage() {
                 message += '¡Hola! Quisiera confirmar este pedido.'
 
                 const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+                
+                // Disparar evento de conversión GA4
+                if (typeof window !== 'undefined' && window.gtag) {
+                    window.gtag('event', 'purchase_whatsapp', {
+                        event_category: 'ecommerce',
+                        event_label: 'WhatsApp Checkout',
+                        value: cartTotal,
+                        currency: 'ARS',
+                        transaction_id: orderId
+                    });
+                }
+
                 window.open(url, '_blank')
             }
 
