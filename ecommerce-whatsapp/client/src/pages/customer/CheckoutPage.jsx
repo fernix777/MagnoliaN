@@ -101,9 +101,7 @@ export default function CheckoutPage() {
                 try {
                     const response = await fetch('/api/auth/register', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(userPayload)
                     })
                     
@@ -111,8 +109,6 @@ export default function CheckoutPage() {
                         const userData = await response.json()
                         createdUser = userData.user
                         console.log('✅ Cuenta creada automáticamente')
-                        
-                        // Auto-iniciar sesión con la contraseña temporal que devuelve el backend
                         if (userData.tempPassword) {
                             try {
                                 await signIn(formData.email, userData.tempPassword)
@@ -122,8 +118,20 @@ export default function CheckoutPage() {
                             }
                         }
                     } else {
-                        // Si falla la creación de usuario, continuar con el checkout normal
-                        console.warn('⚠️ No se pudo crear la cuenta, continuando con checkout')
+                        const errData = await response.json().catch(() => ({}))
+                        if (errData.code === 'email_exists') {
+                            // Intentar auto-login con el teléfono (para cuentas ya registradas con nuestro sistema)
+                            const purePhone = formData.phone.replace(/\D/g, '')
+                            const attemptPassword = purePhone.length >= 6 ? purePhone : (purePhone + '123456').substring(0, 6)
+                            try {
+                                await signIn(formData.email, attemptPassword)
+                                console.log('✅ Sesión iniciada con cuenta existente')
+                            } catch {
+                                console.warn('⚠️ Cuenta existente con otra contraseña, continuando sin login')
+                            }
+                        } else {
+                            console.warn('⚠️ No se pudo crear la cuenta, continuando con checkout')
+                        }
                     }
                 } catch (error) {
                     console.warn('⚠️ Error al crear cuenta, continuando con checkout:', error)
