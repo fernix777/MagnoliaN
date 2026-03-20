@@ -60,7 +60,7 @@ export default function CategoriesSection() {
                             >
                                 {category.image_url && (
                                     <div className="category-image">
-                                        <img src={category.image_url} alt={category.name} />
+                                        <img src={category.image_url} alt={category.name} loading="lazy" />
                                     </div>
                                 )}
                                 <div className="category-info">
@@ -83,7 +83,7 @@ export default function CategoriesSection() {
                                             >
                                                 {product.image_url && (
                                                     <div className="category-product-image">
-                                                        <img src={product.image_url} alt={product.name} />
+                                                        <img src={product.image_url} alt={product.name} loading="lazy" />
                                                     </div>
                                                 )}
                                                 <div className="category-product-info">

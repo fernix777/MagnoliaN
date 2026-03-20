@@ -36,6 +36,7 @@ import Orders from './pages/admin/Orders';
 import ProductForm from './pages/admin/ProductForm';
 import AdminBanners from './pages/admin/AdminBanners';
 import AdminCustomers from './pages/admin/AdminCustomers';
+import PerformanceAuditor from './components/common/PerformanceAuditor';
 
 // Componente para tracking automático de PageView
 function PageViewTracker() {
@@ -186,6 +187,7 @@ function App() {
                 </CartProvider>
             </AuthProvider>
             <Analytics />
+            <PerformanceAuditor />
         </HelmetProvider>
     )
 }

@@ -78,7 +78,7 @@ export default function FeaturedProducts() {
                             >
                                 <div className="featured-image">
                                     {primaryImage ? (
-                                        <img src={primaryImage} alt={product.name} />
+                                        <img src={primaryImage} alt={product.name} loading="lazy" />
                                     ) : (
                                         <div className="no-image">Sin imagen</div>
                                     )}

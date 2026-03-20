@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { getActiveBanners } from '../../services/bannerService'
 import './HeroSection.css'
 import todoOctubreBanner from '../../assets/images/hero/todo_octubre.webp'
@@ -86,6 +87,18 @@ export default function HeroSection() {
 
     return (
         <section className="hero-section">
+            {/* Preload first slide image for LCP performance */}
+            <Helmet>
+                {slides.length > 0 && (
+                    <link 
+                        rel="preload" 
+                        as="image" 
+                        href={slides[0].image} 
+                        fetchpriority="high"
+                    />
+                )}
+            </Helmet>
+
             {/* Slides */}
             {slides.map((slide, index) => {
                 const isExternal = slide.link?.startsWith('http')
