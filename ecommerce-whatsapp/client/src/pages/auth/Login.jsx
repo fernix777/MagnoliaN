@@ -91,10 +91,7 @@ export default function Login() {
                 
                 <div className="auth-footer">
                     <p>
-                        ¿No tienes una cuenta?{' '}
-                        <Link to="/registro" className="auth-link">
-                            Regístrate aquí
-                        </Link>
+                        Para crear una cuenta añade productos al carrito y consíguela gratis al finalizar tu compra.
                     </p>
                     <Link to="/recuperar-contrasena" className="auth-link">
                         ¿Olvidaste tu contraseña?

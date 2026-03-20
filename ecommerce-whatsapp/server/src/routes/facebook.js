@@ -4,10 +4,23 @@ import {
     trackServerAddToCart,
     trackServerInitiateCheckout,
     trackServerPurchase,
-    trackServerCompleteRegistration
+    trackServerCompleteRegistration,
+    trackServerPageView
 } from '../services/facebookCAPI.js';
 
 const router = express.Router();
+
+// Endpoint para rastrear pageview
+router.post('/track-pageview', async (req, res) => {
+    try {
+        const { user, eventSourceUrl } = req.body;
+        const result = await trackServerPageView(user, eventSourceUrl);
+        res.json({ success: !!result, data: result });
+    } catch (error) {
+        console.error('Error tracking pageview:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
 
 // Endpoint para rastrear visualización de producto
 router.post('/track-view', async (req, res) => {

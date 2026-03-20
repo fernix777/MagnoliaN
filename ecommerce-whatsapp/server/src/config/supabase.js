@@ -1,7 +1,14 @@
+import dotenv from 'dotenv'
+dotenv.config({ override: true })
+
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY
+
+console.log('--- SUPABASE CONFIG INIT ---');
+console.log('URL:', supabaseUrl);
+console.log('SERVICE_KEY starts with:', supabaseServiceKey ? supabaseServiceKey.substring(0, 15) : 'UNDEFINED!');
 
 if (!supabaseUrl || !supabaseServiceKey) {
     throw new Error('Missing Supabase environment variables')

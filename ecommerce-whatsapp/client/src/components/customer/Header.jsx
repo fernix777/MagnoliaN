@@ -92,8 +92,7 @@ export default function Header() {
                         </div>
                     ) : (
                         <div className="auth-buttons">
-                            <Link to="/login" className="btn btn-outline btn-sm">Iniciar Sesión</Link>
-                            <Link to="/registro" className="btn btn-primary btn-sm">Registrarse</Link>
+                            <Link to="/login" className="btn btn-primary btn-sm">Iniciar Sesión</Link>
                         </div>
                     )}
                 </div>
@@ -127,8 +126,7 @@ export default function Header() {
                     {/* Auth Buttons en Mobile */}
                     {!user && (
                         <>
-                            <Link to="/login" className="mobile-auth-link" onClick={() => setMenuOpen(false)}>Iniciar Sesión</Link>
-                            <Link to="/registro" className="mobile-auth-link mobile-auth-primary" onClick={() => setMenuOpen(false)}>Registrarse</Link>
+                            <Link to="/login" className="mobile-auth-link mobile-auth-primary" onClick={() => setMenuOpen(false)}>Iniciar Sesión</Link>
                         </>
                     )}
                     

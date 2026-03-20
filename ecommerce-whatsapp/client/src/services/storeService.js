@@ -44,10 +44,11 @@ export async function getTopSellingProductsPerCategory() {
 
         const results = await Promise.all(productsPromises)
         
-        // 3. Aplanar el array de arrays
+        // 3. Aplanar el array de arrays y eliminar duplicados (si un producto está en múltiples categorías)
         const allProducts = results.flat()
+        const uniqueProducts = Array.from(new Map(allProducts.map(item => [item.id, item])).values())
 
-        return { data: allProducts, error: null }
+        return { data: uniqueProducts, error: null }
     } catch (error) {
         console.error('Error fetching top selling products:', error)
         return { data: null, error }

@@ -22,16 +22,11 @@ export default function Cart({ onClose }) {
     };
 
     const handleCheckout = () => {
-        if (!user) {
-            navigate('/login?redirect=/checkout');
-            return;
-        }
-
         // Rastrear iniciación de checkout
-        trackInitiateCheckout(getCartTotal(), cart.length, {
+        trackInitiateCheckout(getCartTotal(), cart, user ? {
             email: user.email,
             user_id: user.id
-        });
+        } : null);
 
         // Navegar a página de checkout
         navigate('/checkout');

@@ -98,12 +98,6 @@ export default function ForgotPassword() {
                             Inicia sesión aquí
                         </Link>
                     </p>
-                    <p>
-                        ¿No tienes una cuenta?{' '}
-                        <Link to="/registro" className="auth-link">
-                            Regístrate aquí
-                        </Link>
-                    </p>
                 </div>
             </div>
         </div>

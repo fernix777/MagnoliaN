@@ -11,7 +11,7 @@ import './CheckoutPage.css'
 
 export default function CheckoutPage() {
     const navigate = useNavigate()
-    const { user } = useAuth()
+    const { user, signIn } = useAuth()
     const { cart, getCartTotal, getCartCount, clearCart } = useCart()
     
     const [formData, setFormData] = useState({
@@ -30,6 +30,7 @@ export default function CheckoutPage() {
     const [paymentMethod, setPaymentMethod] = useState('whatsapp')
     const [processing, setProcessing] = useState(false)
     const [checkoutInitiated, setCheckoutInitiated] = useState(false)
+    const [createAccount, setCreateAccount] = useState(false)
 
     const cartTotal = getCartTotal()
     const cartItemsCount = getCartCount()
@@ -81,6 +82,53 @@ export default function CheckoutPage() {
         setProcessing(true)
 
         try {
+            // Si el usuario quiere crear cuenta y no está logueado
+            let createdUser = null
+            if (createAccount && !user) {
+                // Crear usuario con los datos del formulario
+                const userPayload = {
+                    email: formData.email,
+                    first_name: formData.firstName,
+                    last_name: formData.lastName,
+                    phone: formData.phone,
+                    address: formData.address,
+                    city: formData.city,
+                    state: formData.state,
+                    zip: formData.zipCode,
+                    country: formData.country
+                }
+                
+                try {
+                    const response = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(userPayload)
+                    })
+                    
+                    if (response.ok) {
+                        const userData = await response.json()
+                        createdUser = userData.user
+                        console.log('✅ Cuenta creada automáticamente')
+                        
+                        // Auto-iniciar sesión con la contraseña temporal que devuelve el backend
+                        if (userData.tempPassword) {
+                            try {
+                                await signIn(formData.email, userData.tempPassword)
+                                console.log('✅ Sesión iniciada automáticamente')
+                            } catch (signInErr) {
+                                console.warn('⚠️ No se pudo iniciar sesión automáticamente:', signInErr)
+                            }
+                        }
+                    } else {
+                        // Si falla la creación de usuario, continuar con el checkout normal
+                        console.warn('⚠️ No se pudo crear la cuenta, continuando con checkout')
+                    }
+                } catch (error) {
+                    console.warn('⚠️ Error al crear cuenta, continuando con checkout:', error)
+                }
+            }
             // Preparar datos de la orden
             const orderPayload = {
                 customer: formData,
@@ -93,7 +141,7 @@ export default function CheckoutPage() {
                 })),
                 total: cartTotal,
                 paymentMethod,
-                user_id: user?.id
+                user_id: user?.id || createdUser?.id
             }
 
             // 1. Guardar orden en base de datos
@@ -301,6 +349,27 @@ export default function CheckoutPage() {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Opción de crear cuenta - Solo si no está logueado */}
+                            {!user && (
+                                <div className="form-section account-section">
+                                    <div className="account-option">
+                                        <label className="checkbox-label">
+                                            <input
+                                                type="checkbox"
+                                                checked={createAccount}
+                                                onChange={(e) => setCreateAccount(e.target.checked)}
+                                                disabled={processing}
+                                            />
+                                            <span className="checkbox-text">
+                                                <strong>Crear una cuenta con estos datos para mi próxima compra</strong>
+                                                <br />
+                                                <small>Tu contraseña por defecto será tu <strong>número de WhatsApp</strong> para que puedas entrar fácilmente más tarde.</small>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Dirección */}
                             <div className="form-section">

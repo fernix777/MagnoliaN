@@ -89,15 +89,9 @@ export default function CategoriesSection() {
                                                 <div className="category-product-info">
                                                     <span className="category-product-name">{product.name}</span>
                                                     {product.price && (
-                                                        user ? (
-                                                            <span className="category-product-price">
-                                                                ${!isNaN(parseFloat(product.price)) ? parseFloat(product.price).toLocaleString('es-AR') : '0.00'}
-                                                            </span>
-                                                        ) : (
-                                                            <span className="category-product-price login-required">
-                                                                Ver precio
-                                                            </span>
-                                                        )
+                                                        <span className="category-product-price">
+                                                            ${!isNaN(parseFloat(product.price)) ? parseFloat(product.price).toLocaleString('es-AR') : '0.00'}
+                                                        </span>
                                                     )}
                                                 </div>
                                             </Link>

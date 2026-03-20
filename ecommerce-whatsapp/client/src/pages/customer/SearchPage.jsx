@@ -222,15 +222,9 @@ export default function SearchPage() {
                                                 </p>
                                             )}
                                             <div className="product-footer">
-                                                {user ? (
-                                                    <span className="product-price">
-                                                        {formatPrice(product.base_price)}
-                                                    </span>
-                                                ) : (
-                                                    <span className="login-to-see">
-                                                        <Link to="/login">Inicia sesión</Link> para ver precios
-                                                    </span>
-                                                )}
+                                                <span className="product-price">
+                                                    {formatPrice(product.base_price)}
+                                                </span>
                                                 <span className="product-stock">
                                                     {product.stock > 0 ? (
                                                         <span className="in-stock">✓ Disponible</span>

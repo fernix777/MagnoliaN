@@ -7,46 +7,23 @@ import { supabase } from '../config/supabase'
  */
 export async function createOrder(orderData) {
     try {
-        const { customer, items, total, paymentMethod, user_id } = orderData
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        })
 
-        // 1. Crear la orden principal
-        const { data: order, error: orderError } = await supabase
-            .from('orders')
-            .insert([{
-                user_id: user_id || null,
-                customer_info: customer,
-                total: total,
-                status: 'pending',
-                payment_method: paymentMethod
-            }])
-            .select()
-            .single()
+        if (!response.ok) {
+            const errorResult = await response.json().catch(() => ({}))
+            throw new Error(errorResult.error || 'Failed to create order via backend')
+        }
 
-        if (orderError) throw orderError
-
-        // 2. Crear los items de la orden
-        const orderItems = items.map(item => ({
-            order_id: order.id,
-            product_id: item.id,
-            quantity: item.quantity,
-            price: item.price,
-            product_name: item.name,
-            // Guardar información de variante y color
-            variant_info: item.variant || null,
-            selected_color: item.selectedColor || null,
-            selected_condition: item.selectedCondition || null,
-            purchase_type: item.purchaseType || 'paquete'
-        }))
-
-        const { error: itemsError } = await supabase
-            .from('order_items')
-            .insert(orderItems)
-
-        if (itemsError) throw itemsError
-
-        return { data: order, error: null }
+        const result = await response.json()
+        return { data: result.data, error: null }
     } catch (error) {
-        console.error('Error creating order:', error)
+        console.error('Error creating order proxy:', error)
         return { data: null, error }
     }
 }

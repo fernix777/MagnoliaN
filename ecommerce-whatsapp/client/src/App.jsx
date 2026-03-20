@@ -106,11 +106,6 @@ function App() {
                                     <Login />
                                 </RedirectIfAuth>
                             } />
-                            <Route path="/registro" element={
-                                <RedirectIfAuth>
-                                    <Register />
-                                </RedirectIfAuth>
-                            } />
                             <Route path="/registro-exitoso" element={
                                 <RegistrationSuccess />
                             } />

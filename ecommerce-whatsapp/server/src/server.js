@@ -6,15 +6,18 @@ import { fileURLToPath } from 'url';
 
 // Importar rutas
 import facebookRoutes from './routes/facebook.js';
+import authRoutes from './routes/auth.js';
+import ordersRoutes from './routes/orders.js';
 
 // Configuración
-dotenv.config();
+dotenv.config({ override: true });
+console.log('ENV LOADED: PORT=' + (process.env.PORT || 'undefined'));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middlewares
 app.use(cors());
@@ -36,19 +39,11 @@ app.get('/api/health', (req, res) => {
 // Registrar rutas de Facebook
 app.use('/api/facebook', facebookRoutes);
 
-// Importar rutas (se agregarán después)
-// import authRoutes from './routes/authRoutes.js';
-// import productRoutes from './routes/productRoutes.js';
-// import categoryRoutes from './routes/categoryRoutes.js';
-// import shippingRoutes from './routes/shippingRoutes.js';
-// import settingsRoutes from './routes/settingsRoutes.js';
+// Registrar rutas de autenticación
+app.use('/api/auth', authRoutes);
 
-// Usar rutas
-// app.use('/api/auth', authRoutes);
-// app.use('/api/products', productRoutes);
-// app.use('/api/categories', categoryRoutes);
-// app.use('/api/shipping', shippingRoutes);
-// app.use('/api/settings', settingsRoutes);
+// Registrar rutas de pedidos
+app.use('/api/orders', ordersRoutes);
 
 // Manejo de errores global
 app.use((err, req, res, next) => {

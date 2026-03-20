@@ -136,11 +136,6 @@ export default function ProductDetail() {
 
 
     const handleAddToCart = () => {
-        if (!user) {
-            navigate('/login?redirect=' + encodeURIComponent(window.location.pathname))
-            return
-        }
-
         if (!purchaseType) {
             alert('Por favor selecciona el tipo de venta')
             return
@@ -343,15 +338,9 @@ export default function ProductDetail() {
                             </div>
                         )}
 
-                        {user ? (
-                            <div className="product-price">
-                                {formatPrice(getFinalPrice())}
-                            </div>
-                        ) : (
-                            <div className="login-required">
-                                <i className="fas fa-lock"></i> Inicia sesión para ver precios
-                            </div>
-                        )}
+                        <div className="product-price">
+                            {formatPrice(getFinalPrice())}
+                        </div>
 
                         {/* Información de paquete y bulto */}
                         <div className="package-info">
@@ -453,7 +442,7 @@ export default function ProductDetail() {
                             <button
                                 onClick={handleAddToCart}
                                 className="btn btn-primary btn-large add-to-cart-btn"
-                                disabled={product.stock <= 0 || !purchaseType || (product.has_colors && !selectedColor) || !user}
+                                disabled={product.stock <= 0 || !purchaseType || (product.has_colors && !selectedColor)}
                             >
                                 {product.stock <= 0 ? (
                                     <>❌ No Disponible</>

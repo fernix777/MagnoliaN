@@ -133,6 +133,13 @@ export async function trackServerEvent(eventName, eventData = {}) {
 /**
  * Rastrear visualización de contenido
  */
+export async function trackServerPageView(user = null, eventSourceUrl = '') {
+    return trackServerEvent('PageView', {
+        event_source_url: eventSourceUrl,
+        user_data: user || {}
+    });
+}
+
 export async function trackServerViewContent(product, user = null, eventSourceUrl = '') {
     return trackServerEvent('ViewContent', {
         user,
@@ -261,6 +268,7 @@ export async function trackServerLead(leadData, eventSourceUrl = '') {
 
 export default {
     trackServerEvent,
+    trackServerPageView,
     trackServerViewContent,
     trackServerAddToCart,
     trackServerInitiateCheckout,

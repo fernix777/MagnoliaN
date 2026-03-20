@@ -101,13 +101,7 @@ export default function ProductsPage() {
                                             <p className="product-description">{product.description}</p>
                                         )}
                                         <div className="product-footer">
-                                            {user ? (
-                                                <span className="product-price">{formatPrice(product.base_price)}</span>
-                                            ) : (
-                                                <span className="login-to-see">
-                                                    <Link to="/login">Inicia sesión</Link> para ver precios
-                                                </span>
-                                            )}
+                                            <span className="product-price">{formatPrice(product.base_price)}</span>
                                             {product.stock > 0 ? (
                                                 <span className="stock-badge available">✓ Disponible</span>
                                             ) : (
