@@ -25,45 +25,60 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// ─────────────────────────────────────────────
+// MAPEO DE CATEGORÍAS: product_type → google_product_category
+// ─────────────────────────────────────────────
+const CATEGORY_MAP = {
+    'COTILLON LED': 'Electronics > Electronics Accessories > LED Lighting',
+    'LUCES':        'Electronics > Electronics Accessories > LED Lighting',
+    'LIBRERIA':     'Office Supplies',
+    'COTILLON':     'Arts & Entertainment > Party & Celebration > Party Supplies',
+    'REGALERIA':    'Arts & Entertainment > Party & Celebration > Gift Giving',
+};
+const DEFAULT_CATEGORY = 'Arts & Entertainment > Party & Celebration';
+
+function getGoogleCategory(productType) {
+    if (!productType) return DEFAULT_CATEGORY;
+    const key = productType.toUpperCase().trim();
+    return CATEGORY_MAP[key] ?? DEFAULT_CATEGORY;
+}
+
 async function getProductsFromSupabase() {
     try {
-        console.log('🔄 Obteniendo productos y todas las imágenes por separado...');
+        console.log('🔄 Obteniendo TODOS los productos activos para el feed XML...');
 
-        // 1. Obtener todos los productos
+        // Obtener todos los productos activos sin límite (igual que el feed principal)
         const { data: products, error: productsError } = await supabase
             .from('products')
             .select(`
                 *,
-                categories:category_id(name),
-                subcategories:subcategory_id(name)
+                category:categories(id, name, slug),
+                subcategories:subcategory_id(name),
+                images:product_images(*),
+                product_categories!inner(category_id)
             `)
             .eq('active', true)
-            .order('created_at', { ascending: false });
+            .order('featured', { ascending: false }) // Priorizar destacados
+            .order('created_at', { ascending: false }) // Luego los más nuevos
 
         if (productsError) {
             console.error('✗ Error al obtener productos:', productsError.message);
             return [];
         }
 
-        // 2. Obtener TODAS las imágenes
-        const { data: allImages, error: imagesError } = await supabase
-            .from('product_images')
-            .select('*');
+        console.log(`✓ Se encontraron ${products.length} productos activos`);
 
-        if (imagesError) {
-            console.error('✗ Error al obtener todas las imágenes:', imagesError.message);
-            return [];
-        }
-        
-        console.log(`✓ Se encontraron ${allImages.length} imágenes en total en la tabla.`);
+        // Eliminar duplicados (si un producto está en múltiples categorías) - igual que el feed principal
+        const uniqueProducts = Array.from(new Map(products.map(item => [item.id, item])).values());
+        console.log(`✓ Productos únicos después de eliminar duplicados: ${uniqueProducts.length}`);
 
-        // 3. Unir los datos en el script
-        const productsWithImages = products.map(product => {
-            const productImages = allImages.filter(img => img.product_id === product.id);
+        // Mapear al formato esperado por el resto del script
+        const productsWithImages = uniqueProducts.map(product => {
             return {
                 ...product,
-                images: productImages || [],
-                category: product.categories?.name || 'Decoración'
+                images: product.images || [],
+                // product_type viene de category.name (el nombre de la categoría principal)
+                product_type: product.category?.name || null,
             };
         });
 
@@ -171,8 +186,11 @@ function generateProductFeed(products) {
             description = description.substring(0, 4997) + '...';
         }
 
-        // Categoría del producto
-        const category = product.category || 'Decoración';
+        // ── CATEGORÍA MEJORADA CON MAPEO ──
+        const googleCategory = getGoogleCategory(product.product_type);
+        
+        // product_type para el feed = nombre de la categoría del producto
+        const productType = product.product_type || 'General';
 
         validProducts++;
 
@@ -196,8 +214,8 @@ function generateProductFeed(products) {
             <g:condition>new</g:condition>
             <g:brand>Magnolia Novedades</g:brand>
             <g:mpn>${escapeXml(productId)}</g:mpn>
-            <g:product_type>${escapeXml(category)}</g:product_type>
-            <g:google_product_category>Home &amp; Garden &gt; Decor</g:google_product_category>
+            <g:product_type>${escapeXml(productType)}</g:product_type>
+            <g:google_product_category>${escapeXml(googleCategory)}</g:google_product_category>
         </item>`;
     });
 
