@@ -5,52 +5,32 @@ import { supabase } from '../config/supabase'
  */
 
 /**
- * Obtiene los 3 productos más vendidos (o destacados) de cada categoría
+ * Obtiene todos los productos activos para el feed (usado para Meta)
  * @returns {Promise<{data: Array, error: null} | {data: null, error: Error}>}
  */
 export async function getTopSellingProductsPerCategory() {
     try {
-        // 1. Obtener todas las categorías activas
-        const { data: categories, error: catError } = await supabase
-            .from('categories')
-            .select('id, name, slug')
+        // Obtener todos los productos activos sin límite
+        const { data: products, error } = await supabase
+            .from('products')
+            .select(`
+                *,
+                category:categories(id, name, slug),
+                images:product_images(*),
+                product_categories!inner(category_id)
+            `)
             .eq('active', true)
-            .order('display_order', { ascending: true })
+            .order('featured', { ascending: false }) // Priorizar destacados
+            .order('created_at', { ascending: false }) // Luego los más nuevos
 
-        if (catError) throw catError
+        if (error) throw error
 
-        if (!categories || categories.length === 0) {
-            return { data: [], error: null }
-        }
-
-        // 2. Para cada categoría, obtener los 3 mejores productos
-        const productsPromises = categories.map(async (category) => {
-            const { data: products } = await supabase
-                .from('products')
-                .select(`
-                    *,
-                    category:categories(id, name, slug),
-                    images:product_images(*),
-                    product_categories!inner(category_id)
-                `)
-                .eq('active', true)
-                .eq('product_categories.category_id', category.id)
-                .order('featured', { ascending: false }) // Priorizar destacados
-                .order('created_at', { ascending: false }) // Luego los más nuevos
-                .limit(3)
-            
-            return products || []
-        })
-
-        const results = await Promise.all(productsPromises)
-        
-        // 3. Aplanar el array de arrays y eliminar duplicados (si un producto está en múltiples categorías)
-        const allProducts = results.flat()
-        const uniqueProducts = Array.from(new Map(allProducts.map(item => [item.id, item])).values())
+        // Eliminar duplicados (si un producto está en múltiples categorías)
+        const uniqueProducts = Array.from(new Map(products.map(item => [item.id, item])).values())
 
         return { data: uniqueProducts, error: null }
     } catch (error) {
-        console.error('Error fetching top selling products:', error)
+        console.error('Error fetching all products for feed:', error)
         return { data: null, error }
     }
 }
