@@ -31,7 +31,7 @@ export async function uploadImage(file, folder, customName = null) {
         // Subir a Vercel Blob
         const blob = await put(path, file, {
             access: 'public',
-            token: process.env.BLOB_READ_WRITE_TOKEN
+            token: import.meta.env.VITE_BLOB_READ_WRITE_TOKEN || process.env.BLOB_READ_WRITE_TOKEN
         })
         
         console.log(`✅ Imagen subida exitosamente: ${blob.url}`)
