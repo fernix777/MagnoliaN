@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase'
-import { uploadImage, deleteImage, extractPathFromUrl, uploadMultipleImages } from './uploadService'
+import { uploadImage, deleteImage, extractPathFromUrl, uploadMultipleImages } from './vercelBlobService'
 
 /**
  * Servicio para gestión de productos

@@ -1,4 +1,5 @@
 import { supabase } from '../config/supabase'
+import { uploadImage, deleteImage } from './vercelBlobService'
 
 /**
  * Obtener todos los banners (para admin)
@@ -49,21 +50,16 @@ export async function createBanner(bannerData, imageFile) {
 
         // Si hay archivo, subirlo primero
         if (imageFile) {
-            const fileExt = imageFile.name.split('.').pop()
-            const fileName = `banner_${Date.now()}.${fileExt}`
-            const filePath = `banners/${fileName}`
-
-            const { error: uploadError } = await supabase.storage
-                .from('banners') // Usamos bucket dedicado para banners
-                .upload(filePath, imageFile)
-
-            if (uploadError) throw uploadError
-
-            const { data: { publicUrl } } = supabase.storage
-                .from('banners')
-                .getPublicUrl(filePath)
-
-            image_url = publicUrl
+            console.log('📤 Subiendo banner a Vercel Blob...')
+            const uploadResult = await uploadImage(imageFile, 'banners')
+            
+            if (uploadResult.error) {
+                console.error('❌ Error subiendo banner:', uploadResult.error)
+                throw uploadResult.error
+            }
+            
+            image_url = uploadResult.url
+            console.log('✅ Banner subido exitosamente:', image_url)
         }
 
         const { data, error } = await supabase

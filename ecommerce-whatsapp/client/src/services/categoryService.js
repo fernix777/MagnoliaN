@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase'
-import { uploadImage, deleteImage, extractPathFromUrl } from './uploadService'
+import { uploadImage, deleteImage, extractPathFromUrl } from './vercelBlobService'
 
 /**
  * Servicio para gestión de categorías
