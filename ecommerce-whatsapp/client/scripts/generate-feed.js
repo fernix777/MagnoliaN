@@ -12,16 +12,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Conectar a Supabase
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('✗ Error: Variables de Supabase no encontradas');
-    console.error('  Asegúrate de tener .env.local con:');
-    console.error('  VITE_SUPABASE_URL=...');
-    console.error('  VITE_SUPABASE_ANON_KEY=...');
-    process.exit(1);
-}
+const supabaseUrl = 'https://prymijhlpoeqhihztuwl.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByeW1pamhscG9lcWhpaHp0dXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2Mzk3MDUsImV4cCI6MjA3OTIxNTcwNX0.xn29dwZNae71amG8Y_2RgE3ZPCbCqrTzKSFBNxDARgk';
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
