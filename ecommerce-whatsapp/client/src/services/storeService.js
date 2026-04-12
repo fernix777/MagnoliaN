@@ -66,30 +66,35 @@ export async function getTopSellingProductsPerCategory() {
     }
 }
 
-// Helper para cargar imágenes de productos
+// Helper para cargar imágenes y variantes de productos
 async function loadProductImages(products) {
     if (!products || products.length === 0) return products
     
     const productIds = products.map(p => p.id)
     
-    const { data: images, error: imagesError } = await supabase
-        .from('product_images')
-        .select('*')
-        .in('product_id', productIds)
+    // Cargar imágenes y variantes en paralelo
+    const [{ data: images, error: imagesError }, { data: variants, error: variantsError }] = await Promise.all([
+        supabase.from('product_images').select('*').in('product_id', productIds),
+        supabase.from('product_variants').select('*').in('product_id', productIds)
+    ])
     
     if (imagesError) {
         console.error('[DEBUG] Error cargando imágenes:', imagesError)
-        return products
+    }
+    if (variantsError) {
+        console.error('[DEBUG] Error cargando variantes:', variantsError)
     }
     
     return products.map(product => {
         const productImages = (images || []).filter(img => img.product_id === product.id)
+        const productVariants = (variants || []).filter(v => v.product_id === product.id)
         const primaryImage = productImages.find(img => img.is_primary) || productImages[0]
         
         return {
             ...product,
             image_url: primaryImage?.image_url || null,
-            images: productImages
+            images: productImages,
+            variants: productVariants
         }
     })
 }
@@ -239,14 +244,17 @@ export async function getProductBySlug(slug) {
 
         if (error) throw error
 
-        // Cargar imágenes del producto
-        const { data: images, error: imagesError } = await supabase
-            .from('product_images')
-            .select('*')
-            .eq('product_id', product.id)
+        // Cargar imágenes y variantes del producto
+        const [{ data: images, error: imagesError }, { data: variants, error: variantsError }] = await Promise.all([
+            supabase.from('product_images').select('*').eq('product_id', product.id),
+            supabase.from('product_variants').select('*').eq('product_id', product.id)
+        ])
 
         if (imagesError) {
             console.error('[DEBUG] Error cargando imágenes:', imagesError)
+        }
+        if (variantsError) {
+            console.error('[DEBUG] Error cargando variantes:', variantsError)
         }
 
         const productImages = images || []
@@ -256,7 +264,8 @@ export async function getProductBySlug(slug) {
             data: {
                 ...product,
                 image_url: primaryImage?.image_url || null,
-                images: productImages
+                images: productImages,
+                variants: variants || []
             }, 
             error: null 
         }

@@ -45,14 +45,10 @@ export default function SearchPage() {
     const searchProducts = async () => {
         setLoading(true)
         try {
-            // Búsqueda base
+            // Búsqueda base - consulta simplificada sin relaciones anidadas
             let queryBuilder = supabase
                 .from('products')
-                .select(`
-                    *,
-                    category:categories(id, name, slug),
-                    images:product_images(id, image_url, is_primary, display_order)
-                `)
+                .select('*')
                 .eq('active', true)
 
             // Búsqueda por texto (nombre o descripción)
@@ -85,17 +81,36 @@ export default function SearchPage() {
                     queryBuilder = queryBuilder.order('name', { ascending: true })
             }
 
-            const { data, error } = await queryBuilder
+            const { data: products, error } = await queryBuilder
 
             if (error) throw error
+            if (!products || products.length === 0) {
+                setProducts([])
+                setLoading(false)
+                return
+            }
 
-            // Ordenar imágenes por display_order
-            const productsWithSortedImages = data?.map(product => ({
-                ...product,
-                images: product.images?.sort((a, b) => a.display_order - b.display_order) || []
-            })) || []
+            // Cargar imágenes y variantes en consultas separadas
+            const productIds = products.map(p => p.id)
+            
+            const [{ data: images }, { data: variants }] = await Promise.all([
+                supabase.from('product_images').select('*').in('product_id', productIds),
+                supabase.from('product_variants').select('*').in('product_id', productIds)
+            ])
 
-            setProducts(productsWithSortedImages)
+            // Combinar datos
+            const productsWithRelations = products.map(product => {
+                const productImages = (images || []).filter(img => img.product_id === product.id)
+                const productVariants = (variants || []).filter(v => v.product_id === product.id)
+                
+                return {
+                    ...product,
+                    images: productImages.sort((a, b) => a.display_order - b.display_order),
+                    variants: productVariants
+                }
+            })
+
+            setProducts(productsWithRelations)
         } catch (error) {
             console.error('Error searching products:', error)
             setProducts([])
