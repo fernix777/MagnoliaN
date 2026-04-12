@@ -1,0 +1,9 @@
+column_name,data_type,is_nullable,column_default
+id,bigint,NO,nextval('orders_id_seq'::regclass)
+user_id,uuid,YES,null
+customer_info,jsonb,NO,null
+total,numeric,NO,null
+status,text,NO,'pending'::text
+payment_method,text,NO,null
+created_at,timestamp with time zone,YES,now()
+updated_at,timestamp with time zone,YES,now()

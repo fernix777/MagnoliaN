@@ -1,0 +1,10 @@
+column_name,data_type,is_nullable,column_default
+id,bigint,NO,nextval('categories_id_seq'::regclass)
+name,text,NO,null
+slug,text,NO,null
+description,text,YES,null
+image_url,text,YES,null
+display_order,integer,YES,0
+created_at,timestamp with time zone,YES,now()
+active,boolean,YES,true
+parent_id,bigint,YES,null

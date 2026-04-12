@@ -1,0 +1,10 @@
+column_name,data_type,is_nullable,column_default
+id,bigint,NO,nextval('product_variants_id_seq'::regclass)
+product_id,bigint,NO,null
+variant_type,text,NO,'color'::text
+variant_value,text,NO,null
+price_modifier,numeric,YES,0
+stock,integer,YES,0
+sku,text,YES,null
+created_at,timestamp with time zone,YES,now()
+active,boolean,YES,true

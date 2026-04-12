@@ -1,0 +1,10 @@
+column_name,data_type,is_nullable,column_default
+id,bigint,NO,nextval('banners_id_seq'::regclass)
+title,text,NO,null
+subtitle,text,YES,null
+image_url,text,NO,null
+link,text,YES,null
+display_order,integer,YES,0
+active,boolean,YES,true
+created_at,timestamp with time zone,YES,now()
+updated_at,timestamp with time zone,YES,now()

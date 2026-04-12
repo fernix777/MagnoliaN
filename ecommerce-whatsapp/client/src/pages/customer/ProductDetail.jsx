@@ -143,8 +143,8 @@ export default function ProductDetail() {
             return
         }
 
-        // Solo validar color si el producto tiene opciones de color
-        if (product.has_colors && !selectedColor) {
+        // Solo validar color si el producto tiene variantes disponibles
+        if (product.has_colors && product.variants?.length > 0 && !selectedColor) {
             alert('Por favor selecciona el color del producto')
             return
         }
@@ -444,9 +444,13 @@ export default function ProductDetail() {
                             <button
                                 onClick={handleAddToCart}
                                 className="btn btn-primary btn-large add-to-cart-btn"
-                                disabled={product.stock <= 0 || !purchaseType || (product.has_colors && !selectedColor)}
+                                disabled={
+                                    (product.stock !== null && product.stock !== undefined && product.stock <= 0) || 
+                                    !purchaseType || 
+                                    (product.has_colors && product.variants?.length > 0 && !selectedColor)
+                                }
                             >
-                                {product.stock <= 0 ? (
+                                {(product.stock !== null && product.stock !== undefined && product.stock <= 0) ? (
                                     <>❌ No Disponible</>
                                 ) : (
                                     <>🛒 Agregar al Carrito</>

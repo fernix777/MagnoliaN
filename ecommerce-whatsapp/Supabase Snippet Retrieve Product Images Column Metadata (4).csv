@@ -1,0 +1,12 @@
+column_name,data_type,is_nullable,column_default
+id,bigint,NO,nextval('order_items_id_seq'::regclass)
+order_id,bigint,NO,null
+product_id,bigint,YES,null
+quantity,integer,NO,null
+price,numeric,NO,null
+product_name,text,NO,null
+variant_info,jsonb,YES,null
+created_at,timestamp with time zone,YES,now()
+selected_color,text,YES,null
+selected_condition,text,YES,null
+purchase_type,text,YES,'paquete'::text

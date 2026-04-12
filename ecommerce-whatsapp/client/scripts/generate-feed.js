@@ -11,9 +11,9 @@ dotenv.config({ path: '.env' });
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Conectar a Supabase
-const supabaseUrl = 'https://prymijhlpoeqhihztuwl.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByeW1pamhscG9lcWhpaHp0dXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2Mzk3MDUsImV4cCI6MjA3OTIxNTcwNX0.xn29dwZNae71amG8Y_2RgE3ZPCbCqrTzKSFBNxDARgk';
+// Conectar a Supabase - PROYECTO NUEVO
+const supabaseUrl = 'https://dsovrmquhgkquqsvkptc.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzb3ZybXF1aGdrcXVxc3ZrcHRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MzcyNTIsImV4cCI6MjA5MTUxMzI1Mn0.BYHmFiUuuvZaAUNXINKiqSt4TMYoSDQUFd_HyDx-H7A';
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -39,19 +39,13 @@ async function getProductsFromSupabase() {
     try {
         console.log('🔄 Obteniendo TODOS los productos activos para el feed XML...');
 
-        // Obtener todos los productos activos sin límite (igual que el feed principal)
+        // Obtener todos los productos activos sin límite
         const { data: products, error: productsError } = await supabase
             .from('products')
-            .select(`
-                *,
-                category:categories(id, name, slug),
-                subcategories:subcategory_id(name),
-                images:product_images(*),
-                product_categories!inner(category_id)
-            `)
+            .select('*')
             .eq('active', true)
-            .order('featured', { ascending: false }) // Priorizar destacados
-            .order('created_at', { ascending: false }) // Luego los más nuevos
+            .order('featured', { ascending: false })
+            .order('created_at', { ascending: false })
 
         if (productsError) {
             console.error('✗ Error al obtener productos:', productsError.message);
@@ -60,17 +54,39 @@ async function getProductsFromSupabase() {
 
         console.log(`✓ Se encontraron ${products.length} productos activos`);
 
-        // Eliminar duplicados (si un producto está en múltiples categorías) - igual que el feed principal
-        const uniqueProducts = Array.from(new Map(products.map(item => [item.id, item])).values());
-        console.log(`✓ Productos únicos después de eliminar duplicados: ${uniqueProducts.length}`);
+        // 2. Obtener IDs de productos para cargar imágenes y categorías
+        const productIds = products.map(p => p.id);
+        const categoryIds = [...new Set(products.map(p => p.category_id).filter(Boolean))];
 
-        // Mapear al formato esperado por el resto del script
-        const productsWithImages = uniqueProducts.map(product => {
+        // 3. Obtener imágenes de esos productos
+        const { data: images, error: imagesError } = await supabase
+            .from('product_images')
+            .select('*')
+            .in('product_id', productIds);
+
+        if (imagesError) {
+            console.error('[DEBUG] Error obteniendo imágenes:', imagesError);
+        }
+
+        // 4. Obtener categorías
+        const { data: categories, error: catError } = await supabase
+            .from('categories')
+            .select('id, name, slug')
+            .in('id', categoryIds);
+
+        if (catError) {
+            console.error('[DEBUG] Error obteniendo categorías:', catError);
+        }
+
+        // 5. Combinar productos con sus imágenes y categorías
+        const productsWithImages = products.map(product => {
+            const productImages = (images || []).filter(img => img.product_id === product.id);
+            const category = (categories || []).find(c => c.id === product.category_id);
+            
             return {
                 ...product,
-                images: product.images || [],
-                // product_type viene de category.name (el nombre de la categoría principal)
-                product_type: product.category?.name || null,
+                images: productImages,
+                product_type: category?.name || null,
             };
         });
 

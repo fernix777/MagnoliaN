@@ -1,0 +1,457 @@
+id,name,slug,description,base_price,stock,category_id,subcategory_id,featured,active,created_at,updated_at,units_per_box,boxes_per_bundle,price_box,price_bundle,has_colors,sale_types
+15,(B49) VARITA LED X 12 UNI,b49-varita-led,"(B49) VARITA LED
+* Stock disponible
+* Precio por unidad: $1300
+* Tipos de venta: unidad",13300.00,100,40,null,false,true,2026-02-15 01:31:15.124276+00,2026-03-20 12:01:01.520629+00,10,40,13300.00,null,true,"[""unidad""]"
+16,(B3) PULSERA LED X 12 UNI,b3-pulsera-led,"(B3) PULSERA LED
+* Stock disponible
+* Precio por unidad: $700
+* Tipos de venta: unidad",7200.00,100,40,null,false,true,2026-02-15 01:31:14.375425+00,2026-03-20 12:01:22.998+00,10,40,7200.00,null,true,"[""unidad""]"
+21,(B64) CORONA DE PLUMA LED X 12 UNI,b64-coronas-de-plumas-led-multicolor,"(B64) CORONAS DE PLUMAS LED - MULTICOLOR
+* Stock disponible
+* Precio por unidad: $1200
+* Tipos de venta: unidad",12300.00,100,40,null,false,true,2026-02-15 01:31:11.384301+00,2026-03-20 11:58:47.711054+00,10,40,12300.00,null,true,"[""unidad""]"
+22,(B-15-1) GLOBO LED - MULTICOLOR X 10 UNI,b-15-1-globo-led-multicolor,"(B-15-1) GLOBO LED - MULTICOLOR
+* Stock disponible
+* Precio por unidad: $1600
+* Tipos de venta: unidad",13600.00,0,40,null,false,true,2026-02-15 01:31:10.643036+00,2026-03-20 12:13:32.144128+00,10,40,13600.00,null,true,"[""unidad""]"
+23,(B61) SILBATO LED X 12 UNI,b61-silbato-led,"(B61) SILBATO LED
+* Stock disponible
+* Precio por unidad: $1400
+* Tipos de venta: unidad",14300.00,100,40,null,false,true,2026-02-15 01:31:09.887455+00,2026-03-20 12:04:33.082447+00,10,40,14300.00,null,true,"[""unidad""]"
+24,(A29-1) GUIRNALDA LED 100 LUCES NAVIDAD - 8 EFECTOS - 9M - MULTICOLOR,a29-1-guirnalda-led-100-luces-navidad-8-efectos-9m-multicolor,"(A29-1) GUIRNALDA LED 100 LUCES NAVIDAD - 8 EFECTOS - 9M - MULTICOLOR
+* Stock disponible
+* Precio por unidad: $3500
+* Tipos de venta: unidad",3500.00,100,39,null,false,true,2026-02-15 01:31:09.12659+00,2026-03-03 17:16:20.144601+00,12,40,null,null,true,"[""unidad""]"
+25,(A29-2) GUIRNALDA LED 100 LUCES NAVIDAD - 8 EFECTOS - 9M- BLANCA,a29-2-guirnalda-led-100-luces-navidad-8-efectos-9m-blanca,"(A29-2) GUIRNALDA LED 100 LUCES NAVIDAD - 8 EFECTOS - 9M- BLANCA
+* Stock disponible
+* Precio por unidad: $3500
+* Tipos de venta: unidad",3500.00,100,39,null,false,true,2026-02-15 01:31:08.352491+00,2026-03-03 17:16:40.402011+00,12,40,null,null,true,"[""unidad""]"
+26,(A29-3) GUIRNALDA LED 100 LUCES NAVIDAD - 8 EFECTOS - 9M - CALIDO,a29-3-guirnalda-led-100-luces-navidad-8-efectos-9m-calido,"(A29-3) GUIRNALDA LED 100 LUCES NAVIDAD - 8 EFECTOS - 9M - CALIDO
+* Stock disponible
+* Precio por unidad: $3500
+* Tipos de venta: unidad",3500.00,100,39,null,false,true,2026-02-15 01:31:07.618584+00,2026-03-03 17:22:06.070316+00,12,40,null,null,true,"[""unidad""]"
+27,(A15-1) LED NEON CON FUENTE X 5M - AZUL,a15-1-led-neon-con-fuente-x-5m-azul,"(A15-1) LED NEON CON FUENTE X 5M - AZUL
+* Stock disponible
+* Precio por unidad: $13800
+* Tipos de venta: unidad",13800.00,100,39,null,false,true,2026-02-15 01:31:06.858429+00,2026-03-03 21:19:55.166831+00,12,40,null,null,true,"[""unidad""]"
+28,(A15-2) LED NEON CON FUENTE X 5M - ROJO,a15-2-led-neon-con-fuente-x-5m-rojo,"(A15-2) LED NEON CON FUENTE X 5M - ROJO
+* Stock disponible
+* Precio por unidad: $13800
+* Tipos de venta: unidad",13800.00,100,39,null,false,true,2026-02-15 01:31:06.117382+00,2026-03-03 21:20:07.955109+00,12,40,null,null,true,"[""unidad""]"
+29,(A15-3) LED NEON CON FUENTE X 5M - ROSA,a15-3-led-neon-con-fuente-x-5m-rosa,"(A15-3) LED NEON CON FUENTE X 5M - ROSA
+* Stock disponible
+* Precio por unidad: $13800
+* Tipos de venta: unidad",13800.00,100,39,null,false,true,2026-02-15 01:31:05.369805+00,2026-03-03 17:21:11.43525+00,12,40,null,null,true,"[""unidad""]"
+30,(A15-4) LED NEON CON FUENTE X 5M - VIOLETA,a15-4-led-neon-con-fuente-x-5m-violeta,"(A15-4) LED NEON CON FUENTE X 5M - VIOLETA
+* Stock disponible
+* Precio por unidad: $13800
+* Tipos de venta: unidad",13800.00,0,39,null,false,true,2026-02-15 01:31:04.627115+00,2026-03-03 17:20:52.702182+00,12,40,null,null,true,"[""unidad""]"
+31,(A15-5) LED NEON CON FUENTE X 5M - VERDE,a15-5-led-neon-con-fuente-x-5m-verde,"(A15-5) LED NEON CON FUENTE X 5M - VERDE
+* Stock disponible
+* Precio por unidad: $13800
+* Tipos de venta: unidad",13800.00,100,39,null,false,true,2026-02-15 01:31:03.875142+00,2026-03-03 17:20:34.179217+00,12,40,null,null,true,"[""unidad""]"
+32,(B-15-2)GLOBO LED - BLANCO X 10 UNI,b-15-2-globo-led-blanco,"(B-15-2)GLOBO LED - BLANCO
+* Stock disponible
+* Precio por unidad: $1600
+* Tipos de venta: unidad",13600.00,1000,40,null,false,true,2026-02-15 01:31:03.122515+00,2026-03-20 12:02:58.194437+00,12,40,null,null,true,"[""unidad""]"
+33,(A3-1) LED ALAMBRE - 3M,a3-1-led-alambre-3m,"(A3-1) LED ALAMBRE - 3M
+* Stock disponible
+* Precio por unidad: $800
+* Tipos de venta: unidad",800.00,0,39,null,false,true,2026-02-15 01:31:02.381868+00,2026-03-03 17:26:40.376837+00,12,40,null,null,true,"[""unidad""]"
+34,(A3-2) LED ALAMBRE - 3M,a3-2-led-alambre-3m,"(A3-2) LED ALAMBRE - 3M
+* Stock disponible
+* Precio por unidad: $800
+* Tipos de venta: unidad",800.00,0,39,null,false,true,2026-02-15 01:31:01.640349+00,2026-03-03 17:27:04.749733+00,12,40,null,null,true,"[""unidad""]"
+35,(A9-1) LED ALAMBRE - 50cm,a9-1-led-alambre-50cm,"(A9-1) LED ALAMBRE - 50cm
+* Stock disponible
+* Precio por unidad: $500
+* Tipos de venta: unidad",500.00,100,39,null,false,true,2026-02-15 01:31:00.898031+00,2026-03-03 17:27:29.320545+00,12,40,null,null,true,"[""unidad""]"
+36,(A9-2) LED ALAMBRE - 50cm,a9-2-led-alambre-50cm,"(A9-2) LED ALAMBRE - 50cm
+* Consultar stock antes de comprar
+* Precio por unidad: $500
+* Tipos de venta: unidad",500.00,1000,39,null,false,true,2026-02-15 01:31:00.159894+00,2026-03-03 17:28:02.458861+00,12,40,null,null,true,"[""unidad""]"
+37,(A18-1) LED NEON SIN FUENTE X 5M - AZUL,a18-1-led-neon-sin-fuente-x-5m-azul,"(A18-1) LED NEON SIN FUENTE X 5M - AZUL
+* Stock disponible
+* Precio por unidad: $9500
+* Tipos de venta: unidad",9500.00,100,39,null,false,true,2026-02-15 01:30:59.416695+00,2026-03-03 17:28:24.341154+00,12,40,null,null,true,"[""unidad""]"
+38,(A18-2) LED NEON SIN FUENTE X 5M - ROJO,a18-2-led-neon-sin-fuente-x-5m-rojo,"(A18-2) LED NEON SIN FUENTE X 5M - ROJO
+* Stock disponible
+* Precio por unidad: $9500
+* Tipos de venta: unidad",9500.00,100,39,null,false,true,2026-02-15 01:30:58.214777+00,2026-03-03 17:29:06.807584+00,12,40,null,null,true,"[""unidad""]"
+39,(A18-3) LED NEON SIN FUENTE X 5M - ROSA,a18-3-led-neon-sin-fuente-x-5m-rosa,"(A18-3) LED NEON SIN FUENTE X 5M - ROSA
+* Stock disponible
+* Precio por unidad: $9500
+* Tipos de venta: unidad",9500.00,100,39,null,false,true,2026-02-15 01:30:57.461014+00,2026-03-03 17:29:28.915477+00,12,40,null,null,true,"[""unidad""]"
+40,(A18-4) LED NEON SIN FUENTE X 5M - VIOLETA,a18-4-led-neon-sin-fuente-x-5m-violeta,"(A18-4) LED NEON SIN FUENTE X 5M - VIOLETA
+* Stock disponible
+* Precio por unidad: $9500
+* Tipos de venta: unidad",9500.00,0,39,null,false,true,2026-02-15 01:30:56.701394+00,2026-03-03 17:29:55.390955+00,12,40,null,null,true,"[""unidad""]"
+41,(A18-5) LED NEON SIN FUENTE X 5M - VERDE,a18-5-led-neon-sin-fuente-x-5m-verde,"(A18-5) LED NEON SIN FUENTE X 5M - VERDE
+* Stock disponible
+* Precio por unidad: $9500
+* Tipos de venta: unidad",9500.00,100,39,null,false,true,2026-02-15 01:30:55.947296+00,2026-03-03 17:30:26.030326+00,12,40,null,null,true,"[""unidad""]"
+42,(A17) LED RGB 5050 CON FUENTE X 5M,a17-led-rgb-5050-con-fuente-x5m,"(A17) LED RGB 5050 CON FUENTE X 5M
+* Stock disponible
+* Precio por unidad: $11300
+* Tipos de venta: unidad",11300.00,100,39,null,false,true,2026-02-15 01:30:55.178028+00,2026-03-03 17:30:47.990142+00,12,40,null,null,true,"[""unidad""]"
+95,A43 - TIRA LED RGB 3M USB,a43-tira-led-rgb-3m-usb,"CARACTERISTICAS
+
+- LED RGB DE 3M
+- INCLUYE CONTROL Y CONECCION USB",6000.00,1000,39,null,false,true,2026-02-16 14:51:36.086751+00,2026-03-03 17:12:15.739015+00,12,40,null,null,true,"[""unidad""]"
+96,"A44 - TIRA LED RGB USB DE 5M ",a44-tira-led-rgb-usb-de-5m,"CARACTERISTICA
+
+- TIRA LED RGB 5050 X 5M - USB CON CONTROL Y APP
+",12000.00,1000,39,null,false,true,2026-02-16 14:58:47.220543+00,2026-03-03 17:11:54.453031+00,12,40,null,null,true,"[""unidad""]"
+97,A41 - MEDIA ESFERA LED MP3,a41-media-esfera-led-mp3,"CARACTERISTICA
+
+- ESFERA DE LUZ CON PARLANTE Y CONTROL ",18000.00,1000,39,null,false,true,2026-02-16 14:59:56.545468+00,2026-03-08 05:33:26.755401+00,12,40,null,null,true,"[""unidad""]"
+98,A42 - FOCO CON LUZ GIRATORIO MULTICOLOR,a42-foco-con-luz-giratorio-multicolor,"CARACTERISTICA
+
+- FOCO DE LUZ GIRATORIO ",3000.00,1000,39,null,false,true,2026-02-16 15:01:00.700548+00,2026-03-03 17:11:11.012234+00,12,40,null,null,true,"[""unidad""]"
+99,B14 COLLAR LED X 12 UNI,b-14-collar-led,"CARACTERISTICA
+
+- INCLUYE LED ALAMBRE MULTICOLOR",16300.00,1000,40,null,false,true,2026-02-16 15:03:07.082353+00,2026-03-20 12:06:25.073397+00,10,40,16300.00,null,true,"[""unidad""]"
+100,"(B16) - SOMBREROS LED ",b-16-sombreros-led,"CARACTERISTICA
+
+- SOMBREROS COLOR SURTIDO INCLUYE LED ALAMBRE MULTICOLOR
+- EL PAQUETE DE 12 UNI VIENE EN COLORES SURTIDOS",3600.00,1000,40,null,false,true,2026-02-16 15:05:20.502855+00,2026-03-20 12:12:11.04467+00,12,10,36800.00,null,true,"[""unidad"",""paquete""]"
+101,B103 - SOMBRERO CON LENTEJUELAS LED,b103-sombrero-con-lentejuelas-led,"CARACTERISTICA
+
+- SOMBREROS CON LENTEJUELA INCLUYE LED ALAMBRE MULTICOLOR
+- EL PAQUETE DE 12 UNI VIENE EN COLORES SURTIDOS",8000.00,1000,40,null,false,true,2026-02-16 15:10:17.10979+00,2026-03-20 12:12:34.784734+00,12,10,86400.00,null,true,"[""unidad"",""paquete""]"
+102,P13 - ANTIFAZ CON LUZ,p13-antifaz-con-luz,"CARACTERISTICA
+
+- ANTIFAZ LED MULTICOLOR INCLUYE LUZ LED",2000.00,1000,40,null,false,true,2026-02-16 15:13:00.310988+00,2026-03-03 17:09:56.933411+00,12,40,21500.00,null,true,"[""unidad"",""paquete""]"
+103,L1-1 - LAPIZ DE COLOR X 12 UNI LARGOS - FILGO,l1-1-lapiz-de-color-x-12-uni-largos-filgo,"CARACTERISTICA
+
+- CAJA DE LAPIZ DE COLORES X 12 UNIDADES LARGO",1500.00,1000,37,null,false,true,2026-02-16 15:17:42.875782+00,2026-03-03 17:09:37.113049+00,12,40,null,null,true,"[""unidad""]"
+104,L2-1 - LAPIZ DE COLOR X 12 UNI CORTOS - FILGO,l2-1-lapiz-de-color-x-12-uni-cortos-filgo,"CARACTERISTICA
+
+- CAJA DE LAPIZ DE COLORES X 12 UNIDADES CORTO",1200.00,1000,37,null,false,true,2026-02-16 15:19:06.520231+00,2026-03-03 17:09:14.210535+00,12,40,null,null,true,"[""unidad""]"
+105,L3-1 LAPIZ NEGRO LARGO - FILGO,l3-1-lapiz-negro-largo-filgo,"CARACTERISTICA
+
+- LAPIZ NEGRO FILGO",150.00,1000,37,null,false,true,2026-02-16 15:22:59.761893+00,2026-03-03 17:08:56.854998+00,12,40,1400.00,null,true,"[""unidad"",""paquete""]"
+106,"L4-1 - PORTAMINA 0,7MM - FILGO",l4-1-portamina-0-7mm-filgo,"CARACTERISTICA
+
+- PORTAMINA 0,7MM",800.00,1000,37,null,false,true,2026-02-16 15:26:07.379425+00,2026-03-03 17:08:37.22498+00,12,40,null,null,true,"[""unidad""]"
+107,"L4-2 PORTAMINA 0,7MM-PASTEL",l4-2-portamina-0-7mm-pastel,"CARACTERISTICA
+
+- PORTAMINA 0,7MM COLOR PASTEL",500.00,1000,37,null,false,true,2026-02-16 15:33:23.954274+00,2026-03-03 17:08:16.751689+00,12,40,null,null,true,"[""unidad""]"
+108,"L4-4 - SET DE PORTAMINAS 0,5MM + MINAS",l4-4-set-de-portaminas-0-5mm-minas,"CARACTERISTICA
+
+- PORTA MINA DE 0,5MM
+- INCLUYE CARTUCHO DE MINA",1500.00,1000,37,null,false,true,2026-02-16 15:36:12.277123+00,2026-03-03 17:06:48.19819+00,12,40,null,null,true,"[""unidad""]"
+109,"L4-5 - SET 3 PORTAMINAS 0,7MM + MINAS",l4-5-set-3-portaminas-0-7mm-minas,"CARACTERISTICA
+
+- 3 PORTA MINA DE 0,7MM 
+- INCLUYE CARTUCHO DE MINA",2500.00,1000,37,null,false,true,2026-02-16 15:37:42.92381+00,2026-03-03 17:06:31.458385+00,12,40,null,null,true,"[""unidad""]"
+110,"L5-1 - MINAS 0,5MM - FILGO",l5-1-minas-0-5mm-filgo,"CARACTERISTICA
+
+- MINA DE 0,5MM FILGO",500.00,1000,37,null,false,true,2026-02-16 15:39:02.196888+00,2026-03-03 17:05:43.914817+00,12,40,null,null,true,"[""unidad""]"
+111,"L5-2 MINAS 0,7MM - FILGO",l5-2-minas-0-7mm-filgo,"CARACTERISTICA
+
+- MINA DE 0,7MM - FILGO",500.00,1000,37,null,false,true,2026-02-16 15:40:05.626782+00,2026-03-03 17:05:27.248492+00,12,40,null,null,true,"[""unidad""]"
+112,L6-1 - CORRECTOR LAPIZ FILGO,l6-1-corrector-lapiz-filgo,"CARACTERISTICA
+
+- CORRECTOR LAPIZ FILGO",500.00,1000,37,null,false,true,2026-02-16 15:41:16.967054+00,2026-03-03 17:04:17.196707+00,12,40,null,null,true,"[""unidad""]"
+113,L7-1 - BOLIGRAFO BORRABLE CON DISEÑOS -FILGO,l7-1-boligrafo-borrable-con-disenos-filgo,"CARACTERISTICA
+
+- BOLIGRAFO BORRABLE CON DISEÑO TINTA AZUL",1500.00,1000,37,null,false,true,2026-02-16 15:42:49.417876+00,2026-03-03 17:03:54.734574+00,12,40,null,null,true,"[""unidad""]"
+114,L7-2 - BOLIGRAFO BORRABLE - OLAMI,l7-2-boligrafo-borrable-olami,"CARACTERISTICA
+
+- BOLIGRAFO BORRABLE TINTA AZUL",1200.00,1000,37,null,false,true,2026-02-16 15:44:43.341049+00,2026-03-03 17:02:45.25473+00,12,40,null,null,true,"[""unidad""]"
+115,L7-3 - BOLIGRAFO DE COLORES FUOR - FABER,l7-3-boligrafo-de-colores-fuor-faber,"CARACTERISTICA
+
+- BOLIGRAFO COLOR FLUOR",600.00,1000,37,null,false,true,2026-02-16 15:47:10.177665+00,2026-03-03 17:01:14.464723+00,12,40,null,null,true,"[""unidad""]"
+116,L7-4 - BOLIGRAFO DE COLORES - FABER,l7-4-boligrafo-de-colores-faber,"CARACTERISTICA
+
+- BOLIGRAFO DE COLORES",399.99,1000,37,null,false,true,2026-02-16 15:48:48.460648+00,2026-03-03 16:59:36.604157+00,12,40,null,null,true,"[""unidad""]"
+117,L8-2 - MARCADOR PASTEL X 10 UNI - FILGO,l8-2-marcador-pastel-x-10-uni-filgo,"CARACTERISTICA
+
+- MARCADOR PASTEL X 10 UNIDADES",3100.00,1000,37,null,false,true,2026-02-16 15:50:48.881696+00,2026-03-03 16:59:17.586653+00,12,40,null,null,true,"[""unidad""]"
+118,L8-3 - MARCADOR PERMANENTE VERDE,l8-3-marcador-permanente-verde,"CARACTERISTICA
+
+- MARCADOR PERMANENTE VERDE",500.00,1000,37,null,false,true,2026-02-16 15:51:48.307227+00,2026-03-03 16:58:57.461302+00,12,40,null,null,true,"[""unidad""]"
+119,L9-1 - GOMAS DE BORRAR - FILGO,l9-1-gomas-de-borrar-filgo,"CARACTERISTICA
+
+- GOMAS DE BORRAR",300.00,1000,37,null,false,true,2026-02-16 15:53:00.683908+00,2026-03-03 16:58:35.266945+00,12,40,null,null,true,"[""unidad""]"
+120,L11-1 - MAPA PLANISFERIO,l11-1-mapa-planisferio,"CARACTERISICA
+
+- MAPA PLANISFERIO POLITICO",100.00,1000,37,null,false,true,2026-02-16 15:58:00.481467+00,2026-03-03 16:58:13.865678+00,12,40,null,null,true,"[""unidad""]"
+121,L11-2 - MAPA DE ARGENTINA,l11-2-mapa-de-argentina,"CARACTERITICA
+
+- MAPA DE ARGENTINA FISICO POLITICO",100.00,1000,37,null,false,true,2026-02-16 15:59:29.196254+00,2026-03-03 16:57:57.558641+00,12,40,null,null,true,"[""unidad""]"
+122,L11-3 - MAPA DE AMERICA,l11-3-mapa-de-america,"CARACTERISTICA
+
+- MAPA DE AMERICA FISICO POLITICO",100.00,1000,37,null,false,true,2026-02-16 16:00:42.658364+00,2026-03-03 16:57:43.543653+00,12,40,null,null,true,"[""unidad""]"
+123,L11-3 - MAPA DE AMERICA POLITICO,l11-3-mapa-de-america-politico,"CARACTERISTICA
+
+- MAPA POLITICO DE AMERICA",100.00,1000,37,null,false,true,2026-02-16 16:01:35.074425+00,2026-03-03 16:57:27.542069+00,12,40,null,null,true,"[""unidad""]"
+124,L12-1 - OJALILLO ORION,l12-1-ojalillo-orion,"CARACTERISTICA
+
+- PLANCHA DE OJALILLONS",200.00,1000,37,null,false,true,2026-02-16 16:02:50.168938+00,2026-03-03 16:57:13.517668+00,12,40,null,null,true,"[""unidad""]"
+125,L13-1 - ADHESIVO VOLIGOMA X 30GS.,l13-1-adhesivo-boligoma-x-30gs,"CARACTERISTICA
+
+- ADHESIVO BOLIGOMA X 30GS",1900.00,1000,37,null,false,true,2026-02-16 16:04:02.689236+00,2026-03-03 16:56:57.36436+00,12,40,null,null,true,"[""unidad""]"
+126,L14-1 - CARPETA Nº3,l14-1-carpeta-n-3,"CARACTERISTICA
+
+- CARPETA TAPA DURA Nº3",3500.00,1000,37,null,false,true,2026-02-16 16:08:35.771394+00,2026-03-03 21:19:26.65281+00,12,40,null,null,true,"[""unidad""]"
+127,L15-1 - CARPETA Nº 5,l15-1-carpeta-n-5,"CARACTERISTICA
+
+- CARPETA Nº5 TAPA DURA",3500.00,1000,37,null,false,true,2026-02-16 16:12:16.807956+00,2026-03-03 16:45:29.963644+00,12,40,null,null,true,"[""unidad""]"
+128,L17-1 - CARTUCHERA LISA CON 2 CIERRES,l17-1-cartuchera-lisa-con-2-cierres,"CARACTERISTICA
+
+- CARTUCHERA LISA 2 CIERRES
+",6000.00,1000,37,null,false,true,2026-02-16 16:13:49.085441+00,2026-03-03 16:45:05.444833+00,12,40,null,null,true,"[""unidad""]"
+129,L17-2 - CARTUCHERA CON DISEÑO,l17-2-cartuchera-con-diseno,"CARACTERISTICA
+
+- CARTUCHERA DE 1 CIERRE",5500.00,1000,37,null,false,true,2026-02-16 16:14:58.966068+00,2026-03-03 16:44:46.90661+00,12,40,null,null,true,"[""unidad""]"
+130,(A15-4) LED NEON CON FUENTE X 5M - BLANCO FRIO,a15-4-led-neon-con-fuente-x-5m-blanco-frio,"CARACTERISTICA
+
+- LED NEON CON FUENTE X 5M - BLANCO FRIO",13800.00,1000,39,null,false,true,2026-02-16 16:19:31.368297+00,2026-03-03 16:44:33.053944+00,12,40,null,null,true,"[""unidad""]"
+131,B79 - CORBATA LED X 12 UNI,b79-corbata-led,"CARACTERISTICA
+
+- CORBATAS LED MULTICOLOR
+- PILAS AG INCLUIDAS",23400.00,1000,40,null,false,true,2026-02-16 16:21:32.21255+00,2026-03-20 11:48:16.080445+00,10,40,23400.00,null,true,"[""unidad""]"
+132,B58 - MOÑO LED X 12 UNI,b58-mono-led,"CARACTERISTICA
+
+- MOÑO LED MULTICOLOR
+- PILAS AG INCLUIDAS",21200.00,1000,40,null,false,true,2026-02-16 16:22:51.86069+00,2026-03-20 11:46:10.041294+00,10,20,21200.00,null,true,"[""unidad""]"
+133,(A9-3) LED ALAMBRE - 50cm,a9-3-led-alambre-50cm,"CARACTERISTICA
+
+- LED ALAMBRE DE 50CM ROSA",500.00,0,39,null,false,true,2026-02-16 16:24:21.818184+00,2026-03-28 23:10:49.476851+00,12,40,null,null,true,"[""unidad""]"
+134,B38 - MARIPOSAS 3D,b38-mariposas-3d,"CARACTERISTICA
+
+- MARIPOSA 3D DE PAPEL
+- INCLUYE 12 UNIDADES DE 3 TAMAÑOS",2000.00,1000,41,null,false,true,2026-02-16 16:26:52.075808+00,2026-03-03 15:59:36.067213+00,12,40,null,null,true,"[""unidad""]"
+135,B38 - 1 TOPPER,b38-1-topper,"CARACTERISTICA
+
+- TOPPER PARA TORTA",2000.00,1000,41,null,false,true,2026-02-16 16:27:56.583744+00,2026-03-03 15:59:06.346867+00,12,40,null,null,true,"[""unidad""]"
+136,PORTA SUBE CON TIRA,porta-sube-con-tira,"CARACTERISTICA
+
+- PORTA SUBE CON TIRA Y DISEÑO",2000.00,1000,42,null,false,true,2026-02-26 16:47:59.940684+00,2026-03-03 15:48:50.841856+00,12,40,null,null,true,"[""unidad""]"
+137,PORTA SUBE CON YOYO,porta-sube-con-yoyo,"CARACTERISTICA
+
+- PORTA SUBE YOYO",2500.00,1000,42,null,false,true,2026-02-26 16:50:27.117481+00,2026-03-03 15:48:09.951784+00,12,40,null,null,true,"[""unidad""]"
+138,STICKER ARGENTINA,sticker,"CARACTERISTICA
+
+- PLANCHA DE STICKER DE MESSI",500.00,1000,37,null,false,true,2026-02-26 19:00:26.781139+00,2026-03-06 18:34:04.026597+00,50,10,null,null,true,"[""unidad""]"
+139,(B2) LENTES LED x 12 uni,b2-lentes-led,"- 3 leds
+- Utiliza 3 pilas AG3 (INCLUIDO)
+- Colores surtidos por paquete",12400.00,1000,40,null,false,true,2026-03-03 17:58:34.63065+00,2026-03-20 11:44:01.655928+00,10,19,12400.00,495999.99,true,"[""unidad""]"
+140,(B104) TATUAJE TEMPORAL LUMINOSO X 12 UNI,b104-tatuaje-temporal-luminoso-x-12-uni,"- Tamaño: 12*15.8 cm
+- Modelos surtidos",12000.00,1000,41,null,false,true,2026-03-06 18:57:05.080664+00,2026-03-06 18:57:05.080664+00,10,50,120000.00,6000.00,true,"[""unidad""]"
+141,(B48-1) CAPA LED - MULTICOLOR,b48-1-alas-led-multicolor,"- Largo 100 cm
+- Extensión 3 metros
+- Color: multicolor
+- Utiliza pilas 3*AA",67500.00,1000,40,null,false,true,2026-03-09 19:05:14.466133+00,2026-04-06 18:41:51.162653+00,1,20,1350000.00,1349999.98,true,"[""unidad""]"
+142,(B48-2) CAPA LED - BLANCA,b48-2-alas-led-blanca,"- Largo 145 cm
+- Color Blanca
+- Utiliza pilas 3*AA",67500.00,1000,40,null,false,true,2026-03-09 19:13:02.696847+00,2026-04-06 18:41:34.817804+00,1,20,67500.00,67500.00,true,"[""unidad""]"
+143,(B60) ANILLO LED- EMOJI,b60-anillo-led-emoji,"- Anillo con luz modelo emoji
+- Usa 3 pilas AG10 (incluido)",800.00,1000,40,null,false,true,2026-03-09 19:20:02.810462+00,2026-03-09 19:20:02.810462+00,36,10,28800.00,28799.99,true,"[""unidad"",""paquete""]"
+144,(C2) MAQUINA DE INFLAR GLOBOS,c2-maquina-de-inflar-globos,"- Marca HYTOSHY
+- Modelo 73005
+- 220 - 240 VCA 50HZ 600 W
+- Medida 14.5 x 12 x 10 cm
+- Incluye 2 picos para inflar ",26000.00,1000,41,null,false,true,2026-03-09 19:34:00.709643+00,2026-03-09 19:34:00.709643+00,10,1,260000.00,259999.98,true,"[""unidad"",""paquete""]"
+149,(R2-3) LLAVERO AUTO CON LUZ X 12 UNI,r2-3-llavero-auto-con-luz-x-12-uni,"- Medidas: 5.5*2.5*2.1 cm
+- Utiliza 3 pilas AG3 (INCLUIDO)
+- Colores surtidos entre amarillo, naranja, azul y verde",7000.00,1000,42,null,true,true,2026-03-19 17:00:40.459525+00,2026-03-19 17:26:00.544454+00,10,20,7100.00,7100.00,true,"[""unidad""]"
+150,(R2-4) LLAVERO ELEFANTE CON LUZ X 12 UNI,r2-4-llavero-elefante-con-luz-x-12-uni,"- Medidas: 6*3.3cm
+- Utiliza 3 pilas AG3 (INCLUIDO)",7000.00,1000,42,null,true,true,2026-03-19 17:05:08.794909+00,2026-03-19 17:26:37.197254+00,10,20,7100.00,7099.97,true,"[""unidad""]"
+151,(R2-5) LLAVERO CORAZON CON LUZ X 12 UNI,r2-5-llavero-corazon-con-luz-x-12-uni,"Medidas: 5*4cm
+Utiliza 3 pilas AG3 (INCLUIDO)",6000.00,1000,42,null,false,true,2026-03-19 17:16:09.688876+00,2026-03-19 17:16:09.688876+00,10,20,6000.00,5999.98,true,"[""unidad""]"
+152,(R2-6) LLAVERO UNICORNIO CON LUZ X 12 UNI,r2-6-llavero-unicornio-con-luz-x-12-uni,"Medidas: 6*7cm
+Utiliza 3 pilas AG3 (INCLUIDO)",6000.00,1000,42,null,false,true,2026-03-19 17:25:29.286006+00,2026-03-19 17:25:29.286006+00,10,19,6000.00,6000.00,true,"[""unidad""]"
+153,(L20) SACAPUNTAS 3 EN 1 EN FORMA DE RELOJ X 48 UNI,sacapuntas-reloj-3-en-1-x-48-uni,"- Medida: 7.5*3.5*1cm
+- Colores surtidos: azul, naranja, verde y rosa",15000.00,0,37,null,false,true,2026-03-19 17:36:30.437979+00,2026-03-27 19:27:33.941957+00,10,19,15000.00,15000.00,true,"[""unidad""]"
+155,(L20-2) SACAPUNTAS DOBLE X 24 UNI,l20-2-sacapuntas-doble-x-24-uni,"- Medida: 5*5cm
+- Modelos surtidos",28000.00,1000,37,null,false,true,2026-03-19 17:52:20.458475+00,2026-03-19 17:52:20.458475+00,10,20,28000.00,28000.00,true,"[""unidad""]"
+156,(L21-1) DIAMANTINA CON DISEÑOS X 12 UNI,l21-1-diamantina-con-disenos-x-12-uni,"- Tamaño 15*24 cm
+- Modelos surtidos",11900.00,1000,37,null,true,true,2026-03-19 18:12:21.794161+00,2026-03-19 18:12:21.794161+00,10,20,11900.00,11900.00,true,"[""unidad""]"
+158,(L20- 1) AGENDA CON DISEÑOS X 48 UNI,l20-1-agenda-con-disenos-x-48-uni,"- Colores surtidos
+- 40 hojas
+- Tamaño 9* 8 cm",34100.00,1000,37,null,true,true,2026-03-19 18:41:08.137963+00,2026-03-19 18:42:24.48449+00,10,20,34100.00,34100.00,true,"[""unidad""]"
+159,(B4) CORONA DE FLORES LED X 10 UNI,b4-coronita-de-flores-led-x-10-uni,"- 10 leds
+- Utiliza 3 pilas AG13 (INCLUIDO)
+- El color de la luz se corresponde con los colores de las flores
+- COLORES: MULTICOLOR, ROSA Y BLANCO",11900.00,1000,40,null,false,true,2026-03-20 11:56:51.395723+00,2026-03-20 11:59:14.836357+00,10,40,11900.00,11900.00,true,"[""unidad""]"
+164,(B106-1) COMBO LED MIXTO DE 50 ARTICULOS,b106-1-combo-led-mixto-de-50-articulos,"INCLUYE 50 ARTICULOS DE COTILLON LED EN COLORES SURTIDOS
+
+- 5 UNI de Coronitas de plumas led
+
+- 5 UNI de Coronitas de flores led
+
+- 10 UNI de Pulseras led
+
+- 5 UNI de Varita led
+
+- 5 UNI de Corbatas led
+
+- 10 UNI de Silbatos led
+
+- 5 UNI de Moños led
+
+- 5 UNI de anteojos led",58300.00,1000,40,null,true,true,2026-03-21 15:22:46.520087+00,2026-03-21 15:43:32.696672+00,1,2,58300.00,58300.00,true,"[""unidad""]"
+165,(B106-2) COMBO LED MIXTO DE 80 ARTICULOS,b106-2-combo-led-mixto-de-80-articulos,"INCLUYE 80 ARTICULOS DE COTILLON LED EN COLORES SURTIDOS
+
+- 10 UNI de Coronitas de plumas led
+
+- 10 UNI de Coronitas de flores led
+
+- 10 UNI de Pulseras led
+
+- 10 UNI de Varita led
+
+- 10 UNI de Corbatas led
+
+- 10 UNI de Silbatos led
+
+- 10 UNI de Moños led
+
+- 10 UNI de anteojos led",98700.00,1000,40,null,true,true,2026-03-21 15:27:18.885714+00,2026-03-21 15:44:08.927309+00,1,1,98700.00,98700.00,true,"[""unidad""]"
+166,(B106-3) COMBO LED MIXTO DE 150 ARTICULOS,b106-3-combo-led-mixto-de-150-articulos,"INCLUYE 150 ARTICULOS DE COTILLON LED EN COLORES SURTIDOS
+
+- 25 UNI de Coronitas de plumas led
+
+- 25 UNI de Coronitas de flores led
+
+- 20 UNI de Pulseras led
+
+- 20 UNI de Varitas led
+
+- 15 UNI de Corbatas led
+
+- 10 UNI de Silbatos led
+
+- 15 UNI de Moños led
+
+- 20 UNI de anteojos led",177900.00,1000,40,null,true,true,2026-03-21 15:42:41.777956+00,2026-03-21 15:53:19.146486+00,1,1,177900.00,177900.00,true,"[""unidad""]"
+167,(B106-4) COMBO LED MIXTO DE 200 ARTICULOS,b106-4-combo-led-mixto-de-200-articulos,"INCLUYE 200 ARTICULOS DE COTILLON LED EN COLORES SURTIDOS
+
+- 25 UNI de Coronitas de plumas led
+
+- 25 UNI de Coronitas de flores led
+
+- 25 UNI de Pulseras led
+
+- 25 UNI de Varitas led
+
+- 25 UNI de Corbatas led
+
+- 25 UNI de Silbatos led
+
+- 25 UNI de Moños led
+
+- 25 UNI de anteojos led",246700.00,1000,43,null,true,true,2026-03-21 15:56:37.500466+00,2026-03-21 15:56:37.500466+00,1,1,246700.00,246700.00,true,"[""unidad""]"
+168,"(B106-5) COMBO LED C/ SOMBRERO C/ CORONA DE 101 ARTICULOS ",b106-5-combo-led-c-sombrero-c-corona-de-101-articulos,"INCLUYE 101 ARTICULOS DE COTILLON LED EN COLORES SURTIDOS
+
+- 1 UNI - Sombrero led con lentejuelas y corona (los colores pueden ser en rosa, blanco y negro)
+
+- 50 UNI - Varitas led
+
+- 50 UNI -  Globos led blancos (desinflados)",130700.00,1000,40,null,true,true,2026-03-21 16:03:45.387176+00,2026-03-21 16:27:21.287359+00,1,1,130700.00,130700.00,true,"[""unidad""]"
+169,(B106-6) COMBO LED C/ SOMBRERO C/ CORONA DE 201 ARTICULOS,b106-6-combo-led-c-sombrero-c-corona-de-201-articulos,"INCLUYE 201 ARTICULOS DE COTILLON LED EN COLORES SURTIDOS
+
+- 1 UNI - Sombrero led con lentejuelas y corona (los colores pueden ser en rosa, blanco y negro)
+
+- 100 UNI - Varitas led
+
+- 100 UNI - Globos led blancos (desinflados)",254100.00,1000,40,null,true,true,2026-03-21 16:08:02.620311+00,2026-03-21 16:26:38.546108+00,1,1,254100.00,254100.00,true,"[""unidad""]"
+170,(B106-7) COMBO LED C/ SOMBRERO DE 101 ARTICULOS,b106-7-combo-led-c-sombrero-de-101-articulos,"INCLUYE 101 ARTICULOS DE COTILLON LED EN COLORES SURTIDOS
+
+- 1 UNI - Sombrero led con lentejuelas (los colores pueden ser en azul, blanco, violeta, amarillo y negro)
+
+- 50 UNI - Varitas led
+
+- 50 UNI - Globos led blancos (desinflados)",133700.00,1000,40,null,true,true,2026-03-21 16:21:13.919451+00,2026-03-21 16:25:53.326402+00,1,1,133700.00,133700.00,true,"[""unidad""]"
+171,(B106-8) COMBO LED C/ SOMBRERO DE 201 ARTICULOS,b106-8-combo-led-c-sombrero-de-201-articulos,"INCLUYE 201 ARTICULOS DE COTILLON LED EN COLORES SURTIDOS
+
+- 1 UNI - Sombrero led con lentejuelas (los colores pueden ser en azul, blanco, amarillo, violeta y negro)
+
+- 100 UNI - Varitas led
+
+- 100 UNI - Globos led blancos (desinflados)",257000.00,1000,43,null,true,true,2026-03-21 16:25:29.337134+00,2026-03-21 16:25:29.337134+00,1,1,257000.00,256999.99,true,"[""unidad""]"
+172,(B106-9) COMBO LED MIXTO C/ SOMBRERO DE 201 ARTICULOS,b106-9-combo-led-mixto-c-sombrero-de-201-articulos,"INCLUYE 201 ARTICULOS DE COTILLON LED EN COLORES SURTIDOS
+
+-1 UNI - sombrero led con lentejuelas y corona(los colores pueden ser en rosa, blanco y negro)
+
+- 30 UNI - Coronitas de flores led
+
+- 40 UNI - Pulseras led
+
+- 30 UNI - Corbatas led
+
+- 40 UNI - Silbatos led
+
+- 30 UNI - Moños led
+
+- 30 UNI - Globos led blancos (desinflados)",267000.00,1000,43,null,true,true,2026-03-21 16:35:52.000324+00,2026-03-21 16:35:52.000324+00,1,1,267000.00,267000.00,true,"[""unidad""]"
+173,"LUZ LED NEON CON FUENTE X 10 UNI ",luz-led-neon-con-fuente-x-10-uni," Tiras de luz neon flexibles
+- 5 metros de largo, 
+- Blanco, rojo, azul, verde, violeta y rosa
+- incluye fuente 3A x 12 V",127000.00,1000,39,null,true,true,2026-03-23 22:06:30.206693+00,2026-03-23 22:06:30.206693+00,1,4,127000.00,127000.00,true,"[""unidad""]"
+174,(B106-10)COMBO LED C/ SOMBRERO Y CAPA DE 102 ARTICULOS,b106-10-combo-led-c-sombrero-y-capa-de-102-articulos,"INCLUYE 102 ARTICULOS
+- 50 UNI - GLOBO LED BLANCO
+- 50 UNI - VARITA LED
+- 1 UNI - SOMBRERO LED CON CORONA (PUEDE SER COLOR NEGRO, BLANCO O ROSA)
+- 1 UNI - CAPA LED MULTICOLOR",198200.00,1000,43,null,true,true,2026-03-28 13:55:15.532878+00,2026-03-28 13:55:15.532878+00,1,1,198200.00,198200.00,true,"[""unidad""]"
+175,(B106-11)COMBO LED CON SOMBRERO Y CAPA DE 202 ARTICULOS,b106-11-combo-led-con-sombrero-y-capa-de-202-articulos,"INCLUYE 202 ARTICULOS
+
+- 100 UNI - GLOBO LED BLANCO
+
+- 100 UNI - VARITA LED
+
+- 1 UNI - SOMBRERO LED CON CORONA (PUEDE SER COLOR NEGRO, BLANCO O ROSA)
+
+- 1 UNI - CAPA LED BLANCA",321600.00,1000,40,null,true,true,2026-03-28 13:59:48.65527+00,2026-03-28 14:00:11.103936+00,1,1,321600.00,321600.00,true,"[""unidad""]"
+176,(B106-12) COMBO LED CON SOMBRERO Y CORBATA DE 102 ARTICULOS,b106-12-combo-led-con-sombrero-y-corbata-de-102-articulos,"INCLUYE 102 ARTICULOS
+
+- 50 UNI - GLOBO LED BLANCO
+
+- 50 UNI - ANTEOJOS LED
+
+- 1 UNI - SOMBRERO LED CON LENTEJUELAS (PUEDE SER COLOR AZUL, BLANCO, NEGRO, AMARILLO O VIOLETA)
+
+- 1 UNI - CORBATA LED",131800.00,1000,43,null,true,true,2026-03-28 14:11:53.235461+00,2026-03-28 14:11:53.235461+00,1,1,131800.00,131800.00,true,"[""unidad""]"
+177,(B106-13) COMBO LED CON SOMBRERO Y CORBATA DE 202 ARTICULOS,b106-13-combo-led-con-sombrero-y-corbata-de-202-articulos,"INCLUYE 202 ARTICULOS
+
+- 100 UNI - GLOBO LED BLANCO
+
+- 100 UNI - ANTEOJOS LED
+
+- 1 UNI - SOMBRERO LED CON LENTEJUELAS (PUEDE SER COLOR AZUL, BLANCO, NEGRO, AMARILLO O VIOLETA)
+
+- 1 UNI - CORBATA LED",251500.00,1000,43,null,true,true,2026-03-28 14:15:31.350636+00,2026-03-28 14:15:31.350636+00,1,1,251500.00,251500.00,true,"[""unidad""]"
+178,"(C200) GALERA ARGENTINA (H.14 CM ) ",c200-galera-argentina-h-14-cm,"- GALERA DE TELA 
+- HALTURA 14 CM",2400.00,1000,41,null,false,true,2026-03-28 15:26:17.384558+00,2026-03-28 15:32:40.419207+00,5,10,10200.00,10200.00,true,"[""unidad"",""paquete""]"
+182,"(C201) GORRO ARLEQUIN 3 PUNTAS  ",c201-gorro-arlequin-3-puntas,"- GORRO DE TELA 
+
+",3400.00,1000,41,null,false,true,2026-03-28 15:45:54.496386+00,2026-03-28 15:45:54.496386+00,5,10,14500.00,14500.00,true,"[""unidad"",""paquete""]"
+183,(C202) GALERON ARGENTINA SUBLIMADO (H. 25 CM,c202-galeron-argentina-sublimado-h-25-cm,"- GALERON DE TELA ESTAMPADA
+
+- HALTURA 25 CM",5400.00,1000,41,null,false,true,2026-03-28 15:49:49.777085+00,2026-03-28 15:50:26.671152+00,5,10,23000.00,23000.00,true,"[""unidad"",""paquete""]"
+185,(B110) ROMPECOCOS X 10 UNI,b110-rompecocos-x-10-uni,"CARACTERISTICA
+
+- Cada pack trae 10 unidades del mismo color
+
+- Utiliza 3 pilas AG13 (INCLUIDO)
+
+- COLORES: MULTICOLOR y BLANCO",11900.00,1000,40,null,false,true,2026-03-28 17:41:23.891394+00,2026-03-28 17:42:15.202665+00,12,40,null,null,true,"[""unidad""]"
+187,(A7-1) GUIRNALDA DE SOGA BOMBILLA LED - 7 EFECTOS,a7-1-guirnalda-de-soga-bombilla-led-7-efectos,"- Largo: 7 metros
+- Enchufe en forma de ocho 5w
+- bombilla: 6*9 cm
+- 16 LEDS",25300.00,1000,39,null,false,true,2026-03-31 20:16:17.240688+00,2026-03-31 21:01:43.318082+00,5,5,115299.99,115300.00,true,"[""unidad""]"
+188,(A5) CORTINA LED 3X2 M- C/ 8 EFECTOS,a5-cortina-led-3x2-m-c-8-efectos,"- Medidas: 3*2 metros
+- 16 tiras de 15 unidades
+- Conexión eléctrica a enchufe de 220v
+- Transformador de 8 funciones",14500.00,1000,39,null,false,true,2026-04-01 19:30:31.262254+00,2026-04-01 19:30:31.262254+00,10,10,133400.00,133400.00,true,"[""unidad""]"
+189,"(a5-1) CORTINA LED 2X1,5 M C/ 8 EFECTOS ",a5-1-cortina-led-2x1-5-m-c-8-efectos,"- Medidas: 2*1.5 m
+- Conexión eléctrica a enchufe de 3w
+- Transformador de 8 funciones",7500.00,1000,39,null,false,true,2026-04-01 20:10:57.379232+00,2026-04-01 20:10:57.379232+00,10,10,69000.00,69000.00,true,"[""unidad""]"
+190,"(A5-2) CORTINA LED LUNAS Y ESTRELLAS 3X0,8 M C/ 8 EFECTOS ",a5-2-cortina-led-lunas-y-estrellas-3x0-8-m-c-8-efectos,"- Medidas: 3 m * 80 cm
+- Conexión eléctrica a enchufe de 3w
+- Transformador de 8 funciones
+- Incluye 5 lunas grandes y 10 estrellas chicas",12700.00,1000,39,null,false,true,2026-04-01 20:26:51.071547+00,2026-04-01 20:26:51.071547+00,10,10,116900.00,116900.00,true,"[""unidad""]"

@@ -1,29 +1,35 @@
 import { supabase } from '../config/supabase'
 
 /**
- * Get all customers (from auth.users via RPC)
+ * Get all customers from customers table
  * Intended for Admin use
  */
 export async function getCustomers() {
     try {
-        console.log('🔄 Calling get_all_users_admin RPC...')
-        const { data, error } = await supabase.rpc('get_all_users_admin')
+        console.log('🔄 Fetching customers from table...')
+        
+        const { data, error } = await supabase
+            .from('customers')
+            .select('*')
+            .order('created_at', { ascending: false })
 
         if (error) {
-            console.error('❌ RPC Error:', error)
+            console.error('❌ Error fetching customers:', error)
             throw error
         }
         
-        console.log('✅ RPC Success. Users found:', data?.length)
+        console.log('✅ Customers found:', data?.length)
         
         // Map data to match component expectations
-        const formattedData = data.map(user => ({
-            ...user,
-            full_name: user.full_name || 
-                       (user.raw_user_meta_data?.full_name) || 
-                       (user.raw_user_meta_data?.first_name ? `${user.raw_user_meta_data.first_name} ${user.raw_user_meta_data.last_name || ''}` : 'Sin Nombre'),
-            phone: user.phone || user.raw_user_meta_data?.phone || 'N/A',
-            city: user.city || user.raw_user_meta_data?.city || 'N/A'
+        const formattedData = (data || []).map(customer => ({
+            id: customer.id,
+            email: customer.email,
+            full_name: customer.full_name || 'Sin Nombre',
+            phone: customer.phone || 'N/A',
+            address: customer.address || 'N/A',
+            city: customer.city || 'N/A',
+            created_at: customer.created_at,
+            source: customer.source
         }))
 
         return { data: formattedData, error: null }

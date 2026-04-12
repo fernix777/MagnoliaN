@@ -1,0 +1,8 @@
+id,name,slug,description,image_url,display_order,created_at,active,parent_id
+37,LIBRERIA,libreria,null,https://jxkj6fescurdg6ul.public.blob.vercel-storage.com/categories/category_LIBRERIA_1775487383090_mjwlukgh9.jpg,6,2026-02-15 01:31:53.375937+00,true,null
+38,STOCK JUJUY,listo-para-enviar-desde-jujuy,TODOS LOS ARTICULOS DE ESTA CATEGORIA TENEMOS EN SAN SALVADOR DE JUJUY LISTO PARA ENVIO O RETIRO EN EL SHOWROOM.,https://jxkj6fescurdg6ul.public.blob.vercel-storage.com/categories/category_STOCK_JUJUY_1775487378998_mjgzjiqq9.jpg,0,2026-02-15 01:31:54.52123+00,true,null
+39,LUCES,luces,null,https://jxkj6fescurdg6ul.public.blob.vercel-storage.com/categories/category_LUCES_1775487380362_h8mf43aln.jpg,4,2026-02-15 01:32:05.052242+00,true,null
+40,COTILLON LED,cotillon-led,null,https://jxkj6fescurdg6ul.public.blob.vercel-storage.com/categories/category_COTILLON_LED_1775487377652_i0cfpaiu1.jpg,2,2026-02-15 01:32:15.71751+00,true,null
+41,COTILLON,cotillon,null,null,3,2026-03-03 15:33:18.657127+00,true,null
+42,REGALERIA,regaleria,null,null,5,2026-03-03 15:34:22.84184+00,true,null
+43,COMBOS DE COTILLON LED,combos-de-cotillon-led,null,https://jxkj6fescurdg6ul.public.blob.vercel-storage.com/categories/category_COMBOS_DE_COTILLON_LED_1775487381749_umuotqclj.jpg,1,2026-03-19 15:14:57.945172+00,true,null

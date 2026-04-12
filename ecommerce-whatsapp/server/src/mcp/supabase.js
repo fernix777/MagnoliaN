@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // MCP-based Supabase connector
-const MCP_URL = process.env.MCP_SUPABASE_MCP_URL || 'https://mcp.supabase.com/mcp?project_ref=prymijhlpoeqhihztuwl'
+const MCP_URL = process.env.MCP_SUPABASE_MCP_URL || 'https://mcp.supabase.com/mcp?project_ref=coadlejoezzjvqwhbuqc'
 const MCP_TOKEN = process.env.MCP_SUPABASE_TOKEN
 
 export async function connectToMCP() {

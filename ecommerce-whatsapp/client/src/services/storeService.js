@@ -10,29 +10,88 @@ import { supabase } from '../config/supabase'
  */
 export async function getTopSellingProductsPerCategory() {
     try {
-        // Obtener todos los productos activos sin límite
-        const { data: products, error } = await supabase
+        console.log('[DEBUG] Intentando obtener productos...')
+        
+        // 1. Obtener productos
+        const { data: products, error: productsError } = await supabase
             .from('products')
-            .select(`
-                *,
-                category:categories(id, name, slug),
-                images:product_images(*),
-                product_categories!inner(category_id)
-            `)
+            .select('*')
             .eq('active', true)
-            .order('featured', { ascending: false }) // Priorizar destacados
-            .order('created_at', { ascending: false }) // Luego los más nuevos
+            .order('created_at', { ascending: false })
+            .limit(50)
+        
+        if (productsError) {
+            console.error('[DEBUG] Error obteniendo productos:', productsError)
+            throw productsError
+        }
+        
+        if (!products || products.length === 0) {
+            return { data: [], error: null }
+        }
+        
+        // 2. Obtener IDs de productos
+        const productIds = products.map(p => p.id)
+        
+        // 3. Obtener imágenes de esos productos
+        const { data: images, error: imagesError } = await supabase
+            .from('product_images')
+            .select('*')
+            .in('product_id', productIds)
+        
+        if (imagesError) {
+            console.error('[DEBUG] Error obteniendo imágenes:', imagesError)
+        }
+        
+        // 4. Combinar productos con sus imágenes
+        const productsWithImages = products.map(product => {
+            const productImages = (images || []).filter(img => img.product_id === product.id)
+            const primaryImage = productImages.find(img => img.is_primary) || productImages[0]
+            
+            return {
+                ...product,
+                image_url: primaryImage?.image_url || null,
+                images: productImages
+            }
+        })
+        
+        console.log('[DEBUG] Productos con imágenes:', { 
+            productCount: productsWithImages.length,
+            withImages: productsWithImages.filter(p => p.image_url).length
+        })
 
-        if (error) throw error
-
-        // Eliminar duplicados (si un producto está en múltiples categorías)
-        const uniqueProducts = Array.from(new Map(products.map(item => [item.id, item])).values())
-
-        return { data: uniqueProducts, error: null }
+        return { data: productsWithImages, error: null }
     } catch (error) {
         console.error('Error fetching all products for feed:', error)
-        return { data: null, error }
+        return { data: [], error }
     }
+}
+
+// Helper para cargar imágenes de productos
+async function loadProductImages(products) {
+    if (!products || products.length === 0) return products
+    
+    const productIds = products.map(p => p.id)
+    
+    const { data: images, error: imagesError } = await supabase
+        .from('product_images')
+        .select('*')
+        .in('product_id', productIds)
+    
+    if (imagesError) {
+        console.error('[DEBUG] Error cargando imágenes:', imagesError)
+        return products
+    }
+    
+    return products.map(product => {
+        const productImages = (images || []).filter(img => img.product_id === product.id)
+        const primaryImage = productImages.find(img => img.is_primary) || productImages[0]
+        
+        return {
+            ...product,
+            image_url: primaryImage?.image_url || null,
+            images: productImages
+        }
+    })
 }
 
 /**
@@ -42,21 +101,19 @@ export async function getTopSellingProductsPerCategory() {
  */
 export async function getFeaturedProducts(limit = 8) {
     try {
-        const { data, error } = await supabase
+        const { data: products, error } = await supabase
             .from('products')
-            .select(`
-        *,
-        category:categories(id, name, slug),
-        images:product_images(*)
-      `)
+            .select('*')
             .eq('active', true)
-            .eq('featured', true)
             .order('created_at', { ascending: false })
             .limit(limit)
 
         if (error) throw error
 
-        return { data, error: null }
+        // Cargar imágenes
+        const productsWithImages = await loadProductImages(products)
+
+        return { data: productsWithImages, error: null }
     } catch (error) {
         console.error('Error fetching featured products:', error)
         return { data: null, error }
@@ -69,21 +126,29 @@ export async function getFeaturedProducts(limit = 8) {
  */
 export async function getActiveCategories() {
     try {
+        console.log('[DEBUG] Intentando obtener categorías...')
+        
+        // Consulta simple sin relaciones
         const { data, error } = await supabase
             .from('categories')
-            .select(`
-        *,
-        products:products(count)
-      `)
+            .select('*')
             .eq('active', true)
             .order('display_order', { ascending: true })
 
-        if (error) throw error
+        console.log('[DEBUG] Categorías:', { 
+            dataLength: data?.length, 
+            error: error?.message 
+        })
 
-        return { data, error: null }
+        if (error) {
+            console.error('[DEBUG] Error categorías:', error)
+            throw error
+        }
+
+        return { data: data || [], error: null }
     } catch (error) {
         console.error('Error fetching categories:', error)
-        return { data: null, error }
+        return { data: [], error }
     }
 }
 
@@ -109,25 +174,23 @@ export async function getProductsByCategory(categorySlug, options = {}) {
 
         let query = supabase
             .from('products')
-            .select(`
-        *,
-        category:categories(id, name, slug),
-        images:product_images(*),
-        product_categories!inner(category_id)
-      `)
+            .select('*')
             .eq('active', true)
-            .eq('product_categories.category_id', category.id)
+            .eq('category_id', category.id)
             .order('created_at', { ascending: false })
 
         if (options.limit) {
             query = query.limit(options.limit)
         }
 
-        const { data, error } = await query
+        const { data: products, error } = await query
 
         if (error) throw error
 
-        return { data, error: null }
+        // Cargar imágenes
+        const productsWithImages = await loadProductImages(products)
+
+        return { data: productsWithImages, error: null }
     } catch (error) {
         console.error('Error fetching products by category:', error)
         return { data: null, error }
@@ -141,20 +204,19 @@ export async function getProductsByCategory(categorySlug, options = {}) {
  */
 export async function searchProducts(searchQuery) {
     try {
-        const { data, error } = await supabase
+        const { data: products, error } = await supabase
             .from('products')
-            .select(`
-        *,
-        category:categories(id, name, slug),
-        images:product_images(*)
-      `)
+            .select('*')
             .eq('active', true)
             .or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`)
             .order('created_at', { ascending: false })
 
         if (error) throw error
 
-        return { data, error: null }
+        // Cargar imágenes
+        const productsWithImages = await loadProductImages(products)
+
+        return { data: productsWithImages, error: null }
     } catch (error) {
         console.error('Error searching products:', error)
         return { data: null, error }
@@ -168,22 +230,36 @@ export async function searchProducts(searchQuery) {
  */
 export async function getProductBySlug(slug) {
     try {
-        const { data, error } = await supabase
+        const { data: product, error } = await supabase
             .from('products')
-            .select(`
-        *,
-        category:categories(id, name, slug),
-        subcategory:subcategories(id, name, slug),
-        images:product_images(*),
-        variants:product_variants(*)
-      `)
+            .select('*')
             .eq('slug', slug)
             .eq('active', true)
             .single()
 
         if (error) throw error
 
-        return { data, error: null }
+        // Cargar imágenes del producto
+        const { data: images, error: imagesError } = await supabase
+            .from('product_images')
+            .select('*')
+            .eq('product_id', product.id)
+
+        if (imagesError) {
+            console.error('[DEBUG] Error cargando imágenes:', imagesError)
+        }
+
+        const productImages = images || []
+        const primaryImage = productImages.find(img => img.is_primary) || productImages[0]
+
+        return { 
+            data: {
+                ...product,
+                image_url: primaryImage?.image_url || null,
+                images: productImages
+            }, 
+            error: null 
+        }
     } catch (error) {
         console.error('Error fetching product:', error)
         return { data: null, error }
@@ -199,11 +275,7 @@ export async function getAllProducts(options = {}) {
     try {
         let query = supabase
             .from('products')
-            .select(`
-        *,
-        category:categories(id, name, slug),
-        images:product_images(*)
-      `)
+            .select('*')
             .eq('active', true)
             .order('created_at', { ascending: false })
 
@@ -215,11 +287,14 @@ export async function getAllProducts(options = {}) {
             query = query.range(options.offset, options.offset + (options.limit || 10) - 1)
         }
 
-        const { data, error } = await query
+        const { data: products, error } = await query
 
         if (error) throw error
 
-        return { data, error: null }
+        // Cargar imágenes
+        const productsWithImages = await loadProductImages(products)
+
+        return { data: productsWithImages, error: null }
     } catch (error) {
         console.error('Error fetching all products:', error)
         return { data: null, error }

@@ -1,0 +1,16 @@
+table_name,column_name,foreign_table,foreign_column
+categories,parent_id,categories,id
+ecommerce_order_items,order_id,ecommerce_orders,id
+order_items,product_id,products,id
+order_items,order_id,orders,id
+order_status_history,order_id,ecommerce_orders,id
+product_categories,product_id,products,id
+product_categories,subcategory_id,subcategories,id
+product_categories,category_id,categories,id
+product_images,product_id,products,id
+product_stats,product_id,products,id
+product_variants,product_id,products,id
+products,category_id,categories,id
+products,subcategory_id,subcategories,id
+shipping_rates,zone_id,shipping_zones,id
+subcategories,category_id,categories,id

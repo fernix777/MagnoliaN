@@ -11,24 +11,52 @@ import { uploadImage, deleteImage, extractPathFromUrl, uploadMultipleImages } fr
  * @param {AbortSignal} [signal] - Señal de aborto opcional
  * @returns {Promise<{data: Array, error: null} | {data: null, error: Error}>}
  */
+// Helper para cargar datos relacionados de productos
+async function loadProductRelations(products) {
+    if (!products || products.length === 0) return products
+    
+    const productIds = products.map(p => p.id)
+    
+    // Cargar imágenes
+    const { data: images } = await supabase
+        .from('product_images')
+        .select('*')
+        .in('product_id', productIds)
+    
+    // Cargar variantes
+    const { data: variants } = await supabase
+        .from('product_variants')
+        .select('*')
+        .in('product_id', productIds)
+    
+    // Cargar categorías
+    const categoryIds = [...new Set(products.map(p => p.category_id).filter(Boolean))]
+    const { data: categories } = categoryIds.length > 0 ? await supabase
+        .from('categories')
+        .select('id, name')
+        .in('id', categoryIds)
+    : { data: [] }
+    
+    // Combinar datos
+    return products.map(product => {
+        const productImages = (images || []).filter(img => img.product_id === product.id)
+        const productVariants = (variants || []).filter(v => v.product_id === product.id)
+        const category = (categories || []).find(c => c.id === product.category_id)
+        
+        return {
+            ...product,
+            images: productImages,
+            variants: productVariants,
+            category: category || null
+        }
+    })
+}
+
 export async function getProducts(filters = {}, signal) {
     try {
-        let selectQuery = `
-        *,
-        category:categories(id, name),
-        subcategory:subcategories(id, name),
-        images:product_images(*),
-        variants:product_variants(*)
-      `
-
-        // Si filtramos por categoría o subcategoría, usamos la tabla pivote
-        if (filters.category_id || filters.subcategory_id) {
-            selectQuery += `, product_categories!inner(category_id, subcategory_id)`
-        }
-
         let query = supabase
             .from('products')
-            .select(selectQuery)
+            .select('*')
             .order('created_at', { ascending: false })
             .abortSignal(signal)
 
@@ -37,16 +65,8 @@ export async function getProducts(filters = {}, signal) {
             query = query.eq('active', filters.active)
         }
 
-        if (filters.featured !== undefined) {
-            query = query.eq('featured', filters.featured)
-        }
-
         if (filters.category_id) {
-            query = query.eq('product_categories.category_id', filters.category_id)
-        }
-
-        if (filters.subcategory_id) {
-            query = query.eq('product_categories.subcategory_id', filters.subcategory_id)
+            query = query.eq('category_id', filters.category_id)
         }
 
         if (filters.search) {
@@ -62,11 +82,14 @@ export async function getProducts(filters = {}, signal) {
             query = query.range(filters.offset, filters.offset + (filters.limit || 10) - 1)
         }
 
-        const { data, error } = await query
+        const { data: products, error } = await query
 
         if (error) throw error
 
-        return { data, error: null }
+        // Cargar relaciones
+        const productsWithRelations = await loadProductRelations(products)
+
+        return { data: productsWithRelations, error: null }
     } catch (error) {
         if (error.code === 20 || error.name === 'AbortError') {
             return { data: [], error: null }
@@ -83,22 +106,44 @@ export async function getProducts(filters = {}, signal) {
  */
 export async function getProductById(id) {
     try {
-        const { data, error } = await supabase
+        // Obtener producto simple
+        const { data: product, error } = await supabase
             .from('products')
-            .select(`
-        *,
-        category:categories(id, name),
-        subcategory:subcategories(id, name),
-        images:product_images(*),
-        variants:product_variants(*),
-        product_categories(category_id, subcategory_id)
-      `)
+            .select('*')
             .eq('id', id)
             .single()
 
         if (error) throw error
 
-        return { data, error: null }
+        // Cargar imágenes
+        const { data: images } = await supabase
+            .from('product_images')
+            .select('*')
+            .eq('product_id', id)
+
+        // Cargar variantes
+        const { data: variants } = await supabase
+            .from('product_variants')
+            .select('*')
+            .eq('product_id', id)
+
+        // Cargar categoría
+        const { data: category } = product.category_id ? await supabase
+            .from('categories')
+            .select('id, name')
+            .eq('id', product.category_id)
+            .single()
+        : { data: null }
+
+        return { 
+            data: {
+                ...product,
+                images: images || [],
+                variants: variants || [],
+                category: category || null
+            }, 
+            error: null 
+        }
     } catch (error) {
         console.error('Error fetching product:', error)
         return { data: null, error }
@@ -488,40 +533,20 @@ function generateSlug(text) {
  */
 export async function getFeaturedProducts(limit = 8) {
     try {
-        // Primero intentamos obtener productos marcados como destacados
-        let { data, error } = await supabase
+        // Obtener productos activos
+        const { data: products, error } = await supabase
             .from('products')
-            .select(`
-        *,
-        category:categories(id, name),
-        images:product_images(*),
-        variants:product_variants(*)
-      `)
+            .select('*')
             .eq('active', true)
-            .eq('featured', true)
             .order('created_at', { ascending: false })
             .limit(limit)
 
         if (error) throw error
 
-        // Si no hay productos destacados, obtener los últimos productos activos
-        if (!data || data.length === 0) {
-            ({ data, error } = await supabase
-                .from('products')
-                .select(`
-            *,
-            category:categories(id, name),
-            images:product_images(*),
-            variants:product_variants(*)
-          `)
-                .eq('active', true)
-                .order('created_at', { ascending: false })
-                .limit(limit))
+        // Cargar relaciones
+        const productsWithRelations = await loadProductRelations(products)
 
-            if (error) throw error
-        }
-
-        return { data, error: null }
+        return { data: productsWithRelations, error: null }
     } catch (error) {
         console.error('Error fetching featured products:', error)
         return { data: null, error }

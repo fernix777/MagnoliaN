@@ -1,0 +1,19 @@
+column_name,data_type,is_nullable,column_default,character_maximum_length
+id,bigint,NO,nextval('products_id_seq'::regclass),null
+name,text,NO,null,null
+slug,text,NO,null,null
+description,text,YES,null,null
+base_price,numeric,NO,null,null
+stock,integer,YES,0,null
+category_id,bigint,YES,null,null
+subcategory_id,bigint,YES,null,null
+featured,boolean,YES,false,null
+active,boolean,YES,true,null
+created_at,timestamp with time zone,YES,now(),null
+updated_at,timestamp with time zone,YES,now(),null
+units_per_box,integer,YES,12,null
+boxes_per_bundle,integer,YES,40,null
+price_box,numeric,YES,null,null
+price_bundle,numeric,YES,null,null
+has_colors,boolean,YES,true,null
+sale_types,ARRAY,YES,"ARRAY['unidad'::text, 'caja'::text, 'bulto'::text]",null
