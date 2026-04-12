@@ -259,14 +259,19 @@ export async function updateProduct(id, productData) {
         // Separar variantes y categorías de los datos del producto
         const { variants, categories: productCategories, ...productFields } = productData
 
+        // Asegurar que el ID es número (BIGINT)
+        const numericId = typeof id === 'string' ? parseInt(id, 10) : id
+
         const { data, error } = await supabase
             .from('products')
             .update(productFields)
-            .eq('id', id)
+            .eq('id', numericId)
             .select()
-            .single()
 
         if (error) throw error
+        
+        // Tomar el primer resultado si hay múltiples (no debería pasar con eq)
+        const product = Array.isArray(data) ? data[0] : data
 
         // Actualizar categorías (Eliminar y crear nuevas)
         if (productCategories !== undefined) {
@@ -274,14 +279,14 @@ export async function updateProduct(id, productData) {
             const { error: deleteCatError } = await supabase
                 .from('product_categories')
                 .delete()
-                .eq('product_id', id)
+                .eq('product_id', numericId)
             
             if (deleteCatError) console.error('Error deleting old product categories:', deleteCatError)
 
             // 2. Insertar nuevas categorías
             if (productCategories.length > 0) {
                 const categoriesToInsert = productCategories.map(c => ({
-                    product_id: id,
+                    product_id: numericId,
                     category_id: c.category_id,
                     subcategory_id: c.subcategory_id || null
                 }))
@@ -300,14 +305,14 @@ export async function updateProduct(id, productData) {
             const { error: deleteError } = await supabase
                 .from('product_variants')
                 .delete()
-                .eq('product_id', id)
+                .eq('product_id', numericId)
 
             if (deleteError) console.error('Error deleting old variants:', deleteError)
 
             // 2. Insertar nuevas variantes
             if (variants.length > 0) {
                 const variantsToInsert = variants.map(v => ({
-                    product_id: id,
+                    product_id: numericId,
                     variant_type: v.variant_type || 'color',
                     variant_value: v.variant_value || v.name,
                     sku: v.sku || null,
@@ -327,7 +332,7 @@ export async function updateProduct(id, productData) {
             }
         }
 
-        return { data, error: null }
+        return { data: product, error: null }
     } catch (error) {
         console.error('Error updating product:', error)
         return { data: null, error }

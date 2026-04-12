@@ -77,12 +77,15 @@ export default function ProductForm() {
         // Cargar categorías
         let productCategories = [];
         if (data.product_categories && data.product_categories.length > 0) {
-            productCategories = data.product_categories;
+            productCategories = data.product_categories.map(pc => ({
+                category_id: pc.category_id || '',
+                subcategory_id: pc.subcategory_id || ''
+            }));
         } else if (data.category_id) {
             // Migración: Si tiene category_id pero no product_categories
             productCategories = [{ 
-                category_id: data.category_id, 
-                subcategory_id: data.subcategory_id 
+                category_id: data.category_id || '', 
+                subcategory_id: data.subcategory_id || '' 
             }];
         }
 
@@ -509,7 +512,7 @@ export default function ProductForm() {
                                 <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                                     <label>Categoría {index + 1} *</label>
                                     <select
-                                        value={cat.category_id}
+                                        value={cat.category_id || ''}
                                         onChange={(e) => handleCategoryChange(index, 'category_id', e.target.value)}
                                         disabled={saving}
                                         className={errors.categories && index === 0 && !cat.category_id ? 'error' : ''}
@@ -524,7 +527,7 @@ export default function ProductForm() {
                                 <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
                                     <label>Subcategoría</label>
                                     <select
-                                        value={cat.subcategory_id}
+                                        value={cat.subcategory_id || ''}
                                         onChange={(e) => handleCategoryChange(index, 'subcategory_id', e.target.value)}
                                         disabled={saving || !cat.category_id}
                                     >
