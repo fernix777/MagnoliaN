@@ -37,21 +37,28 @@ export default function MyAccount() {
 
     const loadUserData = async () => {
         try {
-            // Cargar perfil de la tabla profiles
-            const { data: profileData } = await supabase
-                .from('profiles')
+            // Cargar datos del cliente desde customers por email
+            const { data: customerData } = await supabase
+                .from('customers')
                 .select('*')
-                .eq('id', user.id)
-                .single()
+                .eq('email', user.email)
+                .maybeSingle()
 
-            if (profileData) {
-                setProfile(profileData)
+            if (customerData) {
+                setProfile(customerData)
                 
                 // Cargar datos de envío si existen
-                if (profileData.shipping_data) {
-                    setShippingData(profileData.shipping_data)
-                    setShippingForm(profileData.shipping_data)
+                const shippingFromCustomer = {
+                    full_name: customerData.full_name || '',
+                    phone: customerData.phone || '',
+                    address: customerData.address || '',
+                    city: customerData.city || '',
+                    province: '',
+                    postal_code: '',
+                    observations: ''
                 }
+                setShippingData(shippingFromCustomer)
+                setShippingForm(shippingFromCustomer)
             }
         } catch (error) {
             console.error('Error loading user data:', error)
@@ -64,18 +71,23 @@ export default function MyAccount() {
         e.preventDefault()
         
         try {
+            // Actualizar datos en customers
             const { error } = await supabase
-                .from('profiles')
-                .update({ 
-                    shipping_data: shippingForm,
+                .from('customers')
+                .upsert({ 
+                    email: user.email,
+                    full_name: shippingForm.full_name,
+                    phone: shippingForm.phone,
+                    address: shippingForm.address,
+                    city: shippingForm.city,
                     updated_at: new Date().toISOString()
-                })
-                .eq('id', user.id)
+                }, { onConflict: 'email' })
 
             if (error) throw error
 
             setShippingData(shippingForm)
             setEditingShipping(false)
+            alert('Datos guardados correctamente')
         } catch (error) {
             console.error('Error saving shipping data:', error)
             alert('Error al guardar los datos de envío')

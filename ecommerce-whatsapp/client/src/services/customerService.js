@@ -42,27 +42,27 @@ export async function getCustomers() {
 /**
  * Get customer details including orders
  */
-export async function getCustomerDetails(userId) {
+export async function getCustomerDetails(userId, userEmail) {
     try {
-        // Get profile (might be null if user only exists in auth)
-        const { data: profile, error: profileError } = await supabase
-            .from('profiles')
+        // Get customer from customers table by email
+        const { data: customer, error: customerError } = await supabase
+            .from('customers')
             .select('*')
-            .eq('id', userId)
-            .maybeSingle() // Use maybeSingle to avoid error if not found
+            .eq('email', userEmail)
+            .maybeSingle()
         
-        if (profileError) console.warn('Profile fetch warning:', profileError)
+        if (customerError) console.warn('Customer fetch warning:', customerError)
 
-        // Get orders
+        // Get orders by user_id or customer_email
         const { data: orders, error: ordersError } = await supabase
             .from('orders')
             .select('*')
-            .eq('user_id', userId)
+            .or(`user_id.eq.${userId},customer_info->>email.eq.${userEmail}`)
             .order('created_at', { ascending: false })
 
         if (ordersError) throw ordersError
 
-        return { data: { ...(profile || {}), orders }, error: null }
+        return { data: { ...(customer || {}), orders }, error: null }
     } catch (error) {
         console.error('Error fetching customer details:', error)
         return { data: null, error }
