@@ -351,21 +351,24 @@ export async function updateProduct(id, productData) {
                 console.log('[DEBUG] Variantes únicas:', uniqueVariants.length)
                 console.log('[DEBUG] Variantes a insertar:', uniqueVariants)
 
-                if (uniqueVariants.length > 0) {
-                    const { error: variantsError } = await supabase
+                // Insertar variantes una a una para manejar errores individualmente
+                for (const variant of uniqueVariants) {
+                    console.log('[DEBUG] Insertando variante:', variant)
+                    const { data: insertedVariant, error: variantError } = await supabase
                         .from('product_variants')
-                        .insert(uniqueVariants)
-
-                    if (variantsError) {
-                        console.error('Error updating variants:', variantsError)
-                        // Si hay error de duplicados, intentar con upsert
-                        if (variantsError.code === '23505') {
-                            console.log('[DEBUG] Intentando upsert como fallback...')
-                            const { error: upsertError } = await supabase
-                                .from('product_variants')
-                                .upsert(uniqueVariants, { onConflict: 'product_id,variant_value' })
-                            if (upsertError) console.error('Upsert también falló:', upsertError)
+                        .insert(variant)
+                        .select()
+                        .single()
+                    
+                    if (variantError) {
+                        console.error('[DEBUG] Error insertando variante:', variantError)
+                        if (variantError.code !== '23505') {
+                            console.error('Error grave al insertar variante:', variantError)
+                        } else {
+                            console.log('[DEBUG] Ignorando duplicado de variante')
                         }
+                    } else {
+                        console.log('[DEBUG] Variante insertada:', insertedVariant)
                     }
                 }
             }
