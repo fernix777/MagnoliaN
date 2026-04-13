@@ -309,7 +309,7 @@ export async function updateProduct(id, productData) {
 
             if (deleteError) console.error('Error deleting old variants:', deleteError)
 
-            // 2. Insertar nuevas variantes
+            // 2. Insertar nuevas variantes (sin ID para evitar conflictos de PK)
             if (variants.length > 0) {
                 const variantsToInsert = variants.map(v => ({
                     product_id: numericId,
@@ -319,6 +319,7 @@ export async function updateProduct(id, productData) {
                     price_modifier: Number(v.price_modifier) || 0,
                     stock: Number(v.stock) || 0,
                     active: v.active !== undefined ? v.active : true
+                    // NOTA: No incluimos 'id' - dejamos que Supabase genere uno nuevo
                 }))
 
                 const { error: variantsError } = await supabase
