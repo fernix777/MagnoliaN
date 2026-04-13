@@ -54,9 +54,37 @@ USING (
 
 ALTER TABLE product_variants ENABLE ROW LEVEL SECURITY;
 
-DROP POLICY IF EXISTS "Admins can manage variants" ON product_variants;
-CREATE POLICY "Admins can manage variants"
-ON product_variants FOR ALL
+-- Política para admins: SELECT
+DROP POLICY IF EXISTS "Admins can read variants" ON product_variants;
+CREATE POLICY "Admins can read variants"
+ON product_variants FOR SELECT
+TO authenticated
+USING (
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
+);
+
+-- Política para admins: INSERT
+DROP POLICY IF EXISTS "Admins can insert variants" ON product_variants;
+CREATE POLICY "Admins can insert variants"
+ON product_variants FOR INSERT
+TO authenticated
+WITH CHECK (
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
+);
+
+-- Política para admins: UPDATE
+DROP POLICY IF EXISTS "Admins can update variants" ON product_variants;
+CREATE POLICY "Admins can update variants"
+ON product_variants FOR UPDATE
+TO authenticated
+USING (
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
+);
+
+-- Política para admins: DELETE
+DROP POLICY IF EXISTS "Admins can delete variants" ON product_variants;
+CREATE POLICY "Admins can delete variants"
+ON product_variants FOR DELETE
 TO authenticated
 USING (
     (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
