@@ -309,7 +309,8 @@ export async function updateProduct(id, productData) {
 
             // 2. Insertar nuevas variantes (sin ID para evitar conflictos de PK)
             if (variants.length > 0) {
-                const variantsToInsert = variants.map(v => ({
+                // Usar desestructuración para quitar explícitamente el campo 'id'
+                const variantsToInsert = variants.map(({ id, ...v }) => ({
                     product_id: numericId,
                     variant_type: v.variant_type || 'color',
                     variant_value: v.variant_value || v.name,
@@ -317,7 +318,6 @@ export async function updateProduct(id, productData) {
                     price_modifier: Number(v.price_modifier) || 0,
                     stock: Number(v.stock) || 0,
                     active: v.active !== undefined ? v.active : true
-                    // NOTA: No incluimos 'id' - dejamos que Supabase genere uno nuevo
                 }))
 
                 const { error: variantsError } = await supabase
