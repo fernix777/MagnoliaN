@@ -323,21 +323,30 @@ export async function updateProduct(id, productData) {
                     active: v.active !== undefined ? v.active : true
                 }))
 
-                console.log('[DEBUG] Variantes a insertar:', variantsToInsert)
+                // FILTRAR DUPLICADOS: mantener solo la primera ocurrencia de cada variant_value
+                const uniqueVariants = variantsToInsert.filter((v, index, self) =>
+                    index === self.findIndex(t => t.variant_value === v.variant_value)
+                )
 
-                const { error: variantsError } = await supabase
-                    .from('product_variants')
-                    .insert(variantsToInsert)
+                console.log('[DEBUG] Variantes originales:', variants.length)
+                console.log('[DEBUG] Variantes únicas:', uniqueVariants.length)
+                console.log('[DEBUG] Variantes a insertar:', uniqueVariants)
 
-                if (variantsError) {
-                    console.error('Error updating variants:', variantsError)
-                    // Si hay error de duplicados, intentar con upsert
-                    if (variantsError.code === '23505') {
-                        console.log('[DEBUG] Intentando upsert como fallback...')
-                        const { error: upsertError } = await supabase
-                            .from('product_variants')
-                            .upsert(variantsToInsert, { onConflict: 'product_id,variant_value' })
-                        if (upsertError) console.error('Upsert también falló:', upsertError)
+                if (uniqueVariants.length > 0) {
+                    const { error: variantsError } = await supabase
+                        .from('product_variants')
+                        .insert(uniqueVariants)
+
+                    if (variantsError) {
+                        console.error('Error updating variants:', variantsError)
+                        // Si hay error de duplicados, intentar con upsert
+                        if (variantsError.code === '23505') {
+                            console.log('[DEBUG] Intentando upsert como fallback...')
+                            const { error: upsertError } = await supabase
+                                .from('product_variants')
+                                .upsert(uniqueVariants, { onConflict: 'product_id,variant_value' })
+                            if (upsertError) console.error('Upsert también falló:', upsertError)
+                        }
                     }
                 }
             }
