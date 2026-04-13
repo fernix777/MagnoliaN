@@ -1,5 +1,6 @@
 -- Políticas RLS para permitir a usuarios admin gestionar productos
 -- Ejecutar en Supabase SQL Editor
+-- Usa auth.jwt() que es accesible desde el contexto RLS
 
 -- ============================================
 -- POLÍTICAS PARA TABLA products
@@ -8,52 +9,43 @@
 -- Habilitar RLS (si no está habilitado)
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 
--- Política para admins: permitir SELECT (ya existe, pero la dejamos)
+-- Verificar si el usuario es admin desde el JWT
+-- El rol está en auth.jwt() -> user_metadata -> role
+
+-- Política para admins: permitir SELECT
 DROP POLICY IF EXISTS "Admins can read all products" ON products;
 CREATE POLICY "Admins can read all products"
 ON products FOR SELECT
+TO authenticated
 USING (
-    EXISTS (
-        SELECT 1 FROM auth.users
-        WHERE auth.users.id = auth.uid()
-        AND auth.users.raw_user_meta_data->>'role' = 'admin'
-    )
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 
 -- Política para admins: permitir INSERT
 DROP POLICY IF EXISTS "Admins can insert products" ON products;
 CREATE POLICY "Admins can insert products"
 ON products FOR INSERT
+TO authenticated
 WITH CHECK (
-    EXISTS (
-        SELECT 1 FROM auth.users
-        WHERE auth.users.id = auth.uid()
-        AND auth.users.raw_user_meta_data->>'role' = 'admin'
-    )
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 
 -- Política para admins: permitir UPDATE
 DROP POLICY IF EXISTS "Admins can update products" ON products;
 CREATE POLICY "Admins can update products"
 ON products FOR UPDATE
+TO authenticated
 USING (
-    EXISTS (
-        SELECT 1 FROM auth.users
-        WHERE auth.users.id = auth.uid()
-        AND auth.users.raw_user_meta_data->>'role' = 'admin'
-    )
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 
 -- Política para admins: permitir DELETE
 DROP POLICY IF EXISTS "Admins can delete products" ON products;
 CREATE POLICY "Admins can delete products"
 ON products FOR DELETE
+TO authenticated
 USING (
-    EXISTS (
-        SELECT 1 FROM auth.users
-        WHERE auth.users.id = auth.uid()
-        AND auth.users.raw_user_meta_data->>'role' = 'admin'
-    )
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 
 -- ============================================
@@ -65,12 +57,9 @@ ALTER TABLE product_variants ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Admins can manage variants" ON product_variants;
 CREATE POLICY "Admins can manage variants"
 ON product_variants FOR ALL
+TO authenticated
 USING (
-    EXISTS (
-        SELECT 1 FROM auth.users
-        WHERE auth.users.id = auth.uid()
-        AND auth.users.raw_user_meta_data->>'role' = 'admin'
-    )
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 
 -- ============================================
@@ -82,12 +71,9 @@ ALTER TABLE product_images ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Admins can manage images" ON product_images;
 CREATE POLICY "Admins can manage images"
 ON product_images FOR ALL
+TO authenticated
 USING (
-    EXISTS (
-        SELECT 1 FROM auth.users
-        WHERE auth.users.id = auth.uid()
-        AND auth.users.raw_user_meta_data->>'role' = 'admin'
-    )
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 
 -- ============================================
@@ -99,12 +85,9 @@ ALTER TABLE product_categories ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Admins can manage product_categories" ON product_categories;
 CREATE POLICY "Admins can manage product_categories"
 ON product_categories FOR ALL
+TO authenticated
 USING (
-    EXISTS (
-        SELECT 1 FROM auth.users
-        WHERE auth.users.id = auth.uid()
-        AND auth.users.raw_user_meta_data->>'role' = 'admin'
-    )
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 
 -- ============================================
