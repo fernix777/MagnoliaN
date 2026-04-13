@@ -215,21 +215,19 @@ export async function createProduct(productData, imageFiles = []) {
 
         // Subir imágenes si hay
         if (imageFiles.length > 0) {
-            const uploadResults = await uploadMultipleImages(
+            const { urls, errors } = await uploadMultipleImages(
                 imageFiles,
                 'product-images',
                 `products/${product.id}`
             )
 
-            // Crear registros de imágenes
-            const imageRecords = uploadResults
-                .filter(result => !result.error)
-                .map((result, index) => ({
-                    product_id: product.id,
-                    image_url: result.url,
-                    display_order: index,
-                    is_primary: index === 0
-                }))
+            // Crear registros de imágenes (urls es un array de strings)
+            const imageRecords = urls.map((url, index) => ({
+                product_id: product.id,
+                image_url: url,
+                display_order: index,
+                is_primary: index === 0
+            }))
 
             if (imageRecords.length > 0) {
                 const { error: imagesError } = await supabase
@@ -399,21 +397,19 @@ export async function addProductImages(productId, imageFiles) {
             : 0
 
         // Subir imágenes
-        const uploadResults = await uploadMultipleImages(
+        const { urls } = await uploadMultipleImages(
             imageFiles,
             'product-images',
             `products/${productId}`
         )
 
-        // Crear registros
-        const imageRecords = uploadResults
-            .filter(result => !result.error)
-            .map((result, index) => ({
-                product_id: productId,
-                image_url: result.url,
-                display_order: startOrder + index,
-                is_primary: false
-            }))
+        // Crear registros (urls es array de strings)
+        const imageRecords = urls.map((url, index) => ({
+            product_id: productId,
+            image_url: url,
+            display_order: startOrder + index,
+            is_primary: false
+        }))
 
         const { data, error } = await supabase
             .from('product_images')
