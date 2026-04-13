@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { getProductById, createProduct, updateProduct } from '../../services/productService'
+import { getProductById, createProduct, updateProduct, addProductImages } from '../../services/productService'
 import { getCategories } from '../../services/categoryService'
 import ImageUploader from '../../components/admin/ImageUploader'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
@@ -318,17 +318,31 @@ export default function ProductForm() {
                 // Actualizar producto
                 result = await updateProduct(id, productData)
                 productId = id
+                
+                // Si hay imágenes nuevas, agregarlas
+                if (result.error) {
+                    throw result.error
+                }
+                
+                if (newImageFiles.length > 0) {
+                    console.log(`[DEBUG] Agregando ${newImageFiles.length} imágenes nuevas al producto ${productId}`)
+                    const { data: addedImages, error: imagesError } = await addProductImages(productId, newImageFiles)
+                    if (imagesError) {
+                        console.error('[DEBUG] Error agregando imágenes:', imagesError)
+                        toast.error('Producto actualizado pero error al agregar imágenes')
+                    } else {
+                        console.log('[DEBUG] Imágenes agregadas:', addedImages)
+                    }
+                }
             } else {
                 // Crear producto con imágenes
                 result = await createProduct(productData, newImageFiles)
                 productId = result.data?.id
+                
+                if (result.error) {
+                    throw result.error
+                }
             }
-
-            if (result.error) {
-                throw result.error
-            }
-
-
 
             toast.success(isEditing ? 'Producto actualizado' : 'Producto creado')
             navigate('/admin/products')
