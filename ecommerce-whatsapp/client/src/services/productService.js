@@ -215,11 +215,20 @@ export async function createProduct(productData, imageFiles = []) {
 
         // Subir imágenes si hay
         if (imageFiles.length > 0) {
+            console.log(`[DEBUG] Subiendo ${imageFiles.length} imágenes para producto ${product.id}`)
+            
             const { urls, errors } = await uploadMultipleImages(
                 imageFiles,
                 'product-images',
                 `products/${product.id}`
             )
+
+            console.log(`[DEBUG] URLs subidas: ${urls.length}, Errores: ${errors.length}`)
+            console.log('[DEBUG] URLs:', urls)
+            
+            if (errors.length > 0) {
+                console.error('[DEBUG] Errores al subir:', errors)
+            }
 
             // Crear registros de imágenes (urls es un array de strings)
             const imageRecords = urls.map((url, index) => ({
@@ -229,13 +238,23 @@ export async function createProduct(productData, imageFiles = []) {
                 is_primary: index === 0
             }))
 
+            console.log('[DEBUG] Registros a insertar:', imageRecords)
+
             if (imageRecords.length > 0) {
-                const { error: imagesError } = await supabase
+                const { data: insertedImages, error: imagesError } = await supabase
                     .from('product_images')
                     .insert(imageRecords)
+                    .select()
 
-                if (imagesError) console.error('Error saving images:', imagesError)
+                if (imagesError) {
+                    console.error('[DEBUG] Error saving images:', imagesError)
+                    throw new Error(`Error al guardar imágenes: ${imagesError.message}`)
+                } else {
+                    console.log('[DEBUG] Imágenes guardadas exitosamente:', insertedImages)
+                }
             }
+        } else {
+            console.log('[DEBUG] No hay imágenes para subir')
         }
 
         // Obtener producto completo con imágenes y variantes
