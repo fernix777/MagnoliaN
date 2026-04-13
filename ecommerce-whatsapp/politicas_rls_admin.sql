@@ -91,6 +91,34 @@ USING (
 );
 
 -- ============================================
+-- POLÍTICAS PARA TABLA product_images (ADMIN)
+-- ============================================
+
+DROP POLICY IF EXISTS "Admins can insert images" ON product_images;
+CREATE POLICY "Admins can insert images"
+ON product_images FOR INSERT
+TO authenticated
+WITH CHECK (
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
+);
+
+DROP POLICY IF EXISTS "Admins can update images" ON product_images;
+CREATE POLICY "Admins can update images"
+ON product_images FOR UPDATE
+TO authenticated
+USING (
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
+);
+
+DROP POLICY IF EXISTS "Admins can delete images" ON product_images;
+CREATE POLICY "Admins can delete images"
+ON product_images FOR DELETE
+TO authenticated
+USING (
+    (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
+);
+
+-- ============================================
 -- POLÍTICA PARA USUARIOS ANÓNIMOS/CLIENTES
 -- (Permitir ver productos activos)
 -- ============================================
