@@ -299,13 +299,16 @@ export async function updateProduct(id, productData) {
 
         // Actualizar variantes (Estrategia: Eliminar todas y crear nuevas)
         if (variants !== undefined) {
-            // 1. Eliminar variantes existentes
+            // 1. Eliminar variantes existentes PRIMERO
             const { error: deleteError } = await supabase
                 .from('product_variants')
                 .delete()
                 .eq('product_id', numericId)
+                .select()
 
-            if (deleteError) console.error('Error deleting old variants:', deleteError)
+            if (deleteError) {
+                console.error('Error deleting old variants:', deleteError)
+            }
 
             // 2. Insertar nuevas variantes (sin ID para evitar conflictos de PK)
             if (variants.length > 0) {
@@ -320,13 +323,22 @@ export async function updateProduct(id, productData) {
                     active: v.active !== undefined ? v.active : true
                 }))
 
+                console.log('[DEBUG] Variantes a insertar:', variantsToInsert)
+
                 const { error: variantsError } = await supabase
                     .from('product_variants')
                     .insert(variantsToInsert)
 
                 if (variantsError) {
                     console.error('Error updating variants:', variantsError)
-                    // No lanzamos error, continuamos sin variantes
+                    // Si hay error de duplicados, intentar con upsert
+                    if (variantsError.code === '23505') {
+                        console.log('[DEBUG] Intentando upsert como fallback...')
+                        const { error: upsertError } = await supabase
+                            .from('product_variants')
+                            .upsert(variantsToInsert, { onConflict: 'product_id,variant_value' })
+                        if (upsertError) console.error('Upsert también falló:', upsertError)
+                    }
                 }
             }
         }
