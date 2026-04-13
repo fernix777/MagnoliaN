@@ -451,10 +451,23 @@ export async function addProductImages(productId, imageFiles) {
             is_primary: false
         }))
 
-        const { data, error } = await supabase
+        console.log('[DEBUG] Registros de imágenes a insertar:', imageRecords)
+
+        let { data, error } = await supabase
             .from('product_images')
             .insert(imageRecords)
             .select()
+
+        // Si hay error de duplicado, intentar con upsert
+        if (error && error.code === '23505') {
+            console.log('[DEBUG] Error de duplicado, intentando upsert...')
+            const upsertResult = await supabase
+                .from('product_images')
+                .upsert(imageRecords, { onConflict: 'product_id,image_url' })
+                .select()
+            data = upsertResult.data
+            error = upsertResult.error
+        }
 
         if (error) throw error
 
