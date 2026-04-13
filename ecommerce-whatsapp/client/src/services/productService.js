@@ -453,25 +453,30 @@ export async function addProductImages(productId, imageFiles) {
 
         console.log('[DEBUG] Registros de imágenes a insertar:', imageRecords)
 
-        let { data, error } = await supabase
-            .from('product_images')
-            .insert(imageRecords)
-            .select()
-
-        // Si hay error de duplicado, intentar con upsert
-        if (error && error.code === '23505') {
-            console.log('[DEBUG] Error de duplicado, intentando upsert...')
-            const upsertResult = await supabase
+        // Insertar una imagen a la vez para manejar errores individualmente
+        const insertedImages = []
+        for (const record of imageRecords) {
+            console.log('[DEBUG] Insertando imagen:', record)
+            const { data: imgData, error: imgError } = await supabase
                 .from('product_images')
-                .upsert(imageRecords, { onConflict: 'product_id,image_url' })
+                .insert(record)
                 .select()
-            data = upsertResult.data
-            error = upsertResult.error
+                .single()
+            
+            if (imgError) {
+                console.error('[DEBUG] Error insertando imagen individual:', imgError)
+                // Si es error de duplicado, ignorar y continuar
+                if (imgError.code !== '23505') {
+                    throw imgError
+                }
+                console.log('[DEBUG] Ignorando duplicado, continuando...')
+            } else {
+                console.log('[DEBUG] Imagen insertada:', imgData)
+                insertedImages.push(imgData)
+            }
         }
 
-        if (error) throw error
-
-        return { data, error: null }
+        return { data: insertedImages, error: null }
     } catch (error) {
         console.error('Error adding product images:', error)
         return { data: null, error }
