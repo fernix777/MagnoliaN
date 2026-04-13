@@ -318,15 +318,27 @@ export async function updateProduct(id, productData) {
 
         // Actualizar variantes (Estrategia: Eliminar todas y crear nuevas)
         if (variants !== undefined) {
+            // 0. Verificar variantes existentes antes de eliminar
+            const { data: existingVariants, error: checkError } = await supabase
+                .from('product_variants')
+                .select('*')
+                .eq('product_id', numericId)
+            
+            console.log('[DEBUG] Variantes existentes antes de eliminar:', existingVariants?.length || 0)
+            if (checkError) console.error('[DEBUG] Error verificando variantes:', checkError)
+
             // 1. Eliminar variantes existentes PRIMERO
-            const { error: deleteError } = await supabase
+            console.log('[DEBUG] Eliminando variantes para producto:', numericId)
+            const { data: deletedVariants, error: deleteError } = await supabase
                 .from('product_variants')
                 .delete()
                 .eq('product_id', numericId)
                 .select()
 
             if (deleteError) {
-                console.error('Error deleting old variants:', deleteError)
+                console.error('[DEBUG] Error deleting old variants:', deleteError)
+            } else {
+                console.log('[DEBUG] Variantes eliminadas:', deletedVariants?.length || 0)
             }
 
             // 2. Insertar nuevas variantes (sin ID para evitar conflictos de PK)
