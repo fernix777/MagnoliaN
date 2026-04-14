@@ -12,10 +12,10 @@ export async function getTopSellingProductsPerCategory() {
     try {
         console.log('[DEBUG] Intentando obtener productos...')
         
-        // 1. Obtener productos con categorías
+        // 1. Obtener productos con categorías (especificando relación para evitar ambigüedad PGRST201)
         const { data: products, error: productsError } = await supabase
             .from('products')
-            .select('*, category:categories(id, name)')
+            .select('*, category:categories!products_category_id_fkey(id, name)')
             .eq('active', true)
             .order('created_at', { ascending: false })
             .limit(50)
@@ -108,7 +108,7 @@ export async function getFeaturedProducts(limit = 8) {
     try {
         const { data: products, error } = await supabase
             .from('products')
-            .select('*, category:categories(id, name)')
+            .select('*, category:categories!products_category_id_fkey(id, name)')
             .eq('active', true)
             .order('created_at', { ascending: false })
             .limit(limit)

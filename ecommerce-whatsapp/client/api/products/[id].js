@@ -30,14 +30,30 @@ export default async function handler(req, res) {
     }
 
     try {
-        // 1. Obtener imágenes antes de eliminar (para limpiar storage)
+        // 1. Desvincular manualmente el producto de las órdenes existentes
+        // Esto previene errores 23503 (FK violation) si el ON DELETE SET NULL no está configurado en la BD
+        const clearRes = await fetch(
+            `${supabaseUrl}/rest/v1/order_items?product_id=eq.${id}`,
+            { 
+                method: 'PATCH', 
+                headers,
+                body: JSON.stringify({ product_id: null }) 
+            }
+        )
+        
+        if (!clearRes.ok) {
+            console.warn('[DELETE product] Warning: Could not clear order_items references:', await clearRes.text())
+            // No bloqueamos el proceso, intentamos seguir
+        }
+
+        // 2. Obtener imágenes antes de eliminar (para limpiar storage)
         const imagesRes = await fetch(
             `${supabaseUrl}/rest/v1/product_images?product_id=eq.${id}&select=image_url`,
             { headers }
         )
         const images = imagesRes.ok ? await imagesRes.json() : []
 
-        // 2. Eliminar el producto (ON DELETE SET NULL en order_items funciona con service key)
+        // 3. Eliminar el producto
         const deleteRes = await fetch(
             `${supabaseUrl}/rest/v1/products?id=eq.${id}`,
             { method: 'DELETE', headers }
