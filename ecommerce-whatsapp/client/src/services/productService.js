@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase'
-import { uploadImage, deleteImage, extractPathFromUrl, uploadMultipleImages } from './vercelBlobService'
+import { uploadImage, deleteImage, uploadMultipleImages } from './vercelBlobService'
 
 /**
  * Servicio para gestión de productos
@@ -127,7 +127,13 @@ export async function getProductById(id) {
             .select('*')
             .eq('product_id', id)
 
-        // Cargar categoría
+        // Cargar todas las categorías asignadas desde la tabla puente
+        const { data: productCategories } = await supabase
+            .from('product_categories')
+            .select('category_id, subcategory_id')
+            .eq('product_id', id)
+
+        // Cargar categoría principal (para compatibilidad)
         const { data: category } = product.category_id ? await supabase
             .from('categories')
             .select('id, name')
@@ -140,7 +146,8 @@ export async function getProductById(id) {
                 ...product,
                 images: images || [],
                 variants: variants || [],
-                category: category || null
+                category: category || null,
+                product_categories: productCategories || []
             }, 
             error: null 
         }
@@ -164,21 +171,48 @@ export async function createProduct(productData, imageFiles = []) {
         // Separar variantes y categorías de los datos del producto
         const { variants, categories: productCategories, ...productFields } = productData
 
-        // Crear producto
-        const { data: product, error: productError } = await supabase
-            .from('products')
-            .insert([{
-                ...productFields,
-                slug
-            }])
-            .select()
-            .single()
+        let finalSlug = slug
+        let product, productError
 
-        if (productError) throw productError
+        // Intentar insertar (con lógica de reintento para el slug si es necesario)
+        const maxRetries = 3
+        let retries = 0
 
-        // Guardar categorías adicionales si existen
+        while (retries < maxRetries) {
+            const { data, error } = await supabase
+                .from('products')
+                .insert([{
+                    ...productFields,
+                    slug: finalSlug
+                }])
+                .select()
+                .single()
+
+            if (error) {
+                // Si es un error de duplicado (23505) y es el campo slug
+                if (error.code === '23505' && error.message.includes('slug')) {
+                    console.log(`[DEBUG] Slug colisión detectada: ${finalSlug}. Reintentando...`)
+                    finalSlug = `${slug}-${Math.random().toString(36).substr(2, 5)}`
+                    retries++
+                    continue
+                }
+                throw error
+            }
+
+            product = data
+            break
+        }
+
+        if (!product) throw new Error('No se pudo crear el producto después de varios reintentos de slug')
+
+        // Guardar categorías adicionales si existen (Deduplicadas)
         if (productCategories && productCategories.length > 0) {
-            const categoriesToInsert = productCategories.map(c => ({
+            // Filtrar IDs duplicados para evitar error de PK
+            const uniqueCategories = productCategories.filter((v, index, self) =>
+                index === self.findIndex(t => t.category_id === v.category_id)
+            )
+
+            const categoriesToInsert = uniqueCategories.map(c => ({
                 product_id: product.id,
                 category_id: c.category_id,
                 subcategory_id: c.subcategory_id || null
@@ -300,12 +334,17 @@ export async function updateProduct(id, productData) {
             
             if (deleteCatError) console.error('Error deleting old product categories:', deleteCatError)
 
-            // 2. Insertar nuevas categorías
+            // 2. Insertar nuevas categorías (Deduplicadas)
             if (productCategories.length > 0) {
-                const categoriesToInsert = productCategories.map(c => ({
+                // Filtrar IDs duplicados para evitar error de PK
+                const uniqueCategories = productCategories.filter((v, index, self) =>
+                    index === self.findIndex(t => Number(t.category_id) === Number(v.category_id))
+                )
+
+                const categoriesToInsert = uniqueCategories.map(c => ({
                     product_id: numericId,
-                    category_id: c.category_id,
-                    subcategory_id: c.subcategory_id || null
+                    category_id: Number(c.category_id),
+                    subcategory_id: c.subcategory_id ? Number(c.subcategory_id) : null
                 }))
 
                 const { error: insertCatError } = await supabase
@@ -400,33 +439,66 @@ export async function updateProduct(id, productData) {
  */
 export async function deleteProduct(id) {
     try {
-        // Obtener imágenes del producto
-        const { data: images } = await supabase
-            .from('product_images')
-            .select('image_url')
-            .eq('product_id', id)
-
-        // Eliminar imágenes del storage
-        if (images && images.length > 0) {
-            for (const image of images) {
-                const path = extractPathFromUrl(image.image_url, 'product-images')
-                if (path) {
-                    await deleteImage('product-images', path)
-                }
-            }
-        }
-
-        // Eliminar producto (las imágenes y variantes se eliminan por CASCADE)
+        // Intentar eliminación directa vía Supabase cliente (anon key)
         const { error } = await supabase
             .from('products')
             .delete()
             .eq('id', id)
 
-        if (error) throw error
+        // Si hay error de FK/RLS (409 o código 23503), usado el endpoint serverless
+        // que tiene service_role key y puede bypassear las RLS policies.
+        // La FK order_items.product_id tiene ON DELETE SET NULL en el schema,
+        // así que Supabase pone product_id=null automáticamente.
+        if (error) {
+            const isConstraintError =
+                error.code === '23503' ||
+                error.code === '409' ||
+                error.status === 409 ||
+                (error.details || '').includes('foreign key') ||
+                (error.message || '').includes('foreign key') ||
+                (error.message || '').includes('violates')
+
+            if (isConstraintError) {
+                console.log('[deleteProduct] Usando endpoint serverless para bypassear RLS...')
+                return await deleteProductViaAPI(id)
+            }
+            throw error
+        }
 
         return { success: true, error: null }
     } catch (error) {
         console.error('Error deleting product:', error)
+        return { success: false, error }
+    }
+}
+
+/**
+ * Elimina producto usando la API serverless /api/products/:id (service_role key)
+ * Necesario cuando el cliente anon no puede bypassear RLS para el ON DELETE SET NULL
+ */
+async function deleteProductViaAPI(id) {
+    try {
+        const response = await fetch(`/api/products/${id}`, {
+            method: 'DELETE'
+        })
+
+        if (!response.ok) {
+            const err = await response.json()
+            throw new Error(err.error || `Error ${response.status} al eliminar producto`)
+        }
+
+        const result = await response.json()
+
+        // Limpiar imágenes de Vercel Blob si las devuelve el servidor
+        if (result.imageUrls?.length > 0) {
+            for (const url of result.imageUrls) {
+                await deleteImage(url)
+            }
+        }
+
+        return { success: true, error: null }
+    } catch (error) {
+        console.error('[deleteProductViaAPI] Error:', error)
         return { success: false, error }
     }
 }
@@ -512,21 +584,18 @@ export async function deleteProductImage(imageId) {
             .eq('id', imageId)
             .single()
 
-        if (image) {
-            // Eliminar del storage
-            const path = extractPathFromUrl(image.image_url, 'product-images')
-            if (path) {
-                await deleteImage('product-images', path)
-            }
-        }
-
-        // Eliminar registro
+        // Eliminar registro de BD primero
         const { error } = await supabase
             .from('product_images')
             .delete()
             .eq('id', imageId)
 
         if (error) throw error
+
+        // Luego limpiar del storage (vercelBlobService recibe URL directamente)
+        if (image?.image_url) {
+            await deleteImage(image.image_url)
+        }
 
         return { success: true, error: null }
     } catch (error) {

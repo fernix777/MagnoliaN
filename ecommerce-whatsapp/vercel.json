@@ -9,5 +9,11 @@
   "domains": [
     "www.magnolia-n.com",
     "magnolia-n.com"
+  ],
+  "rewrites": [
+    {
+      "source": "/feed.xml",
+      "destination": "/api/feed.xml"
+    }
   ]
 }

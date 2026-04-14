@@ -79,10 +79,17 @@ export default function Products() {
     }
 
     const handleDeleteConfirm = async () => {
-        const { success, error } = await deleteProduct(deleteDialog.product.id)
+        const { success, deactivated, error } = await deleteProduct(deleteDialog.product.id)
 
         if (success) {
-            toast.success('Producto eliminado')
+            if (deactivated) {
+                toast('Producto desactivado (tiene órdenes asociadas)', {
+                    icon: '⚠️',
+                    style: { background: '#fff8e1', color: '#5d4037' }
+                })
+            } else {
+                toast.success('Producto eliminado')
+            }
             loadProducts()
         } else {
             toast.error('Error al eliminar producto')

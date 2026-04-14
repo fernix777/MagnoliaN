@@ -51,21 +51,27 @@ export async function uploadImage(file, folder, customName = null) {
  */
 export async function deleteImage(url) {
     try {
-        // Extraer path de la URL
-        const urlObj = new URL(url)
-        const path = urlObj.pathname.substring(1) // Quitar el primer /
+        if (!url) return { success: true, error: null }
+
+        console.log(`🗑️ Eliminando imagen de Vercel Blob: ${url}`)
         
-        console.log(`🗑️ Eliminando imagen: ${path}`)
-        
-        // Vercel Blob no tiene delete directo en el cliente
-        // Esto se debe hacer desde el servidor o usando API routes
-        // Por ahora, solo logueamos la eliminación
-        console.log(`⚠️  Nota: La eliminación se debe implementar en el servidor`)
+        const response = await fetch('/api/delete-blob', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url })
+        })
+
+        if (!response.ok) {
+            const err = await response.json()
+            throw new Error(err.error || 'Error al eliminar la imagen en el servidor')
+        }
         
         return { success: true, error: null }
         
     } catch (error) {
-        console.error('❌ Error eliminando imagen:', error)
+        console.error('❌ Error eliminando imagen de Vercel Blob:', error)
         return { success: false, error }
     }
 }

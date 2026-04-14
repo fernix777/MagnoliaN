@@ -12,10 +12,10 @@ export async function getTopSellingProductsPerCategory() {
     try {
         console.log('[DEBUG] Intentando obtener productos...')
         
-        // 1. Obtener productos
+        // 1. Obtener productos con categorías
         const { data: products, error: productsError } = await supabase
             .from('products')
-            .select('*')
+            .select('*, category:categories(id, name)')
             .eq('active', true)
             .order('created_at', { ascending: false })
             .limit(50)
@@ -108,7 +108,7 @@ export async function getFeaturedProducts(limit = 8) {
     try {
         const { data: products, error } = await supabase
             .from('products')
-            .select('*')
+            .select('*, category:categories(id, name)')
             .eq('active', true)
             .order('created_at', { ascending: false })
             .limit(limit)
@@ -165,7 +165,7 @@ export async function getActiveCategories() {
  */
 export async function getProductsByCategory(categorySlug, options = {}) {
     try {
-        // Primero obtener la categoría
+        // 1. Obtener la categoría
         const { data: category } = await supabase
             .from('categories')
             .select('id')
@@ -177,12 +177,29 @@ export async function getProductsByCategory(categorySlug, options = {}) {
             return { data: [], error: null }
         }
 
+        // 2. Obtener productos vinculados a esta categoría (vía tabla puente o campo directo)
+        // Usamos una consulta que traiga los productos que tengan este category_id en cualquiera de los dos lugares
+        const { data: pCatData, error: pCatError } = await supabase
+            .from('product_categories')
+            .select('product_id')
+            .eq('category_id', category.id)
+
+        const linkedProductIds = (pCatData || []).map(pc => pc.product_id)
+        
+        // También incluimos los que tengan el category_id directo en la tabla products (compatibilidad)
+        // Construimos un query OR o buscamos por lista de IDs
         let query = supabase
             .from('products')
             .select('*')
             .eq('active', true)
-            .eq('category_id', category.id)
-            .order('created_at', { ascending: false })
+
+        if (linkedProductIds.length > 0) {
+            query = query.or(`category_id.eq.${category.id},id.in.(${linkedProductIds.join(',')})`)
+        } else {
+            query = query.eq('category_id', category.id)
+        }
+
+        query = query.order('created_at', { ascending: false })
 
         if (options.limit) {
             query = query.limit(options.limit)

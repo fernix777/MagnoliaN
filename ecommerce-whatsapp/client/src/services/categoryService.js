@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase'
-import { uploadImage, deleteImage, extractPathFromUrl } from './vercelBlobService'
+import { uploadImage, deleteImage } from './vercelBlobService'
 
 /**
  * Servicio para gestión de categorías
@@ -117,21 +117,16 @@ export async function updateCategory(id, categoryData, imageFile = null) {
 
         // Si hay nueva imagen, subir y eliminar la anterior
         if (imageFile) {
+            // Eliminar imagen anterior del storage (solo si existe)
             if (currentImageUrl) {
-                const oldPath = extractPathFromUrl(currentImageUrl, 'category-images')
-                if (oldPath) {
-                    await deleteImage('category-images', oldPath)
-                }
+                await deleteImage(currentImageUrl)
             }
 
             const uploadResult = await uploadImage(imageFile, 'category-images', 'categories')
             if (uploadResult.error) throw uploadResult.error
             imageUrl = uploadResult.url
         } else if (removeImage && currentImageUrl) {
-            const oldPath = extractPathFromUrl(currentImageUrl, 'category-images')
-            if (oldPath) {
-                await deleteImage('category-images', oldPath)
-            }
+            await deleteImage(currentImageUrl)
             imageUrl = null
         }
 
@@ -171,10 +166,7 @@ export async function deleteCategory(id) {
 
         // Eliminar imagen si existe
         if (category?.image_url) {
-            const path = extractPathFromUrl(category.image_url, 'category-images')
-            if (path) {
-                await deleteImage('category-images', path)
-            }
+            await deleteImage(category.image_url)
         }
 
         const { error } = await supabase
