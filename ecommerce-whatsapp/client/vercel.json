@@ -5,6 +5,10 @@
             "destination": "/api/feed.xml"
         },
         {
+            "source": "/api/facebook/:action",
+            "destination": "/api/fb-events?action=:action"
+        },
+        {
             "source": "/api/(.*)",
             "destination": "/api/$1"
         },
