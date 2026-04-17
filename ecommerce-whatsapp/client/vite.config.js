@@ -21,8 +21,9 @@ export default defineConfig({
                 manualChunks: {
                     // Separar librerías grandes en chunks propios
                     'vendor': ['react', 'react-dom', 'react-router-dom'],
-                    'ui': ['@headlessui/react', '@heroicons/react'],
-                    'utils': ['date-fns', 'lodash']
+                    'react-libs': ['react-dropzone', 'react-helmet-async', 'react-hot-toast', 'react-icons'],
+                    'supabase': ['@supabase/supabase-js'],
+                    'vercel': ['@vercel/analytics', '@vercel/blob']
                 }
             }
         },
