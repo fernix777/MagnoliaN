@@ -12,5 +12,27 @@ export default defineConfig({
                 changeOrigin: true,
             }
         }
+    },
+    build: {
+        // Reducir tamaño de chunks para menor cache egress
+        chunkSizeWarningLimit: 500,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    // Separar librerías grandes en chunks propios
+                    'vendor': ['react', 'react-dom', 'react-router-dom'],
+                    'ui': ['@headlessui/react', '@heroicons/react'],
+                    'utils': ['date-fns', 'lodash']
+                }
+            }
+        },
+        // Minificar más agresivamente
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true,
+                drop_debugger: true
+            }
+        }
     }
 })
