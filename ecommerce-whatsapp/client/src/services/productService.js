@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase'
-import { uploadImage, deleteImage, uploadMultipleImages } from './vercelBlobService'
+import { uploadImage, deleteImage, uploadMultipleImages } from './supabaseStorageService'
 
 /**
  * Servicio para gestión de productos
@@ -91,7 +91,13 @@ export async function getProducts(filters = {}, signal) {
 
         return { data: productsWithRelations, error: null }
     } catch (error) {
-        if (error.code === 20 || error.name === 'AbortError') {
+        // Ignorar errores de aborto (suceden cuando el usuario escribe rápido en el buscador)
+        if (
+            error.code === 20 || 
+            error.name === 'AbortError' || 
+            error.message?.includes('AbortError') ||
+            error.message?.includes('aborted')
+        ) {
             return { data: [], error: null }
         }
         console.error('Error fetching products:', error)
@@ -254,7 +260,7 @@ export async function createProduct(productData, imageFiles = []) {
             const { urls, errors } = await uploadMultipleImages(
                 imageFiles,
                 'product-images',
-                `products/${product.id}`
+                `${product.id}`
             )
 
             console.log(`[DEBUG] URLs subidas: ${urls.length}, Errores: ${errors.length}`)
@@ -527,7 +533,7 @@ export async function addProductImages(productId, imageFiles) {
         const { urls } = await uploadMultipleImages(
             imageFiles,
             'product-images',
-            `products/${productId}`
+            `${productId}`
         )
 
         // Crear registros (urls es array de strings)
