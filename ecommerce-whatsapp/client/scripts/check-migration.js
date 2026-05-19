@@ -3,11 +3,24 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const supabaseUrl = 'https://prymijhlpoeqhihztuwl.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByeW1pamhscG9lcWhpaHp0dXdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2Mzk3MDUsImV4cCI6MjA3OTIxNTcwNX0.xn29dwZNae71amG8Y_2RgE3ZPCbCqrTzKSFBNxDARgk';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+dotenv.config({ path: join(__dirname, '..', '.env') });
+dotenv.config({ path: join(__dirname, '..', '.env.production') });
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+
+if (!supabaseUrl) {
+  console.error('ERROR: Faltan credenciales en .env');
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, undefined);
 
 async function checkMigrationStatus() {
     console.log('🔍 Verificando estado de la migración...\n');

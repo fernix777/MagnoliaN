@@ -29,10 +29,15 @@ export default function Products() {
     }, [])
 
     useEffect(() => {
-        const controller = new AbortController()
-        loadProducts(controller.signal)
+        // Debounce de 300ms para evitar saturar el servidor y generar AbortErrors innecesarios
+        const timer = setTimeout(() => {
+            const controller = new AbortController()
+            loadProducts(controller.signal)
+            
+            return () => controller.abort()
+        }, 300)
 
-        return () => controller.abort()
+        return () => clearTimeout(timer)
     }, [filters])
 
     const loadCategories = async () => {
@@ -45,8 +50,17 @@ export default function Products() {
         const { data, error } = await getProducts(filters, signal)
 
         if (error) {
-            toast.error('Error al cargar productos')
-            console.error(error)
+            // Silencio total para cancelaciones de red (suceden al escribir rápido)
+            const isAbortError = 
+                error.name === 'AbortError' || 
+                error.code === 20 || 
+                error.message?.includes('aborted') ||
+                error.message?.includes('AbortError');
+
+            if (!isAbortError) {
+                toast.error('Error al cargar productos')
+                console.error('Error real al cargar productos:', error)
+            }
         } else if (data) {
             // Only update if not aborted (data comes back as empty array on abort but we should verify signal if possible, 
             // but since service returns empty array on abort, we rely on component mounted state or signal check)

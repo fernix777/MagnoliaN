@@ -15,7 +15,10 @@
   <meta name="description"
     content="Cotillón LED, Tecnología y Decoración única en Magnolia-N. Envíos directos en San Salvador de Jujuy y Buenos Aires. ¡Potencia tus fiestas y eventos hoy!" />
   <meta name="keywords"
-    content="cotillón LED, tecnología, decoración, regalos, Jujuy, Buenos Aires, Argentina, tienda cotillon" />
+    content="cotillón LED, tecnología, decoración, regalos, Jujuy, Buenos Aires, Argentina, tienda cotillon, fiesta led, decoracion tecnologica" />
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://www.magnolia-n.com/" />
   
   <!-- Google Site Verification -->
   <meta name="google-site-verification" content="google4ecbfb762c82a2aa" />
@@ -70,7 +73,7 @@
         "@id": "https://www.magnolia-n.com/#business",
         "name": "Magnolia-N",
         "image": "https://www.magnolia-n.com/logo.jpg",
-        "description": "Tienda de cotillón LED, tecnología y decoración en San Salvador de Jujuy y Buenos Aires, Argentina.",
+        "description": "Tienda de cotillón LED, tecnología y decoración en San Salvador de Jujuy y Buenos Aires, Argentina. Especialistas en iluminación LED para fiestas y eventos.",
         "url": "https://www.magnolia-n.com/",
         "telephone": "+543885171795",
         "email": "magnolianovedades56@gmail.com",
@@ -107,7 +110,29 @@
         ],
         "priceRange": "$$",
         "currenciesAccepted": "ARS",
-        "paymentAccepted": "Cash, Transfer"
+        "paymentAccepted": "Cash, Transfer",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Catálogo de Productos",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Cotillón LED",
+                "category": "Iluminación para Fiestas"
+              }
+            },
+            {
+              "@type": "Offer", 
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Decoración Tecnológica",
+                "category": "Decoración para Eventos"
+              }
+            }
+          ]
+        }
       },
       {
         "@type": "Organization",
@@ -130,18 +155,39 @@
         "sameAs": [
           "https://www.instagram.com/magnolia_novedades/",
           "https://www.facebook.com/magnolianove"
-        ]
+        ],
+        "foundingDate": "2020",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Argentina"
+        }
       },
       {
         "@type": "WebSite",
         "@id": "https://www.magnolia-n.com/#website",
         "url": "https://www.magnolia-n.com/",
         "name": "Magnolia-N",
-        "description": "Cotillón LED y Tecnología en Jujuy y Buenos Aires",
+        "description": "Cotillón LED y Tecnología en Jujuy y Buenos Aires - Tienda especializada en iluminación y decoración para fiestas",
         "publisher": {
           "@id": "https://www.magnolia-n.com/#organization"
         },
-        "inLanguage": "es-AR"
+        "inLanguage": "es-AR",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.magnolia-n.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://www.magnolia-n.com/"
+          }
+        ]
       }
     ]
   }

@@ -8,6 +8,9 @@ import { fileURLToPath } from 'url';
 import facebookRoutes from './routes/facebook.js';
 import authRoutes from './routes/auth.js';
 import ordersRoutes from './routes/orders.js';
+import shippingRoutes from './routes/shipping.js';
+import correoRoutes from './routes/correo.js';
+import viaCargoRoutes from './routes/via-cargo.js';
 
 // Configuración
 dotenv.config({ override: true });
@@ -44,6 +47,11 @@ app.use('/api/auth', authRoutes);
 
 // Registrar rutas de pedidos
 app.use('/api/orders', ordersRoutes);
+
+// Registrar rutas de envíos
+app.use('/api/shipping', shippingRoutes);
+app.use('/api/correo', correoRoutes);
+app.use('/api/via-cargo', viaCargoRoutes);
 
 // Manejo de errores global
 app.use((err, req, res, next) => {

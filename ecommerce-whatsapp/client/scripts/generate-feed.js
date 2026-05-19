@@ -11,9 +11,9 @@ dotenv.config({ path: '.env' });
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Conectar a Supabase - PROYECTO NUEVO
-const supabaseUrl = 'https://dsovrmquhgkquqsvkptc.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzb3ZybXF1aGdrcXVxc3ZrcHRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MzcyNTIsImV4cCI6MjA5MTUxMzI1Mn0.BYHmFiUuuvZaAUNXINKiqSt4TMYoSDQUFd_HyDx-H7A';
+// Conectar a Supabase - PROYECTO FUNCIONAL
+const supabaseUrl = 'https://dqewyrotzskpbymecntt.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxZXd5cm90enNrcGJ5bWVjbnR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMDA0NDAsImV4cCI6MjA5NDY3NjQ0MH0.23oKKutBsAHJG8Pz-FkP53ArsKVjY_Kq9wm9K4oGpyE';
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 

@@ -34,7 +34,11 @@ export default function ProductForm() {
         has_colors: true,
         sale_types: ['unidad', 'paquete', 'bulto'],
         variants: [],
-        categories: [] // [{ category_id, subcategory_id }]
+        categories: [], // [{ category_id, subcategory_id }]
+        weight_g: '',
+        height_cm: '',
+        width_cm: '',
+        length_cm: ''
     })
 
     const [images, setImages] = useState([])
@@ -103,7 +107,11 @@ export default function ProductForm() {
             has_colors: data.has_colors ?? true,
             sale_types: data.sale_types || ['unidad', 'paquete', 'bulto'],
             variants: variants,
-            categories: productCategories
+            categories: productCategories,
+            weight_g: data.weight_g || '',
+            height_cm: data.height_cm || '',
+            width_cm: data.width_cm || '',
+            length_cm: data.length_cm || ''
         })
 
         // Cargar imágenes existentes
@@ -240,6 +248,10 @@ export default function ProductForm() {
         if (!formData.base_price || Number(formData.base_price) <= 0) {
             newErrors.base_price = 'El precio debe ser mayor a 0'
         }
+        
+        if (!formData.weight_g || Number(formData.weight_g) <= 0) {
+            newErrors.weight_g = 'El peso es requerido (en gramos)'
+        }
 
         if (!formData.categories || formData.categories.length === 0) {
             newErrors.categories = 'Selecciona al menos una categoría'
@@ -292,6 +304,10 @@ export default function ProductForm() {
                 price_bundle: formData.price_bundle ? Number(formData.price_bundle) : null,
                 has_colors: formData.has_colors,
                 sale_types: formData.sale_types,
+                weight_g: formData.weight_g ? Number(formData.weight_g) : null,
+                height_cm: formData.height_cm ? Number(formData.height_cm) : null,
+                width_cm: formData.width_cm ? Number(formData.width_cm) : null,
+                length_cm: formData.length_cm ? Number(formData.length_cm) : null,
                 // Usar las variantes de formData
                 variants: formData.has_colors && formData.variants && formData.variants.length > 0
                     ? formData.variants.map(v => ({
@@ -709,6 +725,70 @@ export default function ProductForm() {
                         </div>
                         {errors.sale_types && <span className="error-text">{errors.sale_types}</span>}
                     </div>
+                </section>
+
+                {/* Envíos / Logística */}
+                <section className="form-section">
+                    <h2>Logística y Envíos</h2>
+                    <p className="section-description">Datos necesarios para el cálculo de costos de envío (Correo Argentino, Vía Cargo).</p>
+                    
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="weight_g">Peso (g) *</label>
+                            <input
+                                id="weight_g"
+                                name="weight_g"
+                                type="number"
+                                value={formData.weight_g}
+                                onChange={handleChange}
+                                className={errors.weight_g ? 'error' : ''}
+                                disabled={saving}
+                                placeholder="Ej: 500"
+                            />
+                            {errors.weight_g && <span className="error-text">{errors.weight_g}</span>}
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="height_cm">Alto (cm)</label>
+                            <input
+                                id="height_cm"
+                                name="height_cm"
+                                type="number"
+                                value={formData.height_cm}
+                                onChange={handleChange}
+                                disabled={saving}
+                                placeholder="Ej: 10"
+                            />
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="width_cm">Ancho (cm)</label>
+                            <input
+                                id="width_cm"
+                                name="width_cm"
+                                type="number"
+                                value={formData.width_cm}
+                                onChange={handleChange}
+                                disabled={saving}
+                                placeholder="Ej: 20"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="length_cm">Largo (cm)</label>
+                            <input
+                                id="length_cm"
+                                name="length_cm"
+                                type="number"
+                                value={formData.length_cm}
+                                onChange={handleChange}
+                                disabled={saving}
+                                placeholder="Ej: 30"
+                            />
+                        </div>
+                    </div>
+                    <small style={{ color: 'var(--gray)', display: 'block', marginTop: '-10px', marginBottom: '20px' }}>
+                        Nota: Las dimensiones en centímetros son obligatorias si utilizas Correo Argentino.
+                    </small>
                 </section>
 
                 {/* Configuración General */}

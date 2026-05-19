@@ -1,22 +1,23 @@
 -- ==========================================
 -- CREAR BUCKETS PARA SUPABASE STORAGE
+-- Proyecto: coadlejoezzjvqwhbuqc
 -- Ejecutar en Supabase Dashboard > SQL Editor
 -- ==========================================
 
 -- 1. Crear bucket: product-images
 INSERT INTO storage.buckets (id, name, public, file_size_limit)
 VALUES ('product-images', 'product-images', true, 10485760)
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET file_size_limit = EXCLUDED.file_size_limit;
 
 -- 2. Crear bucket: banners
 INSERT INTO storage.buckets (id, name, public, file_size_limit)
 VALUES ('banners', 'banners', true, 10485760)
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET file_size_limit = EXCLUDED.file_size_limit;
 
--- 3. Crear bucket: category-images (para mantener compatibilidad)
+-- 3. Crear bucket: category-images
 INSERT INTO storage.buckets (id, name, public, file_size_limit)
 VALUES ('category-images', 'category-images', true, 10485760)
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET file_size_limit = EXCLUDED.file_size_limit;
 
 -- ==========================================
 -- POLÍTICAS DE SEGURIDAD PARA product-images
@@ -33,7 +34,7 @@ DROP POLICY IF EXISTS "Admin Insert Product Images" ON storage.objects;
 CREATE POLICY "Admin Insert Product Images"
 ON storage.objects FOR INSERT
 WITH CHECK (
-    bucket_id = 'product-images' 
+    bucket_id = 'product-images'
     AND (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 
@@ -70,7 +71,7 @@ DROP POLICY IF EXISTS "Admin Insert Banners" ON storage.objects;
 CREATE POLICY "Admin Insert Banners"
 ON storage.objects FOR INSERT
 WITH CHECK (
-    bucket_id = 'banners' 
+    bucket_id = 'banners'
     AND (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 
@@ -107,7 +108,7 @@ DROP POLICY IF EXISTS "Admin Insert Category Images" ON storage.objects;
 CREATE POLICY "Admin Insert Category Images"
 ON storage.objects FOR INSERT
 WITH CHECK (
-    bucket_id = 'category-images' 
+    bucket_id = 'category-images'
     AND (auth.jwt() -> 'user_metadata' ->> 'role') = 'admin'
 );
 

@@ -1,0 +1,23 @@
+# robots.txt para Magnolia-N
+# https://www.magnolia-n.com/
+
+User-agent: *
+Allow: /
+
+# Bloquear áreas administrativas y privadas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /.well-known/
+Disallow: /temp/
+
+# Permitir recursos necesarios para renderizado
+Allow: /src/
+Allow: /public/
+Allow: /assets/
+
+# Sitemap
+Sitemap: https://www.magnolia-n.com/sitemap.xml
+
+# Delay para crawlers (opcional)
+Crawl-delay: 1
