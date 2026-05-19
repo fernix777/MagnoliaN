@@ -28,12 +28,12 @@ export default defineConfig({
             }
         },
         // Minificar más agresivamente
-        minify: 'terser',
-        terserOptions: {
-            compress: {
-                drop_console: true,
-                drop_debugger: true
-            }
+    minify: 'terser',
+    terserOptions: {
+        compress: {
+            drop_console: false,
+            drop_debugger: false
         }
+    }
     }
 })

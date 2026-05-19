@@ -98,9 +98,7 @@ export default function Dashboard() {
                     <Link to="/admin/customers" className="nav-item">
                         <span>👥</span> Clientes
                     </Link>
-                    <Link to="/admin/via-cargo" className="nav-item">
-                        <span>🚚</span> Tarifas Vía Cargo
-                    </Link>
+                    {/* OCULTO: <Link to="/admin/via-cargo" className="nav-item"><span>🚚</span> Tarifas Vía Cargo</Link> */}
                 </nav>
 
                 <div className="sidebar-footer">

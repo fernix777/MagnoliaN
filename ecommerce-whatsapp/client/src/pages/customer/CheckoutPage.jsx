@@ -219,8 +219,6 @@ export default function CheckoutPage() {
                 })),
                 total: cartTotal,
                 paymentMethod,
-                shipping_method: shippingMethod,
-                shipping_cost: shippingCost,
                 user_id: user?.id || createdUser?.id
             }
 
@@ -291,9 +289,8 @@ export default function CheckoutPage() {
                     }
                 })
                 
-                message += `\n📦 *Método de Envío:* ${shippingMethod === 'via_cargo' ? 'Vía Cargo (Pago en Destino)' : 'Correo Argentino (Pago Adelantado)'}\n`
-                message += `💰 *Costo de Envío:* ${shippingMethod === 'via_cargo' ? '$0 (Paga en destino)' : '$' + shippingCost.toLocaleString('es-AR')}\n`
-                message += `✅ *TOTAL FINAL A PAGAR:* $${(cartTotal + shippingCost).toLocaleString('es-AR')}\n`
+                message += `📦 *Concepto:* Venta online\n`
+                message += `✅ *TOTAL A PAGAR:* $${cartTotal.toLocaleString('es-AR')}\n`
                 message += `ID de Orden: ${orderId}\n`
                 message += '¡Hola! Quisiera confirmar este pedido.'
 
@@ -369,13 +366,9 @@ export default function CheckoutPage() {
                                 <span>Subtotal:</span>
                                 <span>${cartTotal.toLocaleString('es-AR')}</span>
                             </div>
-                            <div className="total-row">
-                                <span>Envío:</span>
-                                <span>{shippingMethod === 'via_cargo' ? '$0.00 (A pagar en destino)' : (correoRateLoading ? 'Calculando...' : `$${shippingCost.toLocaleString('es-AR')}`)}</span>
-                            </div>
                             <div className="total-row final">
                                 <span>Total:</span>
-                                <span>${(cartTotal + shippingCost).toLocaleString('es-AR')}</span>
+                                <span>${cartTotal.toLocaleString('es-AR')}</span>
                             </div>
                         </div>
                     </div>
@@ -551,7 +544,7 @@ export default function CheckoutPage() {
                                 </div>
                             </div>
 
-                            {/* Método de Envío */}
+                            {/* OCULTO - Módulo de envíos deshabilitado
                             <div className="form-section shipping-section">
                                 <h3>Método de Envío</h3>
                                 <div className="payment-options">
@@ -596,6 +589,7 @@ export default function CheckoutPage() {
                                     </label>
                                 </div>
                             </div>
+                            */}
 
                             {/* Método de pago - Solo WhatsApp */}
                             <div className="form-section payment-section">

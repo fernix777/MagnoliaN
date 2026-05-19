@@ -40,21 +40,21 @@ export default function Orders() {
         } else {
             toast.success(`Pedido marcado como ${newStatus === 'completed' ? 'completado' : newStatus}`)
             
-            // Si se completó y es correo argentino, generar y abrir etiqueta
-            if (newStatus === 'completed' && order && order.shipping_method === 'correo_argentino') {
-                try {
-                    const labelToast = toast.loading('Generando etiqueta de envío...');
-                    const res = await fetch(`/api/correo/etiqueta/${order.id}`, { method: 'POST' });
-                    const data = await res.json();
-                    toast.dismiss(labelToast);
-                    if (data.url) {
-                        toast.success('Etiqueta generada con éxito');
-                        window.open(data.url, '_blank');
-                    }
-                } catch(e) {
-                    toast.error('Error generando etiqueta');
-                }
-            }
+            // OCULTO - Si se completó y es correo argentino, generar y abrir etiqueta
+            // if (newStatus === 'completed' && order && order.shipping_method === 'correo_argentino') {
+            //     try {
+            //         const labelToast = toast.loading('Generando etiqueta de envío...');
+            //         const res = await fetch(`/api/correo/etiqueta/${order.id}`, { method: 'POST' });
+            //         const data = await res.json();
+            //         toast.dismiss(labelToast);
+            //         if (data.url) {
+            //             toast.success('Etiqueta generada con éxito');
+            //             window.open(data.url, '_blank');
+            //         }
+            //     } catch(e) {
+            //         toast.error('Error generando etiqueta');
+            //     }
+            // }
 
             loadOrders()
             if (selectedOrder && selectedOrder.id === orderId) {
@@ -196,6 +196,7 @@ export default function Orders() {
                                 <p><strong>Método de Pago:</strong> {selectedOrder.payment_method}</p>
                                 <p><strong>Total:</strong> <span style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{formatPrice(selectedOrder.total)}</span></p>
                                 
+                                {/* OCULTO - shipping_method block deshabilitado
                                 {selectedOrder.shipping_method && (
                                     <div style={{ marginTop: '10px', padding: '10px', background: '#e3f2fd', borderRadius: '4px' }}>
                                         <strong>Logística:</strong><br/>
@@ -211,6 +212,7 @@ export default function Orders() {
                                         )}
                                     </div>
                                 )}
+                                */}
                             </div>
                         </div>
 

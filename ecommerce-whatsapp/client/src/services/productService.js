@@ -174,8 +174,16 @@ export async function createProduct(productData, imageFiles = []) {
         // Generar slug
         const slug = productData.slug || generateSlug(productData.name)
 
-        // Separar variantes y categorías de los datos del producto
-        const { variants, categories: productCategories, ...productFields } = productData
+        // Separar variantes, categorías y campos de envío (no existentes en la BD actual) de los datos del producto
+        const { 
+            variants, 
+            categories: productCategories, 
+            weight_g, 
+            height_cm, 
+            width_cm, 
+            length_cm, 
+            ...productFields 
+        } = productData
 
         let finalSlug = slug
         let product, productError
@@ -195,13 +203,18 @@ export async function createProduct(productData, imageFiles = []) {
                 .single()
 
             if (error) {
-                // Si es un error de duplicado (23505) y es el campo slug
                 if (error.code === '23505' && error.message.includes('slug')) {
-                    console.log(`[DEBUG] Slug colisión detectada: ${finalSlug}. Reintentando...`)
+                    console.log(`[DEBUG] Slug collision: ${finalSlug}. Retrying...`)
                     finalSlug = `${slug}-${Math.random().toString(36).substr(2, 5)}`
                     retries++
                     continue
                 }
+                console.error('[createProduct] INSERT FAILED:', {
+                    code  : error.code,
+                    message: error.message,
+                    details: error.details,
+                    hint  : error.hint,
+                })
                 throw error
             }
 
@@ -313,8 +326,16 @@ export async function createProduct(productData, imageFiles = []) {
  */
 export async function updateProduct(id, productData) {
     try {
-        // Separar variantes y categorías de los datos del producto
-        const { variants, categories: productCategories, ...productFields } = productData
+        // Separar variantes, categorías y campos de envío (no existentes en la BD actual) de los datos del producto
+        const { 
+            variants, 
+            categories: productCategories, 
+            weight_g, 
+            height_cm, 
+            width_cm, 
+            length_cm, 
+            ...productFields 
+        } = productData
 
         // Asegurar que el ID es número (BIGINT)
         const numericId = typeof id === 'string' ? parseInt(id, 10) : id

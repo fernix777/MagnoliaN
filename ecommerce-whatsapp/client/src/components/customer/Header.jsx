@@ -43,7 +43,7 @@ export default function Header() {
                 <nav className="header-nav desktop-nav">
                     <Link to="/" className="nav-link">Nosotros</Link>
                     <Link to="/productos" className="nav-link">Productos</Link>
-                    <Link to="/envios" className="nav-link">Envíos</Link>
+                    {/* <Link to="/envios" className="nav-link">Envíos</Link> OCULTO */}
                     <Link to="/contacto" className="nav-link">Contacto</Link>
                 </nav>
 
@@ -120,7 +120,7 @@ export default function Header() {
                     </form>
                     <Link to="/" onClick={() => setMenuOpen(false)}>Nosotros</Link>
                     <Link to="/productos" onClick={() => setMenuOpen(false)}>Productos</Link>
-                    <Link to="/envios" onClick={() => setMenuOpen(false)}>Envíos</Link>
+                    {/* <Link to="/envios" onClick={() => setMenuOpen(false)}>Envíos</Link> OCULTO */}
                     <Link to="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link>
                     
                     {/* Auth Buttons en Mobile */}

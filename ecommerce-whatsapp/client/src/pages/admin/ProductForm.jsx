@@ -249,8 +249,9 @@ export default function ProductForm() {
             newErrors.base_price = 'El precio debe ser mayor a 0'
         }
         
-        if (!formData.weight_g || Number(formData.weight_g) <= 0) {
-            newErrors.weight_g = 'El peso es requerido (en gramos)'
+        // El peso no es requerido si la sección de logística está deshabilitada/oculta
+        if (formData.weight_g && Number(formData.weight_g) < 0) {
+            newErrors.weight_g = 'El peso no puede ser negativo'
         }
 
         if (!formData.categories || formData.categories.length === 0) {
@@ -727,8 +728,8 @@ export default function ProductForm() {
                     </div>
                 </section>
 
-                {/* Envíos / Logística */}
-                <section className="form-section">
+                {/* OCULTO - Módulo de envíos deshabilitado
+                {<section className="form-section">
                     <h2>Logística y Envíos</h2>
                     <p className="section-description">Datos necesarios para el cálculo de costos de envío (Correo Argentino, Vía Cargo).</p>
                     
@@ -789,7 +790,7 @@ export default function ProductForm() {
                     <small style={{ color: 'var(--gray)', display: 'block', marginTop: '-10px', marginBottom: '20px' }}>
                         Nota: Las dimensiones en centímetros son obligatorias si utilizas Correo Argentino.
                     </small>
-                </section>
+                </section>} */}
 
                 {/* Configuración General */}
                 <section className="form-section">
