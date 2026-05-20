@@ -134,11 +134,22 @@ export async function getActiveCategories() {
         console.log('[DEBUG] Intentando obtener categorías...')
         
         // Consulta simple sin relaciones
-        const { data, error } = await supabase
+        let { data, error } = await supabase
             .from('categories')
             .select('*')
             .eq('active', true)
             .order('display_order', { ascending: true })
+
+        // Fallback: si la columna 'active' no existe, traer todas las categorías
+        if (error) {
+            console.warn('[DEBUG] Columna active no existe en categories, usando fallback sin filtro:', error.message)
+            const fallback = await supabase
+                .from('categories')
+                .select('*')
+                .order('display_order', { ascending: true })
+            data = fallback.data
+            error = fallback.error
+        }
 
         console.log('[DEBUG] Categorías:', { 
             dataLength: data?.length, 
@@ -166,12 +177,23 @@ export async function getActiveCategories() {
 export async function getProductsByCategory(categorySlug, options = {}) {
     try {
         // 1. Obtener la categoría
-        const { data: category } = await supabase
+        let { data: category, error: categoryError } = await supabase
             .from('categories')
             .select('id')
             .eq('slug', categorySlug)
             .eq('active', true)
             .single()
+
+        // Fallback: si la columna 'active' no existe
+        if (categoryError) {
+            const fallbackCat = await supabase
+                .from('categories')
+                .select('id')
+                .eq('slug', categorySlug)
+                .single()
+            category = fallbackCat.data
+            categoryError = fallbackCat.error
+        }
 
         if (!category) {
             return { data: [], error: null }

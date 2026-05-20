@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, isNaN } from 'react'
 import { Link } from 'react-router-dom'
 import { getActiveCategories, getProductsByCategory } from '../../services/storeService'
 import { useAuth } from '../../context/AuthContext'

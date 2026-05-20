@@ -1,5 +1,6 @@
 import { supabase } from '../config/supabase'
-import { uploadImage, deleteImage, uploadMultipleImages } from './supabaseStorageService'
+import { uploadImage, deleteImage, uploadMultipleImages, isSupabaseStorageUrl } from './supabaseStorageService'
+import { deleteImage as deleteVercelBlob, isVercelBlobUrl } from './vercelBlobService'
 
 /**
  * Servicio para gestión de productos
@@ -294,17 +295,43 @@ export async function createProduct(productData, imageFiles = []) {
             console.log('[DEBUG] Registros a insertar:', imageRecords)
 
             if (imageRecords.length > 0) {
-                const { data: insertedImages, error: imagesError } = await supabase
-                    .from('product_images')
-                    .insert(imageRecords)
-                    .select()
+                // Insertar cada imagen individualmente USANDO DEFAULT ID (sin especificar id)
+                // Esto permite que Supabase genere el ID automáticamente
+                const insertedImages = []
+                for (let i = 0; i < imageRecords.length; i++) {
+                    const record = imageRecords[i]
+                    // Quitar cualquier id que pueda haber (no debería haber, pero por si acaso)
+                    const { id, ...cleanRecord } = record
+                    console.log(`[DEBUG] Insertando imagen ${i + 1}/${imageRecords.length}:`, cleanRecord)
+                    
+                    const { data: imgData, error: imgError } = await supabase
+                        .from('product_images')
+                        .insert(cleanRecord)
+                        .select()
+                        .single()
 
-                if (imagesError) {
-                    console.error('[DEBUG] Error saving images:', imagesError)
-                    throw new Error(`Error al guardar imágenes: ${imagesError.message}`)
-                } else {
-                    console.log('[DEBUG] Imágenes guardadas exitosamente:', insertedImages)
+                    if (imgError) {
+                        console.error(`[DEBUG] Error insertando imagen ${i + 1}:`, imgError)
+                        // Si es error de duplicado de ID, intentar de nuevo sin el campo id
+                        if (imgError.code === '23505') {
+                            console.log(`[DEBUG] Reintentando sin ID explícito...`)
+                            const retryResult = await supabase
+                                .from('product_images')
+                                .insert(cleanRecord)
+                                .select()
+                                .single()
+                            if (!retryResult.error) {
+                                console.log(`[DEBUG] Imagen insertada en reintento:`, retryResult.data)
+                                insertedImages.push(retryResult.data)
+                            }
+                        }
+                    } else {
+                        console.log(`[DEBUG] Imagen ${i + 1} insertada:`, imgData)
+                        insertedImages.push(imgData)
+                    }
                 }
+                
+                console.log(`[DEBUG] Total imágenes insertadas: ${insertedImages.length}/${imageRecords.length}`)
             }
         } else {
             console.log('[DEBUG] No hay imágenes para subir')
@@ -420,10 +447,8 @@ export async function updateProduct(id, productData) {
                     active: v.active !== undefined ? v.active : true
                 }))
 
-                // FILTRAR DUPLICADOS: mantener solo la primera ocurrencia de cada variant_value
-                const uniqueVariants = variantsToInsert.filter((v, index, self) =>
-                    index === self.findIndex(t => t.variant_value === v.variant_value)
-                )
+                // No filtrar duplicados - cada variante debe guardarse independientemente
+                const uniqueVariants = variantsToInsert
 
                 console.log('[DEBUG] Variantes originales:', variants.length)
                 console.log('[DEBUG] Variantes únicas:', uniqueVariants.length)
@@ -516,10 +541,14 @@ async function deleteProductViaAPI(id) {
 
         const result = await response.json()
 
-        // Limpiar imágenes de Vercel Blob si las devuelve el servidor
+        // Limpiar imágenes del storage (Supabase Storage o Vercel Blob)
         if (result.imageUrls?.length > 0) {
             for (const url of result.imageUrls) {
-                await deleteImage(url)
+                if (isSupabaseStorageUrl(url)) {
+                    await deleteImage(url)
+                } else if (isVercelBlobUrl(url)) {
+                    await deleteVercelBlob(url)
+                }
             }
         }
 
@@ -579,11 +608,35 @@ export async function addProductImages(productId, imageFiles) {
             
             if (imgError) {
                 console.error('[DEBUG] Error insertando imagen individual:', imgError)
-                // Si es error de duplicado, ignorar y continuar
-                if (imgError.code !== '23505') {
+                // Si es error de duplicado de ID (secuencia desincronizada), reintentar
+                if (imgError.code === '23505') {
+                    console.log('[DEBUG] Reintentando con ID explícito...')
+                    // Intentar obtener un ID disponible
+                    const maxIdResult = await supabase
+                        .from('product_images')
+                        .select('id')
+                        .order('id', { ascending: false })
+                        .limit(1)
+                        .single()
+                    
+                    const nextId = (maxIdResult.data?.id || 0) + 1
+                    const retryRecord = { ...record, id: nextId }
+                    
+                    const { data: retryData, error: retryError } = await supabase
+                        .from('product_images')
+                        .insert(retryRecord)
+                        .select()
+                        .single()
+                    
+                    if (retryError) {
+                        console.error('[DEBUG] Reintento fallido:', retryError)
+                    } else {
+                        console.log('[DEBUG] Imagen insertada en reintento:', retryData)
+                        insertedImages.push(retryData)
+                    }
+                } else {
                     throw imgError
                 }
-                console.log('[DEBUG] Ignorando duplicado, continuando...')
             } else {
                 console.log('[DEBUG] Imagen insertada:', imgData)
                 insertedImages.push(imgData)
@@ -619,9 +672,13 @@ export async function deleteProductImage(imageId) {
 
         if (error) throw error
 
-        // Luego limpiar del storage (vercelBlobService recibe URL directamente)
+        // Luego limpiar del storage (detectar origen: Supabase Storage o Vercel Blob)
         if (image?.image_url) {
-            await deleteImage(image.image_url)
+            if (isSupabaseStorageUrl(image.image_url)) {
+                await deleteImage(image.image_url)
+            } else if (isVercelBlobUrl(image.image_url)) {
+                await deleteVercelBlob(image.image_url)
+            }
         }
 
         return { success: true, error: null }
