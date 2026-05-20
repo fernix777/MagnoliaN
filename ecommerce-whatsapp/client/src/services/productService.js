@@ -111,8 +111,10 @@ export async function getProducts(filters = {}, signal) {
  * @param {number} id - ID del producto
  * @returns {Promise<{data: Object, error: null} | {data: null, error: Error}>}
  */
-export async function getProductById(id) {
+export async function getProductById(id, signal) {
     try {
+        if (signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+
         // Obtener producto simple
         const { data: product, error } = await supabase
             .from('products')
@@ -122,11 +124,15 @@ export async function getProductById(id) {
 
         if (error) throw error
 
+        if (signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+
         // Cargar imágenes
         const { data: images } = await supabase
             .from('product_images')
             .select('*')
             .eq('product_id', id)
+
+        if (signal?.aborted) throw new DOMException('Aborted', 'AbortError')
 
         // Cargar variantes
         const { data: variants } = await supabase
@@ -134,11 +140,15 @@ export async function getProductById(id) {
             .select('*')
             .eq('product_id', id)
 
+        if (signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+
         // Cargar todas las categorías asignadas desde la tabla puente
         const { data: productCategories } = await supabase
             .from('product_categories')
             .select('category_id, subcategory_id')
             .eq('product_id', id)
+
+        if (signal?.aborted) throw new DOMException('Aborted', 'AbortError')
 
         // Cargar categoría principal (para compatibilidad)
         const { data: category } = product.category_id ? await supabase
@@ -410,7 +420,8 @@ export async function updateProduct(id, productData) {
         }
 
         // Actualizar variantes (Estrategia: Eliminar todas y crear nuevas)
-        if (variants !== undefined) {
+        // Solo si hay variantes nuevas para evitar borrado innecesario
+        if (variants && variants.length > 0) {
             // 0. Verificar variantes existentes antes de eliminar
             const { data: existingVariants, error: checkError } = await supabase
                 .from('product_variants')

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { getProductById, createProduct, updateProduct, addProductImages } from '../../services/productService'
@@ -44,11 +44,24 @@ export default function ProductForm() {
     const [images, setImages] = useState([])
     const [newColor, setNewColor] = useState('') // Para agregar color personalizado
     const [errors, setErrors] = useState({})
+    const abortControllerRef = useRef(null)
 
     useEffect(() => {
+        // Cancelar solicitud anterior si existe
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort()
+        }
+        abortControllerRef.current = new AbortController()
+
         loadCategories()
         if (isEditing) {
-            loadProduct()
+            loadProduct(abortControllerRef.current.signal)
+        }
+
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort()
+            }
         }
     }, [id])
 
@@ -57,9 +70,9 @@ export default function ProductForm() {
         setCategories(data || [])
     }
 
-    const loadProduct = async () => {
+    const loadProduct = async (signal) => {
         setLoading(true)
-        const { data, error } = await getProductById(id)
+        const { data, error } = await getProductById(id, signal)
 
         if (error) {
             toast.error('Error al cargar producto')
