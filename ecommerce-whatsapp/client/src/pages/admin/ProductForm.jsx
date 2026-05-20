@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { getProductById, createProduct, updateProduct, addProductImages } from '../../services/productService'
+import { getProductById, createProduct, updateProduct, addProductImages, deleteProductImage } from '../../services/productService'
 import { getCategories } from '../../services/categoryService'
 import ImageUploader from '../../components/admin/ImageUploader'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
@@ -341,11 +341,21 @@ export default function ProductForm() {
                 .filter(img => img.file)
                 .map(img => img.file)
 
+            // Detectar imágenes marcadas como eliminadas (tienen id de BD)
+            const deletedImageIds = images
+                .filter(img => img.id && img._deleted)
+                .map(img => img.id)
+
+            // Eliminar imágenes borradas de la BD ANTES de guardar el producto
+            for (const imageId of deletedImageIds) {
+                await deleteProductImage(imageId)
+            }
+
             let result
             let productId
 
             if (isEditing) {
-                // Actualizar producto
+                // Actualizar producto (incluye categorias y variantes)
                 result = await updateProduct(id, productData)
                 productId = id
                 

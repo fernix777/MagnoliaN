@@ -138,6 +138,50 @@
     font-weight: 600;
 }
 
+.deleted-badge {
+    position: absolute;
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
+    background-color: var(--error);
+    color: var(--white);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 2;
+}
+
+.deleted-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    cursor: not-allowed;
+    z-index: 1;
+}
+
+/* Estado eliminada: opaca, tachada, no interaccionable */
+.image-preview-item.deleted {
+    opacity: 0.45;
+    filter: grayscale(60%);
+    cursor: not-allowed;
+    border-color: var(--error) !important;
+    box-shadow: none !important;
+}
+
+.image-preview-item.deleted img {
+    filter: grayscale(60%) brightness(0.7);
+}
+
+.deleted .image-overlay {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+.deleted .deleted-overlay {
+    display: flex;
+}
+
 .dropzone {
     border: 2px dashed var(--light-gray);
     border-radius: var(--radius-md);

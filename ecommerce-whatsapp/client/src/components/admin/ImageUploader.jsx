@@ -41,22 +41,19 @@ export default function ImageUploader({ images, onChange, maxImages = 10 }) {
     })
 
     const removeImage = (index) => {
-        const newImages = images.filter((_, i) => i !== index)
-
-        // Si eliminamos la imagen principal, hacer la primera como principal
-        if (images[index].is_primary && newImages.length > 0) {
-            newImages[0].is_primary = true
+        // Marcar como eliminada si tiene id de BD, o remover si es solo preview sin guardar
+        const image = images[index]
+        if (image.id) {
+            onChange(images.map((img, i) => i === index ? { ...img, _deleted: true } : img))
+        } else {
+            const newImages = images.filter((_, i) => i !== index)
+            onChange(newImages)
         }
-
-        // Reordenar display_order
-        newImages.forEach((img, i) => {
-            img.display_order = i
-        })
-
-        onChange(newImages)
     }
 
     const setPrimary = (index) => {
+        // No permitir marcar como principal una imagen marcada para eliminar
+        if (images[index]._deleted) return
         const newImages = images.map((img, i) => ({
             ...img,
             is_primary: i === index
@@ -71,16 +68,19 @@ export default function ImageUploader({ images, onChange, maxImages = 10 }) {
     const handleDragOver = (e, index) => {
         e.preventDefault()
 
-        if (draggedIndex === null || draggedIndex === index) return
+            if (draggedIndex === null || draggedIndex === index) return
 
-        const newImages = [...images]
-        const draggedImage = newImages[draggedIndex]
+            // No permitir reordenar imagen marcada para eliminar
+            if (newImages[draggedIndex]._deleted) return
 
-        // Remover de posición original
-        newImages.splice(draggedIndex, 1)
+            const newImages = [...images]
+            const draggedImage = newImages[draggedIndex]
 
-        // Insertar en nueva posición
-        newImages.splice(index, 0, draggedImage)
+            // Remover de posición original
+            newImages.splice(draggedIndex, 1)
+
+            // Insertar en nueva posición
+            newImages.splice(index, 0, draggedImage)
 
         // Actualizar display_order
         newImages.forEach((img, i) => {
@@ -98,8 +98,8 @@ export default function ImageUploader({ images, onChange, maxImages = 10 }) {
     return (
         <div className="image-uploader">
             <div className="upload-info">
-                <p>Imágenes del producto ({images.length}/{maxImages})</p>
-                <span>Arrastra para reordenar. Click en ⭐ para marcar como principal.</span>
+                <p>Imágenes del producto ({images.filter(img => !img._deleted).length}/{maxImages})</p>
+                <span>Arrastra para reordenar. Click en ⭐ para marcar como principal. × para eliminar.</span>
             </div>
 
             {images.length > 0 && (
@@ -107,10 +107,10 @@ export default function ImageUploader({ images, onChange, maxImages = 10 }) {
                     {images.map((image, index) => (
                         <div
                             key={index}
-                            className={`image-preview-item ${image.is_primary ? 'primary' : ''}`}
-                            draggable
-                            onDragStart={() => handleDragStart(index)}
-                            onDragOver={(e) => handleDragOver(e, index)}
+                            className={`image-preview-item ${image.is_primary ? 'primary' : ''} ${image._deleted ? 'deleted' : ''}`}
+                            draggable={!image._deleted}
+                            onDragStart={() => !image._deleted && handleDragStart(index)}
+                            onDragOver={(e) => !image._deleted && handleDragOver(e, index)}
                             onDragEnd={handleDragEnd}
                         >
                             <img
@@ -137,7 +137,13 @@ export default function ImageUploader({ images, onChange, maxImages = 10 }) {
                                 </button>
                             </div>
 
-                            {image.is_primary && (
+                            {image._deleted && (
+                                <div className="deleted-overlay"></div>
+                            )}
+                            {image._deleted && (
+                                <span className="deleted-badge">Eliminada</span>
+                            )}
+                            {image.is_primary && !image._deleted && (
                                 <span className="primary-badge">Principal</span>
                             )}
 
