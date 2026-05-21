@@ -1,4 +1,5 @@
 import { supabase } from '../config/supabase'
+import { getApiUrl } from '../config/api'
 
 /**
  * Crea una nueva orden
@@ -7,7 +8,7 @@ import { supabase } from '../config/supabase'
  */
 export async function createOrder(orderData) {
     try {
-        const response = await fetch('/api/orders', {
+        const response = await fetch(getApiUrl('/api/orders'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -41,8 +42,15 @@ export async function getOrders(options = {}) {
         if (options.limit) params.set('limit', options.limit)
         if (options.offset) params.set('offset', options.offset)
 
-        const resp = await fetch(`/api/orders?${params.toString()}`)
-        if (!resp.ok) throw new Error('Error fetching orders from backend')
+        const query = params.toString()
+        const url = query ? `/api/orders?${query}` : '/api/orders'
+
+        const resp = await fetch(getApiUrl(url))
+        if (!resp.ok) {
+            // try to parse error body
+            const body = await resp.json().catch(() => ({}))
+            throw new Error(body.error || 'Error fetching orders from backend')
+        }
         const result = await resp.json()
         return { data: result.data || [], count: (result.data || []).length, error: null }
     } catch (error) {
@@ -57,7 +65,7 @@ export async function getOrders(options = {}) {
  */
 export async function getOrderById(id) {
     try {
-        const resp = await fetch(`/api/orders/${id}`)
+        const resp = await fetch(getApiUrl(`/api/orders/${id}`))
         if (!resp.ok) throw new Error('Error fetching order from backend')
         const result = await resp.json()
         return { data: result.data || null, error: null }
@@ -74,6 +82,7 @@ export async function getOrderById(id) {
  */
 export async function updateOrderStatus(id, status) {
     try {
+        // Nota: Esta función aún usa Supabase direct; considerar migrar a backend si se requiere en producción
         const { data, error } = await supabase
             .from('orders')
             .update({ status })

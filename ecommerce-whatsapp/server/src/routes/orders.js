@@ -90,6 +90,7 @@ router.post('/', async (req, res) => {
 // Obtener lista de órdenes (con items) - usado por el admin
 router.get('/', async (req, res) => {
     try {
+        console.log(`[orders] GET ${req.originalUrl} from ${req.ip}`)
         const { status, limit, offset } = req.query
 
         let query = supabase
