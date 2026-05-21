@@ -35,31 +35,16 @@ export async function createOrder(orderData) {
  */
 export async function getOrders(options = {}) {
     try {
-        let query = supabase
-            .from('orders')
-            .select(`
-                *,
-                items:order_items(*)
-            `, { count: 'exact' })
-            .order('created_at', { ascending: false })
+        // Usar endpoint backend para asegurar que obtenemos items (service key)
+        const params = new URLSearchParams()
+        if (options.status) params.set('status', options.status)
+        if (options.limit) params.set('limit', options.limit)
+        if (options.offset) params.set('offset', options.offset)
 
-        if (options.status) {
-            query = query.eq('status', options.status)
-        }
-
-        if (options.limit) {
-            query = query.limit(options.limit)
-        }
-
-        if (options.offset) {
-            query = query.range(options.offset, options.offset + (options.limit || 10) - 1)
-        }
-
-        const { data, count, error } = await query
-
-        if (error) throw error
-
-        return { data, count, error: null }
+        const resp = await fetch(`/api/orders?${params.toString()}`)
+        if (!resp.ok) throw new Error('Error fetching orders from backend')
+        const result = await resp.json()
+        return { data: result.data || [], count: (result.data || []).length, error: null }
     } catch (error) {
         console.error('Error fetching orders:', error)
         return { data: null, count: 0, error }
@@ -72,18 +57,10 @@ export async function getOrders(options = {}) {
  */
 export async function getOrderById(id) {
     try {
-        const { data, error } = await supabase
-            .from('orders')
-            .select(`
-                *,
-                items:order_items(*)
-            `)
-            .eq('id', id)
-            .single()
-
-        if (error) throw error
-
-        return { data, error: null }
+        const resp = await fetch(`/api/orders/${id}`)
+        if (!resp.ok) throw new Error('Error fetching order from backend')
+        const result = await resp.json()
+        return { data: result.data || null, error: null }
     } catch (error) {
         console.error('Error fetching order:', error)
         return { data: null, error }

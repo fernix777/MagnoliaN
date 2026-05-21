@@ -81,28 +81,6 @@ CREATE TABLE IF NOT EXISTS product_categories (
   UNIQUE(product_id, category_id, subcategory_id)
 );
 
--- Tabla de zonas de envío por código postal
-CREATE TABLE IF NOT EXISTS shipping_zones (
-  id BIGSERIAL PRIMARY KEY,
-  postal_code_from TEXT NOT NULL,
-  postal_code_to TEXT NOT NULL,
-  province TEXT NOT NULL,
-  locality TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Tabla de tarifas de envío
-CREATE TABLE IF NOT EXISTS shipping_rates (
-  id BIGSERIAL PRIMARY KEY,
-  carrier TEXT NOT NULL CHECK(carrier IN ('oca', 'andreani', 'correo')),
-  zone_id BIGINT REFERENCES shipping_zones(id) ON DELETE SET NULL,
-  base_price NUMERIC(10, 2) NOT NULL,
-  price_per_kg NUMERIC(10, 2) DEFAULT 0,
-  estimated_days INTEGER,
-  active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
 -- Tabla de configuración general
 CREATE TABLE IF NOT EXISTS settings (
   id BIGSERIAL PRIMARY KEY,
@@ -125,7 +103,6 @@ CREATE INDEX IF NOT EXISTS idx_product_images_product ON product_images(product_
 CREATE INDEX IF NOT EXISTS idx_product_variants_product ON product_variants(product_id);
 CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
 CREATE INDEX IF NOT EXISTS idx_subcategories_category ON subcategories(category_id);
-CREATE INDEX IF NOT EXISTS idx_shipping_rates_carrier ON shipping_rates(carrier);
 CREATE INDEX IF NOT EXISTS idx_settings_key ON settings(key);
 
 -- ==========================================
@@ -161,8 +138,6 @@ ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE subcategories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE product_variants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE product_images ENABLE ROW LEVEL SECURITY;
-ALTER TABLE shipping_zones ENABLE ROW LEVEL SECURITY;
-ALTER TABLE shipping_rates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
 
 -- ==========================================
@@ -205,16 +180,6 @@ CREATE POLICY "Public read product images"
       AND products.active = true
     )
   );
-
--- Zonas de envío: Todos pueden leer
-CREATE POLICY "Public read shipping zones"
-  ON shipping_zones FOR SELECT
-  USING (true);
-
--- Tarifas de envío: Todos pueden leer tarifas activas
-CREATE POLICY "Public read active shipping rates"
-  ON shipping_rates FOR SELECT
-  USING (active = true);
 
 -- Settings: Todos pueden leer configuración pública
 CREATE POLICY "Public read settings"
@@ -307,16 +272,6 @@ CREATE POLICY "Admin delete images"
   ON product_images FOR DELETE
   USING (is_admin());
 
--- Zonas de envío: Solo admins pueden modificar
-CREATE POLICY "Admin modify shipping zones"
-  ON shipping_zones FOR ALL
-  USING (is_admin());
-
--- Tarifas de envío: Solo admins pueden modificar
-CREATE POLICY "Admin modify shipping rates"
-  ON shipping_rates FOR ALL
-  USING (is_admin());
-
 -- Settings: Solo admins pueden modificar
 CREATE POLICY "Admin modify settings"
   ON settings FOR ALL
@@ -346,6 +301,4 @@ COMMENT ON TABLE categories IS 'Categorías principales de productos';
 COMMENT ON TABLE subcategories IS 'Subcategorías de productos';
 COMMENT ON TABLE product_variants IS 'Variantes de productos (color, tamaño)';
 COMMENT ON TABLE product_images IS 'Imágenes de productos almacenadas en Supabase Storage';
-COMMENT ON TABLE shipping_zones IS 'Zonas de envío por código postal';
-COMMENT ON TABLE shipping_rates IS 'Tarifas de envío por carrier';
 COMMENT ON TABLE settings IS 'Configuración general de la tienda';

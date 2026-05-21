@@ -42,9 +42,7 @@ router.post('/', async (req, res) => {
                 customer_info: customer,
                 total: total,
                 status: 'pending',
-                payment_method: paymentMethod,
-                shipping_method: req.body.shipping_method || null,
-                shipping_cost: req.body.shipping_cost || null
+                payment_method: paymentMethod
             }])
             .select()
             .single()
@@ -73,9 +71,60 @@ router.post('/', async (req, res) => {
 
         if (itemsError) throw itemsError
 
-        res.status(201).json({ data: order })
+        // Recuperar la orden con sus items para devolver al cliente
+        const { data: fullOrder, error: fetchError } = await supabase
+            .from('orders')
+            .select(`*, items:order_items(*)`)
+            .eq('id', order.id)
+            .single()
+
+        if (fetchError) throw fetchError
+
+        res.status(201).json({ data: fullOrder })
     } catch (error) {
         console.error('Error creating order in backend:', error)
+        res.status(500).json({ error: error.message || 'Error internal server' })
+    }
+})
+
+// Obtener lista de órdenes (con items) - usado por el admin
+router.get('/', async (req, res) => {
+    try {
+        const { status, limit, offset } = req.query
+
+        let query = supabase
+            .from('orders')
+            .select(`*, items:order_items(*)`)
+            .order('created_at', { ascending: false })
+
+        if (status) query = query.eq('status', status)
+        if (limit) query = query.limit(Number(limit))
+        if (offset) query = query.range(Number(offset), Number(offset) + (Number(limit) || 10) - 1)
+
+        const { data, error } = await query
+        if (error) throw error
+
+        res.json({ data })
+    } catch (error) {
+        console.error('Error fetching orders in backend:', error)
+        res.status(500).json({ error: error.message || 'Error internal server' })
+    }
+})
+
+// Obtener una orden por ID (con items)
+router.get('/:id', async (req, res) => {
+    try {
+        const id = Number(req.params.id)
+        const { data, error } = await supabase
+            .from('orders')
+            .select(`*, items:order_items(*)`)
+            .eq('id', id)
+            .single()
+
+        if (error) throw error
+        res.json({ data })
+    } catch (error) {
+        console.error('Error fetching order by id in backend:', error)
         res.status(500).json({ error: error.message || 'Error internal server' })
     }
 })

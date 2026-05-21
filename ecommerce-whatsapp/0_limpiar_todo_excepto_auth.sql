@@ -34,10 +34,6 @@ TRUNCATE TABLE categories CASCADE;
 TRUNCATE TABLE banners CASCADE;
 TRUNCATE TABLE admin_users CASCADE;
 
--- 7. Configuración de envíos
-TRUNCATE TABLE shipping_rates CASCADE;
-TRUNCATE TABLE shipping_zones CASCADE;
-
 -- ============================================
 -- REACTIVAR TRIGGERS
 -- ============================================

@@ -76,29 +76,6 @@ CREATE TABLE IF NOT EXISTS product_variants (
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
--- Tabla de zonas de envío por código postal
-CREATE TABLE IF NOT EXISTS shipping_zones (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  postal_code_from TEXT NOT NULL,
-  postal_code_to TEXT NOT NULL,
-  province TEXT NOT NULL,
-  locality TEXT,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
--- Tabla de tarifas de envío
-CREATE TABLE IF NOT EXISTS shipping_rates (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  carrier TEXT NOT NULL CHECK(carrier IN ('oca', 'andreani', 'correo')),
-  zone_id INTEGER,
-  base_price REAL NOT NULL,
-  price_per_kg REAL DEFAULT 0,
-  estimated_days INTEGER,
-  active BOOLEAN DEFAULT 1,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (zone_id) REFERENCES shipping_zones(id) ON DELETE SET NULL
-);
-
 -- Tabla de configuración general
 CREATE TABLE IF NOT EXISTS settings (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -118,7 +95,6 @@ CREATE INDEX IF NOT EXISTS idx_product_images_product ON product_images(product_
 CREATE INDEX IF NOT EXISTS idx_product_variants_product ON product_variants(product_id);
 CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
 CREATE INDEX IF NOT EXISTS idx_subcategories_category ON subcategories(category_id);
-CREATE INDEX IF NOT EXISTS idx_shipping_rates_carrier ON shipping_rates(carrier);
 CREATE INDEX IF NOT EXISTS idx_settings_key ON settings(key);
 
 -- Insertar configuración inicial

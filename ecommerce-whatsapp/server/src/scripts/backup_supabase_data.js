@@ -29,8 +29,6 @@ const TABLES = [
   'orders',
   'order_items',
   'banners',
-  'shipping_zones',
-  'shipping_rates',
   'settings',
   'profiles'
 ]

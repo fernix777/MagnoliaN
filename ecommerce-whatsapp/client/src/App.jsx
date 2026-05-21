@@ -19,8 +19,6 @@ import CheckoutPage from './pages/customer/CheckoutPage';
 import OrderConfirmation from './pages/customer/OrderConfirmation';
 import MyAccount from './pages/customer/MyAccount';
 import MyOrders from './pages/customer/MyOrders';
-// OCULTO: import EnviosPage from './pages/customer/EnviosPage';
-
 // Páginas de autenticación
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -37,7 +35,6 @@ import Orders from './pages/admin/Orders';
 import ProductForm from './pages/admin/ProductForm';
 import AdminBanners from './pages/admin/AdminBanners';
 import AdminCustomers from './pages/admin/AdminCustomers';
-// OCULTO: import ViaCargoRates from './pages/admin/ViaCargoRates';
 import PerformanceAuditor from './components/common/PerformanceAuditor';
 
 // Componente para tracking automático de PageView
@@ -81,7 +78,6 @@ function App() {
                             <Route path="/categoria/:slug" element={<CategoryPage />} />
                             <Route path="/buscar" element={<SearchPage />} />
                             <Route path="/contacto" element={<ContactPage />} />
-                            {/* OCULTO: <Route path="/envios" element={<EnviosPage />} /> */}
                             <Route path="/checkout" element={<CheckoutPage />} />
                             <Route path="/order-confirmation" element={<OrderConfirmation />} />
                             
@@ -169,16 +165,6 @@ function App() {
                                     </ProtectedRoute>
                                 }
                             />
-                            {/* OCULTO:
-                            <Route
-                                path="/admin/via-cargo"
-                                element={
-                                    <ProtectedRoute>
-                                        <ViaCargoRates />
-                                    </ProtectedRoute>
-                                }
-                            />
-                            */}
                             <Route
                                 path="/admin/products/new"
                                 element={

@@ -32,11 +32,6 @@ export default function CheckoutPage() {
     const [processing, setProcessing] = useState(false)
     const [checkoutInitiated, setCheckoutInitiated] = useState(false)
     const [createAccount, setCreateAccount] = useState(false)
-    
-    const [shippingMethod, setShippingMethod] = useState('via_cargo')
-    const [shippingCost, setShippingCost] = useState(0)
-    const [correoRateLoading, setCorreoRateLoading] = useState(false)
-    const [viaCargoCost, setViaCargoCost] = useState(0)
 
     const cartTotal = getCartTotal()
     const cartItemsCount = getCartCount()
@@ -57,68 +52,6 @@ export default function CheckoutPage() {
         }
     }, [cart, user, cartTotal, cartItemsCount, checkoutInitiated])
 
-    // Lógica para consolidar paquete
-    const consolidateCart = (cartItems) => {
-        // Validación: si falta alguna dimensión
-        const missingDimensions = cartItems.some(item => !item.weight_g || !item.height_cm || !item.width_cm || !item.length_cm);
-        
-        const weight = cartItems.reduce((sum, item) => sum + ((item.weight_g || 100) * item.quantity), 0);
-        const length = cartItems.reduce((sum, item) => sum + ((item.length_cm || 10) * item.quantity), 0);
-        const height = Math.max(...cartItems.map(i => i.height_cm || 10));
-        const width = Math.max(...cartItems.map(i => i.width_cm || 10));
-
-        return { weight, height, width, length, missingDimensions };
-    };
-
-    useEffect(() => {
-        const calcViaCargo = async () => {
-            const { weight } = consolidateCart(cart);
-            try {
-                const res = await fetch('/api/via-cargo/tarifas');
-                const rates = await res.json();
-                if (Array.isArray(rates)) {
-                    const rate = rates.find(r => weight >= r.min_g && weight <= r.max_g);
-                    if (rate) setViaCargoCost(rate.price);
-                }
-            } catch (e) { console.error(e); }
-        };
-        if (cart.length > 0) calcViaCargo();
-    }, [cart]);
-
-    useEffect(() => {
-        if (shippingMethod === 'correo_argentino' && formData.zipCode.length >= 4) {
-            const getCorreoRate = async () => {
-                setCorreoRateLoading(true);
-                try {
-                    const dimensions = consolidateCart(cart);
-                    if (dimensions.missingDimensions) {
-                        toast?.error('Algunos productos no tienen dimensiones cargadas. Mostrando precio estimado.');
-                    }
-                    
-                    const res = await fetch('/api/correo/cotizar', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({
-                            postalCodeDestination: formData.zipCode,
-                            dimensions
-                        })
-                    });
-                    const data = await res.json();
-                    if (data.error) throw new Error(data.error);
-                    // Asumimos que la API devuelve un precio en data.price o data.totalAmount. Sino un precio base.
-                    setShippingCost(data.price || data.totalAmount || 5000); 
-                } catch(e) {
-                    console.error('Error cotizando:', e);
-                    setShippingCost(4500); // Fallback para demostración
-                } finally {
-                    setCorreoRateLoading(false);
-                }
-            }
-            getCorreoRate();
-        } else if (shippingMethod === 'via_cargo') {
-            setShippingCost(0);
-        }
-    }, [shippingMethod, formData.zipCode, cart]);
 
     if (cart.length === 0) {
         return (
@@ -543,53 +476,6 @@ export default function CheckoutPage() {
                                     />
                                 </div>
                             </div>
-
-                            {/* OCULTO - Módulo de envíos deshabilitado
-                            <div className="form-section shipping-section">
-                                <h3>Método de Envío</h3>
-                                <div className="payment-options">
-                                    <label className={`payment-option ${shippingMethod === 'via_cargo' ? 'selected' : ''}`}>
-                                        <input
-                                            type="radio"
-                                            name="shippingMethod"
-                                            value="via_cargo"
-                                            checked={shippingMethod === 'via_cargo'}
-                                            onChange={(e) => setShippingMethod(e.target.value)}
-                                            disabled={processing}
-                                        />
-                                        <div className="payment-option-content" style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <span style={{ fontWeight: 'bold', color: '#34a853', fontSize: '0.8rem', marginBottom: '4px' }}>★ OPCIÓN RECOMENDADA</span>
-                                            <span className="payment-label">Vía Cargo</span>
-                                            <span className="payment-description">
-                                                Abonás el envío en destino al retirar. Peso: {(consolidateCart(cart).weight / 1000).toFixed(1)}kg.
-                                            </span>
-                                        </div>
-                                    </label>
-
-                                    <label className={`payment-option ${shippingMethod === 'correo_argentino' ? 'selected' : ''}`}>
-                                        <input
-                                            type="radio"
-                                            name="shippingMethod"
-                                            value="correo_argentino"
-                                            checked={shippingMethod === 'correo_argentino'}
-                                            onChange={(e) => setShippingMethod(e.target.value)}
-                                            disabled={processing}
-                                        />
-                                        <div className="payment-option-content" style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <span className="payment-label">Correo Argentino</span>
-                                            <span className="payment-description">
-                                                Plazo de entrega: 3 a 6 días hábiles. Se paga junto a la compra.
-                                            </span>
-                                            {shippingMethod === 'correo_argentino' && consolidateCart(cart).missingDimensions && (
-                                                <span style={{ color: 'red', fontSize: '0.8rem', marginTop: '4px' }}>
-                                                    ⚠️ Hay productos sin dimensiones exactas.
-                                                </span>
-                                            )}
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                            */}
 
                             {/* Método de pago - Solo WhatsApp */}
                             <div className="form-section payment-section">

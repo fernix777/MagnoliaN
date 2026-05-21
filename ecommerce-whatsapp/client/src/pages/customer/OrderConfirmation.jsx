@@ -187,29 +187,33 @@ export default function OrderConfirmation() {
                         </div>
                     </div>
 
-                    {/* Resumen de productos */}
-                    <div className="order-items">
-                        <h3>Artículos Comprados</h3>
-                        <table className="items-table">
-                            <thead>
-                                <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio Unitario</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {order.items.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>{item.name}</td>
-                                        <td className="quantity">{item.quantity}</td>
-                                        <td>${item.price.toLocaleString('es-AR')}</td>
-                                        <td className="total">${(item.price * item.quantity).toLocaleString('es-AR')}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                     {/* Resumen de productos */}
+                     <div className="order-items">
+                         <h3>Artículos Comprados</h3>
+                         <table className="items-table">
+                             <thead>
+                                 <tr>
+                                     <th>Producto</th>
+                                     <th>Cantidad</th>
+                                     <th>Color</th>
+                                     <th>Condición</th>
+                                     <th>Precio Unitario</th>
+                                     <th>Total</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 {order.items.map((item, index) => (
+                                     <tr key={index}>
+                                         <td>{item.name}</td>
+                                         <td className="quantity">{item.quantity}</td>
+                                         <td>{item.selectedColor || '-'}</td>
+                                         <td>{item.selectedCondition || '-'}</td>
+                                         <td>${item.price.toLocaleString('es-AR')}</td>
+                                         <td className="total">${(item.price * item.quantity).toLocaleString('es-AR')}</td>
+                                     </tr>
+                                 ))}
+                             </tbody>
+                         </table>
 
                         <div className="order-totals">
                             <div className="total-row">
